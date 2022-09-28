@@ -1,0 +1,61 @@
+{
+  "manifest_version": 3,
+  "name": "My Extension",
+  "version": "0.0.0.0001",
+  "action": {
+    "default_icon": {
+      "16": "images/icon16.png",
+      "24": "images/icon24.png",
+      "32": "images/icon32.png"
+    },
+    "default_title": "Click Me",
+    "default_popup": "index.html"
+  },
+  "description": "A plain text description",
+  "icons": {
+    "16": "images/icon16.png",
+    "24": "images/icon24.png",
+    "32": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "author": "Author",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "commands": {
+    "inject-script": {
+      "suggested_key": "Ctrl+Shift+K",
+      "description": "Inject a script on the page"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.google.com/*", "https://*.google.ru/*"],
+      "css": ["my-styles.css"],
+      "js": ["content-script.js"]
+    }
+  ],
+  "cross_origin_embedder_policy": {
+    "value": "require-corp"
+  },
+  "cross_origin_opener_policy": {
+    "value": "same-origin"
+  },
+  "homepage_url": "https://google.com/",
+  "host_permissions": [
+    "https://www.google.com/"
+  ],
+  "incognito": "split",
+  "minimum_chrome_version": "100",
+  "offline_enabled": true,
+  "omnibox": {
+    "keyword": "aString"
+  },
+  "permissions": [
+    "tabs"
+  ],
+  "short_name": "Short Name",
+  "version_name": "Just started"
+}
