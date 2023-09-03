@@ -41,6 +41,7 @@ export default defineConfig(({mode}) => {
     build: {
       assetsDir: 'assets',
       outDir: 'dist/' + env.REACT_APP_NAME,
+      emptyOutDir: true,
     },
   }
 })
