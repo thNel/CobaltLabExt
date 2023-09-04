@@ -16,7 +16,7 @@ function clicker() {
   const elementClickerButton = document.querySelector('button.clicker-button');
   const elementClickerText = elementClickerButton.querySelector('span.clicker-button-text');
   elementClickerButton.onclick = undefined;
-  elementClickerButton.style.backgroundColor = '#696969';
+  elementClickerButton.style.backgroundColor = 'rgba(105,105,105,0.3)';
   elementClickerText.innerText = 'Добыча...';
   var clickerTimer = setInterval((button, text) => {
     const element = document.querySelector('.x') ?? document.querySelector('.iskra') ?? document.querySelector('.farm-wrapper__clicker-item');
@@ -24,7 +24,7 @@ function clicker() {
       element.click();
     } else {
       clearInterval(clickerTimer);
-      button.style.backgroundColor = '#2E8B57';
+      button.style.backgroundColor = 'rgba(46,139,87,0.3)';
       text.innerText = 'Всё добыто!';
       elementClickerButton.style.cursor = 'default';
       setTimeout((text, button) => {
