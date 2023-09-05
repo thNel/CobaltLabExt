@@ -4,7 +4,8 @@ import './App.css'
 function App() {
   const [isInterval, setIsInterval] = useState(false);
   const [isDouble, setIsDouble] = useState(false);
-  const [delay, setDelay] = useState(1000);
+  const [delay, setDelay] = useState(200);
+  const [bidLimit, setBidLimit] = useState(0);
   const [sum, setSum] = useState(0);
   const [bid, setBid] = useState<[number, number, number, number, number]>([0, 0, 0, 0, 0]);
   const [errorMessage, setErrorMessage] = useState('');
@@ -28,6 +29,13 @@ function App() {
     let localBid: typeof bid= [...bid];
     const startBid: typeof bid= [...bid];
     setTimer(setInterval(() => {
+      const bidSum = localBid.reduce((acc, item) => acc + item, 0);
+      if (bidLimit > 0 && bidSum > bidLimit) {
+        abortInterval();
+        setLastWin(0);
+        setErrorMessage('Превышен заданный лимит');
+        return;
+      }
       fetch("https://cobaltlab.tech/api/cobaltGame/roulette/spin", {
         method: 'POST',
         headers: {
@@ -41,7 +49,7 @@ function App() {
         if (data.status === 'success') {
           console.log(localBid, data.data);
           localCounter += 1;
-          localSum = localSum - localBid.reduce((acc, item) => acc + item, 0) + +data.data.winSum;
+          localSum = localSum - bidSum + +data.data.winSum;
           setCounter(localCounter);
           setSum(localSum);
           setLastWin(+data.data.winSum);
@@ -53,11 +61,15 @@ function App() {
             setBid(startBid);
           }
         } else {
-          setLastWin(0);
           abortInterval();
+          setLastWin(0);
           setErrorMessage(data.message);
         }
-      }));
+      })).catch((e) => {
+        abortInterval();
+        setLastWin(0);
+        setErrorMessage(String(e));
+      });
     }, delay));
   };
 
@@ -119,6 +131,17 @@ function App() {
             onChange={(event) => setIsDouble(event.target.checked)}
           />
           <label htmlFor='double'>Удваивать ставку при проигрыше?</label>
+          {isDouble
+          ? <div>
+            <label htmlFor="limit">Лимит суммы:&nbsp;</label>
+            <input
+              type="number"
+              id="limit"
+              defaultValue={bidLimit}
+              onChange={(event) => setBidLimit(+event.target.value)}
+            />
+          </div>
+          : null}
         </div>
       </div>
       <div className="card">
