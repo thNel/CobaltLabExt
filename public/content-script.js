@@ -12,6 +12,65 @@ const cellTypes = {
   M415: 'wood',
 }
 
+const toolTypes = [
+  {
+    src: 'https://static.cobaltlab.tech/images/6a42b357c3d1ea9d253b9939ca6953a7d60a4d827567944fac3c953de5173c28.png',
+    name: 'axe1',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/0fc8cbc453c83292a5d269395e73babc8b960303925aa13eed952185c2236048.png',
+    name: 'axe2',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/bb9fad17b727ad7d6a9c2b719794a540414f0ff0f8eb93b4f1969663334562d5.png',
+    name: 'axe3',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/2c54b84c1606aaba3e6bb2f5ec2ffec82d52224ed62fa26d6cdd1f5c36949569.png',
+    name: 'axe4',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/06f51840a178396e960aebe069eb298067c8d6f776e292e424f0b39b8659bf4f.png',
+    name: 'axe5',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/a7b8fd09600a5ce5a9564db1d3de285ec6e20b9dd5d10135e2188f14a443380b.png',
+    name: 'pickaxe1',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/9ee095c64a30af3d9d1b6322773980cf299149112c3fa35e25934874a8fc279c.png',
+    name: 'pickaxe2',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/5fccc85018fe218f21060ecb0938a98fa61016fc77691a42049ebbfa11885825.png',
+    name: 'pickaxe3',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/914c84065538c00950da851e18c2b979ea92eeae43fd25d74d6b866fcb0e4b87.png',
+    name: 'pickaxe4',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/097425200b1104a7ff5794f2d83977dd3ef7c0b1410c0eeff2662cdd201a4f2b.png',
+    name: 'pickaxe5',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/c390fa4a3872abd5333229b07640738c8d475a26ceab05deb792c189253db1f3.png',
+    name: 'pickaxe6',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/75fe1305ab6bc97854ab96b27e2f98fa3bd3f5e50742fd7e49a11f4825248ac1.png',
+    name: 'pickaxe7',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/7d5457d1da8d175acb113e90543b32ab8d34fe0b365f094609ad7a54f86e06c9.png',
+    name: 'pickaxe8',
+  },
+  {
+    src: 'https://static.cobaltlab.tech/images/4c6083a85b4dc2441adee656bd519af6e2c44e279b00528da17f99d6e5a475ec.png',
+    name: 'rock',
+  }
+]
+
 let autoWalkSettings = {
   [cellTypes.M128]: false,
   [cellTypes.M415]: false,
@@ -199,7 +258,6 @@ function nextStep() {
       acc.push(...item.reverse());
     return acc;
   }, [])
-  console.log(mapFarming);
   const mapFarmingCells = reversed ? mapFarming.reverse() : mapFarming;
   if (!mapFarmingCells.some(item => item.isUser)) {
     go(mapFarmingCells[0]);
@@ -238,33 +296,114 @@ function clicker() {
   elementClickerButton.style.backgroundColor = 'rgba(105,105,105,0.3)';
   elementClickerText.innerText = 'Добыча...';
   const clickerTimer = setInterval((button, text) => {
-    const element = document.querySelector('.x') ?? document.querySelector('.iskra') ?? document.querySelector('.farm-wrapper__clicker-item');
-    if (element) {
-      element.click();
-    } else {
-      clearInterval(clickerTimer);
-      mining = false;
-      button.style.backgroundColor = 'rgba(46,139,87,0.3)';
-      text.innerText = 'Всё добыто!';
-      elementClickerButton.style.cursor = 'default';
-      setTimeout((text, button) => {
-        button.style.backgroundColor = '';
-        elementClickerButton.style.cursor = '';
-        text.innerText = 'Автокликер';
-        button.onclick = clicker;
-      }, 2000, text, button);
-      if (autoWalk) {
-        const returnToMapElement = gameBody.querySelector('div.farm-wrapper button.btn.btn-blue')
-        if (!returnToMapElement) {
-          console.error('Не найдена кнопка возврата на карту');
-          setTimeout(() => clicker(), 1000);
+    const cross = document.querySelector('.x');
+    const sparkle = document.querySelector('.iskra');
+    const element = document.querySelector('.farm-wrapper__clicker-item');
+    const toolsNodes = gameBody.querySelectorAll('div.farm-list > div.farm-list__item:has(div.regular-item__progress-broke), div.farm-list > div.farm-list__item:has(img[src="https://static.cobaltlab.tech/images/4c6083a85b4dc2441adee656bd519af6e2c44e279b00528da17f99d6e5a475ec.png"]) ');
+    const tools = [...toolsNodes].map((item, id) => {
+      const src = toolsNodes[id].querySelector('img')?.getAttribute('src');
+      const type = src ? toolTypes.find(elem => elem.src === src)?.name : null;
+      return {
+        id,
+        type,
+        health: type !== 'rock' ? +toolsNodes[id].querySelector('div.regular-item__progress-broke > div')?.style.height.slice(0, -1) ?? 0 : 100,
+      }
+    }).filter(item => item.health > 0);
+    const rock = tools.find(item => item.type === 'rock');
+    if (cross) {
+      const axes = tools.filter(item => !!item.type?.startsWith('axe'))
+        .sort((a, b) => {
+            if (+a.type.slice(-1) < +b.type.slice(-1))
+              return -1;
+            if (+a.type.slice(-1) > +b.type.slice(-1))
+              return 1;
+            return a.health - b.health
+          }
+        );
+      let selectTool = toolsNodes[axes[0]?.id];
+      if (selectTool)
+        selectTool.click()
+      else {
+        if (!rock) {
+          clearInterval(clickerTimer);
+          mining = false;
+          elementClickerText.innerText = 'Автокликер';
+          elementClickerButton.style.backgroundColor = '';
+          elementClickerButton.onclick = clicker;
+          alert('Нечем фармить!');
           return;
         }
-        returnToMapElement.click();
-        setTimeout(nextStep, 300);
+        selectTool = toolsNodes[rock.id];
+        selectTool.click();
       }
+      cross.click();
+      return;
+    } else if (sparkle) {
+      const pickaxes = tools.filter(item => !!item.type?.startsWith('pickaxe'))
+        .sort((a, b) => {
+            if (+a.type.slice(-1) < +b.type.slice(-1))
+              return -1;
+            if (+a.type.slice(-1) > +b.type.slice(-1))
+              return 1;
+            return a.health - b.health
+          }
+        );
+      let selectTool = toolsNodes[pickaxes[0]?.id];
+      if (selectTool)
+        selectTool.click()
+      else {
+        if (!rock) {
+          clearInterval(clickerTimer);
+          mining = false;
+          elementClickerText.innerText = 'Автокликер';
+          elementClickerButton.style.backgroundColor = '';
+          elementClickerButton.onclick = clicker;
+          alert('Нечем фармить!');
+          return;
+        }
+        selectTool = toolsNodes[rock.id];
+        selectTool.click();
+      }
+      sparkle.click();
+      return;
+    } else if (element) {
+      if (!rock) {
+        clearInterval(clickerTimer);
+        mining = false;
+        elementClickerText.innerText = 'Автокликер';
+        elementClickerButton.style.backgroundColor = '';
+        elementClickerButton.onclick = clicker;
+        alert('Нечем фармить!');
+        return;
+      }
+      const selectTool = toolsNodes[rock.id];
+      selectTool.click();
+      element.click();
+      return;
     }
-  }, 400, elementClickerButton, elementClickerText);
+    
+    clearInterval(clickerTimer);
+    mining = false;
+    button.style.backgroundColor = 'rgba(46,139,87,0.3)';
+    text.innerText = 'Всё добыто!';
+    elementClickerButton.style.cursor = 'default';
+    setTimeout((text, button) => {
+      button.style.backgroundColor = '';
+      elementClickerButton.style.cursor = '';
+      text.innerText = 'Автокликер';
+      button.onclick = clicker;
+    }, 2000, text, button);
+    if (autoWalk) {
+      const returnToMapElement = gameBody.querySelector('div.farm-wrapper button.btn.btn-blue')
+      if (!returnToMapElement) {
+        console.error('Не найдена кнопка возврата на карту');
+        setTimeout(() => clicker(), 1000);
+        return;
+      }
+      returnToMapElement.click();
+      setTimeout(nextStep, 300);
+    }
+  }, 600, elementClickerButton, elementClickerText);
   elementClickerButton.onclick = () => {
     clearInterval(clickerTimer);
     mining = false;

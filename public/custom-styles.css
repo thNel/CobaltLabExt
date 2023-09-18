@@ -10,7 +10,7 @@ button.clicker-button {
     position: absolute !important;
     left: calc(var(--px)*140) !important;
     bottom: calc(var(--px)*10) !important;
-    z-index: 99999 !important;
+    z-index: 3 !important;
     max-width: min-content;
     display: flex !important;
     gap: 8px;
