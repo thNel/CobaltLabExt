@@ -20,7 +20,7 @@ export const bidHandler = ({setErrorMessage, setSum, setLastWin, bid, sum, setBi
       };
       message: string
     }>(
-      '/api/cobaltGame/roulette/spin',
+      'https://cobaltlab.tech/api/cobaltGame/roulette/spin',
       {
         bet: bid,
       },
@@ -90,7 +90,7 @@ export const intervalHandler = ({delay, setErrorMessage, setSum, setLastWin, bid
         };
         message: string
       }>(
-        '/api/cobaltGame/roulette/spin',
+        'https://cobaltlab.tech/api/cobaltGame/roulette/spin',
         {
           bet: bid,
         },

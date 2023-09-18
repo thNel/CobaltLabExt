@@ -47,7 +47,7 @@ export const ControlButtons = ({isInterval, setSum, sum, setLastWin, isDouble, s
       <Button
         variant={"contained"}
         className={runningInterval || !isInterval ? 'hidden' : ''}
-        onClick={intervalHandler({delay, setRunningInterval, setCounter, setSum, sum, setErrorMessage, setLastWin, isDouble, setBid, bid, bidLimit, setTimer})}
+        onClick={intervalHandler({delay, setRunningInterval, setCounter, setSum, setErrorMessage, setLastWin, isDouble, setBid, bid, bidLimit, setTimer})}
       >
         Сделать ставку
       </Button>

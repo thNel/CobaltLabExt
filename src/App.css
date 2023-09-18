@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+.App {
+  width: max-content;
+}
+
 .logo {
   height: 4em;
   padding: 1.5em;
@@ -15,7 +19,7 @@
 }
 
 .card, .card > div.MuiFormGroup-root {
-  padding: 2em;
+  padding: 8px;
   display: flex;
   flex-direction: row;
   gap: 16px;
