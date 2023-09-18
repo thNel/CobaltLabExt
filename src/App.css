@@ -14,7 +14,7 @@
   filter: drop-shadow(0 0 2em #646cffaa);
 }
 
-.card {
+.card, .card > div.MuiFormGroup-root {
   padding: 2em;
   display: flex;
   flex-direction: row;
@@ -36,10 +36,14 @@
   justify-content: center;
 }
 
-.bid-column > input {
+.bid-column  input {
   width: 60px;
 }
 
 .error-message {
   color: #FF4500;
+}
+
+.hidden {
+  display: none !important;
 }

@@ -6,17 +6,35 @@ button.clicker-button {
     justify-content: space-between;
 }
 
-.btn-auto-walk {
+.btn-auto-walk-block {
     position: absolute !important;
     left: calc(var(--px)*140) !important;
     bottom: calc(var(--px)*10) !important;
     z-index: 99999 !important;
-    width: auto;
+    max-width: min-content;
+    display: flex !important;
+    gap: 8px;
+    flex-direction: column;
+    align-items: start !important;
+    justify-content: center !important;
+}
+
+.btn-auto-walk-settings, .btn-auto-walk {
+    width: 100%;
     height: calc(var(--px)*36);
     padding: calc(var(--px)*7) !important;
     display: flex !important;
+    flex-wrap: nowrap;
     align-items: center !important;
     justify-content: center !important;
+    font-size: calc(var(--px)*12) !important;
+}
+
+.btn-auto-walk {
     font-size: calc(var(--px)*20) !important;
     background-color: rgba(102, 51, 153, 0.3) !important;
+}
+
+.btn-auto-walk *, .btn-auto-walk-settings * {
+    white-space: nowrap;
 }

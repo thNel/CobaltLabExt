@@ -24,8 +24,8 @@
   "author": "thNel",
   "content_scripts": [
     {
-      "matches": ["https://*.cobaltlab.tech/*"],
-      "css": ["my-styles.css"],
+      "matches": ["https://*.cobaltlab.tech/game*"],
+      "css": ["custom-styles.css"],
       "js": ["content-script.js"]
     }
   ],
@@ -35,10 +35,7 @@
   "cross_origin_opener_policy": {
     "value": "same-origin"
   },
-  "homepage_url": "https://cobaltlab.tech/game",
-  "host_permissions": [
-    "https://*.cobaltlab.tech/*"
-  ],
+  "homepage_url": "https://cobaltlab.tech/",
   "incognito": "split",
   "minimum_chrome_version": "100",
   "offline_enabled": true,
