@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CobaltLab Helper",
-  "version": "0.0.0.4",
+  "version": "0.0.0.5",
   "action": {
     "default_icon": {
       "32": "images/icon32.png",
@@ -43,5 +43,5 @@
     "keyword": "aString"
   },
   "short_name": "AutoCobaltLab",
-  "version_name": "Autowalk"
+  "version_name": "Counter anti-hack"
 }

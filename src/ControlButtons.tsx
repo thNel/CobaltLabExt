@@ -1,6 +1,7 @@
 import {bidHandler, intervalHandler} from "./handlers";
 import {Dispatch, ReactElement, SetStateAction, useState} from "react";
-import {Button, Container} from "@mui/material";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
 
 export const ControlButtons = ({isInterval, setSum, sum, setLastWin, isDouble, setErrorMessage, delay, bid, bidLimit, setBid}: {
   setErrorMessage: Dispatch<SetStateAction<string>>;

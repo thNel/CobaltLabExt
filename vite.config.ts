@@ -42,6 +42,20 @@ export default defineConfig(({mode}) => {
       assetsDir: 'assets',
       outDir: 'dist/' + env.REACT_APP_NAME,
       emptyOutDir: true,
+      rollupOptions: {
+        output: {
+          manualChunks: (libraryName) => {
+            if (libraryName.includes('@mui/')) {
+              return 'vendor_MUI';
+            } else if (libraryName.includes('axios')) {
+              return 'vendor_axios';
+            } else if (libraryName.includes('node_modules')) {
+              return 'vendor';
+            }
+            return 'unknown';
+          }
+        }
+      }
     },
   }
 })

@@ -1,4 +1,8 @@
-import {Checkbox, Container, FormControlLabel, FormGroup, Input} from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import Container from "@mui/material/Container";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import Input from "@mui/material/Input";
 import {Dispatch, ReactElement, SetStateAction} from "react";
 
 export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {

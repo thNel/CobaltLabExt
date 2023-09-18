@@ -1,8 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import {StrictMode} from 'react'
+import {createRoot} from 'react-dom/client'
 import App from './App'
 import './index.css'
 import {createTheme, ThemeProvider} from "@mui/material";
+import {DevSupport} from "@react-buddy/ide-toolbox";
+import {ComponentPreviews, useInitial} from "./dev";
 
 const theme = createTheme({
   palette: {
@@ -13,14 +15,18 @@ const theme = createTheme({
 const RootElement = document.getElementById('root');
 
 if (RootElement) {
-  const root = ReactDOM.createRoot(RootElement);
+  const root = createRoot(RootElement);
 
   root.render(
-    <React.StrictMode>
+    <StrictMode>
       <ThemeProvider theme={theme}>
-        <App/>
+        <DevSupport ComponentPreviews={ComponentPreviews}
+                    useInitialHook={useInitial}
+        >
+          <App/>
+        </DevSupport>
       </ThemeProvider>
-    </React.StrictMode>
+    </StrictMode>
   )
 } else {
   alert('Не задан #root элемент!');

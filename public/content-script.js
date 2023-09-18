@@ -255,7 +255,11 @@ function clicker() {
       }, 2000, text, button);
       if (autoWalk) {
         const returnToMapElement = gameBody.querySelector('div.farm-wrapper button.btn.btn-blue')
-        if (!returnToMapElement) console.error('Не найдена кнопка возврата на карту');
+        if (!returnToMapElement) {
+          console.error('Не найдена кнопка возврата на карту');
+          setTimeout(() => clicker(), 1000);
+          return;
+        }
         returnToMapElement.click();
         setTimeout(nextStep, 300);
       }
@@ -271,3 +275,11 @@ function clicker() {
 }
 
 Init();
+
+setInterval(() => {
+  const startGame = document.querySelector('div.start-game button.btn-medium:has(span)');
+  if (startGame) {
+    startGame.click();
+    if (autoWalk) nextStep();
+  }
+}, 5000);

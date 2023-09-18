@@ -1,7 +1,7 @@
 {
   "name": "chrome-extension",
   "private": true,
-  "version": "0.0.0.4",
+  "version": "0.0.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,9 @@
     "@mui/material": "^5.14.10",
     "axios": "^1.5.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@react-buddy/ide-toolbox": "^2.4.0",
+    "@react-buddy/palette-mui": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^18.7.23",

@@ -1,5 +1,10 @@
 import {Dispatch, ReactElement, SetStateAction} from "react";
-import {Checkbox, Container, FormControlLabel, FormGroup, Input, InputAdornment} from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import Container from "@mui/material/Container";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import Input from "@mui/material/Input";
+import InputAdornment from '@mui/material/InputAdornment';
 
 export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
   isInterval: boolean;
