@@ -21,12 +21,14 @@ export const Bid = ({bid, setBid}: {
                 <Input
                   type={"number"}
                   value={bidNow}
-                  onChange={(event) =>
+                  onChange={(event) => {
                     setBid(
                       bid.map(
                         (item, bidIndex) => index === bidIndex ? +event.target.value : item
                       ) as typeof bid
-                    )}
+                    );
+                    localStorage.setItem('react_bid', JSON.stringify(bid));
+                  }}
                 />
               }
               label={multipliers[index]}

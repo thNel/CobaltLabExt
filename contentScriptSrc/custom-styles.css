@@ -1,0 +1,101 @@
+button.clicker-button {
+  background-color: rgba(102, 51, 153, 0.3);
+}
+
+.clicker-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: center;
+  gap: 24px;
+}
+
+.inp-clicker-settings {
+  width: 50px;
+  text-align: end;
+}
+
+.clicker-settings {
+  display: flex;
+  gap: 8px;
+  justify-content: end;
+}
+
+.clicker-settings-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  align-items: end;
+  position: absolute;
+  top: calc(var(--px) * 50) !important;
+  padding-top: calc(var(--px) * 10) !important;
+}
+
+.farm-header {
+  justify-content: space-between;
+}
+
+.auto-walk-wrapper {
+  position: absolute !important;
+  right: calc(var(--px) * 860) !important;
+  bottom: calc(var(--px) * 20) !important;
+  z-index: 3 !important;
+  max-width: min-content;
+  display: flex !important;
+  gap: 8px;
+  flex-direction: column;
+  align-items: end !important;
+  justify-content: center !important;
+}
+
+.auto-walk-wrapper:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.btn-auto-walk-settings, .btn-auto-walk, .btn-clicker-settings {
+  max-width: 100%;
+  height: calc(var(--px) * 22);
+  padding: calc(var(--px) * 4) !important;
+  display: flex !important;
+  flex: 1 1 max-content;
+  flex-wrap: nowrap;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: calc(var(--px) * 14) !important;
+  white-space: nowrap;
+}
+
+.btn-clicker-settings {
+  height: calc(var(--px) * 30);
+  padding: calc(var(--px) * 8) !important;
+}
+
+.btn-clicker-settings > span {
+  font-size: calc(var(--px) * 14) !important;
+}
+
+.auto-walk-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-auto-walk {
+  padding: calc(var(--px) * 6) !important;
+  height: calc(var(--px) * 38) !important;
+  background-color: rgba(102, 51, 153, 0.3) !important;
+}
+
+.btn-auto-walk > span {
+  font-size: calc(var(--px) * 16) !important;
+}
+
+.btn-auto-walk * {
+  white-space: nowrap;
+}

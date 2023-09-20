@@ -18,7 +18,10 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
           control={
             <Checkbox
               checked={isDouble}
-              onChange={(event) => setIsDouble(event.target.checked)}
+              onChange={(event) => {
+                setIsDouble(event.target.checked);
+                localStorage.setItem('react_isDouble', JSON.stringify(event.target.checked));
+              }}
             />
           }
           label={'Удваивать ставку при проигрыше?'}/>
@@ -29,7 +32,10 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
                 type={"number"}
                 id={"limit"}
                 value={bidLimit}
-                onChange={(event) => setBidLimit(+event.target.value)}
+                onChange={(event) => {
+                  setBidLimit(+event.target.value);
+                  localStorage.setItem('react_bidLimit', JSON.stringify(event.target.value));
+                }}
               />}
             label={'Лимит суммы:\u00A0\u00A0'}
             labelPlacement={"start"}

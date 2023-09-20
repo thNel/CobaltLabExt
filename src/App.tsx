@@ -7,11 +7,13 @@ import {ControlButtons} from "./ControlButtons";
 import {ErrorMessage} from "./ErrorMessage";
 
 const App = (): ReactElement => {
-  const [bid, setBid] = useState<[number, number, number, number, number]>([0, 0, 0, 0, 0]);
-  const [isInterval, setIsInterval] = useState(false);
-  const [isDouble, setIsDouble] = useState(false);
-  const [delay, setDelay] = useState(200);
-  const [bidLimit, setBidLimit] = useState(0);
+  const [bid, setBid] = useState<[number, number, number, number, number]>(
+    JSON.parse(localStorage.getItem('react_bid') ?? '[]') ?? [0, 0, 0, 0, 0]
+  );
+  const [isInterval, setIsInterval] = useState(localStorage.getItem('react_isInterval') === 'true' ?? false);
+  const [isDouble, setIsDouble] = useState(localStorage.getItem('react_isDouble') === 'true' ?? false);
+  const [delay, setDelay] = useState(JSON.parse(localStorage.getItem('react_delay') ?? '200') ?? 200);
+  const [bidLimit, setBidLimit] = useState(JSON.parse(localStorage.getItem('react_bidLimit') ?? '0') ?? 0);
   const [sum, setSum] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [lastWin, setLastWin] = useState(0);
@@ -31,7 +33,7 @@ const App = (): ReactElement => {
         <span>Выигрыш: {lastWin}</span>
         <span>Прибыль: {sum}</span>
       </div>
-      <ErrorMessage message={errorMessage} />
+      <ErrorMessage message={errorMessage}/>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CobaltLab Helper",
-  "version": "0.0.0.5",
+  "version": "0.0.0.6",
   "action": {
     "default_icon": {
       "32": "images/icon32.png",
@@ -24,9 +24,15 @@
   "author": "thNel",
   "content_scripts": [
     {
-      "matches": ["https://*.cobaltlab.tech/game*"],
-      "css": ["custom-styles.css"],
-      "js": ["content-script.js"]
+      "matches": [
+        "https://*.cobaltlab.tech/game*"
+      ],
+      "css": [
+        "custom-styles.css"
+      ],
+      "js": [
+        "content-script.js"
+      ]
     }
   ],
   "cross_origin_embedder_policy": {
@@ -43,5 +49,5 @@
     "keyword": "aString"
   },
   "short_name": "AutoCobaltLab",
-  "version_name": "Counter anti-hack"
+  "version_name": "More settings"
 }

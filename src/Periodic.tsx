@@ -20,7 +20,10 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
             <Checkbox
               id='interval'
               checked={isInterval}
-              onChange={(event) => setIsInterval(event.target.checked)}
+              onChange={(event) => {
+                setIsInterval(event.target.checked);
+                localStorage.setItem('react_isInterval', JSON.stringify(event.target.checked));
+              }}
             />
           }
           label={'Периодично?'}/>
@@ -31,7 +34,10 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
                 type={"number"}
                 id="delay"
                 value={delay}
-                onChange={(event) => setDelay(+event.target.value)}
+                onChange={(event) => {
+                  setDelay(+event.target.value);
+                  localStorage.setItem('react_delay', JSON.stringify(event.target.value));
+                }}
                 endAdornment={<InputAdornment position="end">ms</InputAdornment>}
               />
             }
