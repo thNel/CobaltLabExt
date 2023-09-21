@@ -23,6 +23,7 @@ export const clicker = (cellType: typeof cellTypes[keyof typeof cellTypes] | und
   let autoWalkTryCounter = 0;
   if (!autoClicker.mining)
     return;
+  let counter = 0;
   const clickerTimer = setInterval(() => {
     if (!autoClicker.mining) {
       clearInterval(clickerTimer);
@@ -57,9 +58,12 @@ export const clicker = (cellType: typeof cellTypes[keyof typeof cellTypes] | und
         if (selectTool && autoClicker.settings.autoSelectTool)
           selectTool.click()
         else {
-          autoClicker.toggleMining();
-          pushError('Нечем фармить!');
-          console.log('Нечем фармить!');
+          counter += 1;
+          if (counter < 21) {
+            autoClicker.toggleMining();
+          }
+          pushError('Нечем фармить! Попытка #${counter}');
+          console.log('Нечем фармить! Попытка #${counter}');
           return;
         }
         element.click();
@@ -71,9 +75,12 @@ export const clicker = (cellType: typeof cellTypes[keyof typeof cellTypes] | und
         if (selectTool && autoClicker.settings.autoSelectTool)
           selectTool.click()
         else {
-          autoClicker.toggleMining();
-          pushError('Нечем фармить!');
-          console.log('Нечем фармить!');
+          counter += 1;
+          if (counter < 21) {
+            autoClicker.toggleMining();
+          }
+          pushError(`Нечем фармить! Попытка #${counter}`);
+          console.log('Нечем фармить! Попытка #${counter}');
           return;
         }
         element.click();
@@ -91,11 +98,18 @@ export const clicker = (cellType: typeof cellTypes[keyof typeof cellTypes] | und
         return;
       }
     }
+    const returnToMapElement = settings.gameBody.querySelector<HTMLButtonElement>('div.farm-wrapper button.btn.btn-blue');
+    counter += 1;
+
+    if (counter < 21 && !returnToMapElement) {
+      pushError(`Не удалось найти элементов игры. Попытка #${counter}`, true);
+      console.log(`Не удалось найти элементов игры. Попытка #${counter}`);
+      return;
+    }
 
     clearInterval(clickerTimer);
     autoClicker.toggleMining(true);
     if (autoWalk.enabled) {
-      const returnToMapElement = settings.gameBody.querySelector<HTMLButtonElement>('div.farm-wrapper button.btn.btn-blue')
       if (!returnToMapElement) {
         autoWalkTryCounter += 1;
         if (autoWalkTryCounter < 11) {
