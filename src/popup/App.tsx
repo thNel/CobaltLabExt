@@ -33,6 +33,7 @@ const App = () => {
           width: '100%',
           justifySelf: 'start',
         }}
+        className='dark-shadow-up'
       >
         <img
           src="/images/bigLogo.png"
@@ -46,7 +47,7 @@ const App = () => {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'rgba(133,133,133,0.07)',
-      }} className='dark-shadow'>
+      }} className='dark-shadow-down'>
         <Box sx={{
           display: 'flex',
           width: '100%',
