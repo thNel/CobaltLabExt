@@ -37,7 +37,7 @@ export const bidHandler = ({setErrorMessage, setSum, setLastWin, bid, sum, setBi
       setSum(sum - bid.reduce((acc, item) => acc + item, 0) + +data.data.winSum);
       if (+data.data.winSum < 2 && isDouble) {
         setBid(bid.map(item => item * 2) as typeof bid);
-        localStorage.setItem('react_bid', JSON.stringify(bid));
+        localStorage.setItem('react_bid', JSON.stringify(bid.map(item => item * 2)));
       }
     } else {
       setLastWin(0);

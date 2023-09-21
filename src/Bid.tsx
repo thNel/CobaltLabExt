@@ -27,7 +27,9 @@ export const Bid = ({bid, setBid}: {
                         (item, bidIndex) => index === bidIndex ? +event.target.value : item
                       ) as typeof bid
                     );
-                    localStorage.setItem('react_bid', JSON.stringify(bid));
+                    localStorage.setItem('react_bid', JSON.stringify(bid.map(
+                      (item, bidIndex) => index === bidIndex ? +event.target.value : item
+                    )));
                   }}
                 />
               }
