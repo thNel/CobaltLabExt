@@ -11,6 +11,7 @@ export const nextStep = () => {
       if (!Object.values(autoWalk.settings).reduce((acc, item) => acc || item, false)) {
         autoWalk.toggleEnabled();
         pushError('Выберите типы ресурсов!', true);
+        console.log('Выберите типы ресурсов!');
         return;
       }
       const mapFarming = Object.values(settings.mapFarmingObject).reduce((acc, item, index) => {
@@ -56,11 +57,14 @@ export const nextStep = () => {
         autoWalk.currentCellType = mapFarmingCells[userCellIndex + 1].type;
       }
     } catch (e: any) {
-      autoWalk.toggleEnabled();
-      pushError(e?.message ?? e, true);
+      if (e.cause !== 'MapNotFound')
+        autoWalk.toggleEnabled();
+      pushError(e?.message ?? e, true, 10000);
+      console.log(e);
     }
   } else {
     pushError('Автоходьба была отключена!');
+    console.log('Автоходьба была отключена!');
   }
 
 }

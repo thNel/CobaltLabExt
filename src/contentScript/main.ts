@@ -52,12 +52,14 @@ function Init() {
       if (tryCount > 10) {
         clearInterval(autoWalkTimer);
         pushError('Не получилось установить автоходьбу :(');
+        console.log('Не получилось установить автоходьбу :(');
         return;
       }
       clearInterval(autoWalkTimer);
       tryCount = 0;
       settings.gameBody.append(autoWalk.controlsDiv);
       pushNotification('Автоходьба установлена!', true);
+      console.log('Автоходьба установлена!');
     } catch (e: any) {
       alert(e?.message ?? e);
     }

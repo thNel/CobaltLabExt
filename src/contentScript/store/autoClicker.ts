@@ -65,7 +65,7 @@ class AutoClicker {
         if (+event.target.value < this._settings.delay)
           this.fastDelay = +event.target.value
         else {
-          pushError('Ускоренная добыча должна быть быстрее!', true);
+          pushError('Ускоренная добыча не может быть медленнее обычной!', true);
           this._fastDelayInput.value = this._settings.fastDelay.toString();
         }
       } else {
@@ -146,7 +146,7 @@ class AutoClicker {
     this.fastDelay = condition ? this._settings.fastDelay : this._settings.delay - 1;
     if (!condition) {
       this._fastDelayInput.value = this._settings.fastDelay.toString();
-      pushError('Ускоренная добыча не может быть быстрее обычной!', true);
+      pushError('Ускоренная добыча не может быть медленнее обычной!', true);
     }
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
@@ -155,7 +155,7 @@ class AutoClicker {
     const condition = ms < this._settings.delay;
     this._settings.fastDelay = condition ? ms : this._settings.delay;
     if (!condition)
-      pushError('Ускоренная добыча не может быть быстрее обычной!', true);
+      pushError('Ускоренная добыча не может быть медленнее обычной!', true);
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
 

@@ -1,11 +1,12 @@
 import {Dispatch, ReactElement, SetStateAction} from "react";
 import Checkbox from "@mui/material/Checkbox";
-import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Input from "@mui/material/Input";
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from "@mui/material/Typography";
+import ToastUtils from "@/utils/toastUtils";
+import Box from "@mui/material/Box";
 
 export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
   isInterval: boolean;
@@ -14,15 +15,16 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
   setDelay: Dispatch<SetStateAction<number>>;
 }): ReactElement => {
   return (
-    <Container
+    <Box
       maxWidth='xl'
       sx={{
         display: 'flex',
         flex: '1 1 auto',
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <FormGroup row>
+      <FormGroup sx={{flex: '1 1 auto', alignItems: 'center'}}>
         <FormControlLabel
           control={
             <Checkbox
@@ -37,13 +39,26 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
           label={<Typography>Периодично?</Typography>}/>
         {isInterval
           ? <FormControlLabel
+            sx={{
+              alignSelf: 'end',
+            }}
             control={
               <Input
                 sx={{width: '100px'}}
-                type={"number"}
-                id="delay"
+                inputProps={{
+                  maxLength: 7
+                }}
                 value={delay}
                 onChange={(event) => {
+                  if (event.target.value.length === 0) {
+                    setDelay(1);
+                    localStorage.setItem('react_delay', '1');
+                    return;
+                  }
+                  if (isNaN(+event.target.value) || event.target.value.includes('.') || event.target.value.includes(',') || +event.target.value < 1) {
+                    ToastUtils.error('Только целые числа!');
+                    return;
+                  }
                   setDelay(+event.target.value);
                   localStorage.setItem('react_delay', JSON.stringify(event.target.value));
                 }}
@@ -55,6 +70,6 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
           />
           : null}
       </FormGroup>
-    </Container>
+    </Box>
   )
 }

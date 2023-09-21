@@ -21,9 +21,11 @@ export const move = (target: {
           clearInterval(walkButtonInterval);
           autoWalk.toggleEnabled();
           pushError('Не получилось сходить на следующую клетку :(');
+          console.log('Не получилось сходить на следующую клетку :(');
           return;
         }
         pushError(`Не найдена целевая клетка. Попытка #${tryCounter}`, true, 600);
+        console.log(`Не найдена целевая клетка. Попытка #${tryCounter}`);
         return;
       }
       targetClicked = true;
@@ -37,9 +39,11 @@ export const move = (target: {
           clearInterval(walkButtonInterval);
           autoWalk.toggleEnabled();
           pushError('Не получилось сходить на следующую клетку :(');
+          console.log('Не получилось сходить на следующую клетку :(');
           return;
         }
         pushError(`Не найдена кнопка ходьбы. Попытка #${tryCounter}`, true, 600);
+        console.log(`Не найдена кнопка ходьбы. Попытка #${tryCounter}`);
         return;
       }
       clearInterval(walkButtonInterval);

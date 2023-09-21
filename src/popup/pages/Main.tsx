@@ -3,8 +3,8 @@ import {Bid} from "@/components/Bid";
 import {DoubleSettings} from "@/components/DoubleSettings";
 import {Periodic} from "@/components/Periodic";
 import {ControlButtons} from "@/components/ControlButtons";
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const Main = (): ReactElement => {
   const [bid, setBid] = useState<[number, number, number, number, number]>(
@@ -18,8 +18,7 @@ const Main = (): ReactElement => {
   const [lastWin, setLastWin] = useState(0);
 
   return (
-    <Container
-      maxWidth='xl'
+    <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -27,13 +26,14 @@ const Main = (): ReactElement => {
         justifyContent: 'center',
         gap: '16px',
       }}
+      className='main-page'
     >
       <Bid bid={bid} setBid={setBid}/>
       <DoubleSettings isDouble={isDouble} setIsDouble={setIsDouble} bidLimit={bidLimit} setBidLimit={setBidLimit}/>
       <Periodic isInterval={isInterval} setIsInterval={setIsInterval} delay={delay} setDelay={setDelay}/>
       <ControlButtons bid={bid} setBid={setBid} setLastWin={setLastWin} sum={sum}
                       setSum={setSum} isDouble={isDouble} bidLimit={bidLimit} delay={delay} isInterval={isInterval}/>
-      <Container
+      <Box
         maxWidth='xl'
         sx={{
           display: 'flex',
@@ -44,8 +44,8 @@ const Main = (): ReactElement => {
       >
         <Typography>Выигрыш: {lastWin}</Typography>
         <Typography>Прибыль: {sum}</Typography>
-      </Container>
-    </Container>
+      </Box>
+    </Box>
   )
 }
 

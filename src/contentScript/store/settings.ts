@@ -21,7 +21,7 @@ class Settings {
     if (elements.length > 0)
       return elements;
     else
-      throw new Error('Невозможно обнаружить карту :(');
+      throw new Error('Невозможно обнаружить карту :(. Если вы в локации, попробуйте нажать "Автокликер" в правом верхнем углу', {cause: 'MapNotFound'});
   }
 
   public get mapFarmingObject() {

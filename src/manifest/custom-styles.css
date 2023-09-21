@@ -1,5 +1,6 @@
 button.clicker-button {
   background-color: rgba(102, 51, 153, 0.3);
+  z-index: 3;
 }
 
 .clicker-wrapper {
@@ -28,8 +29,8 @@ button.clicker-button {
   justify-content: center;
   align-items: end;
   position: absolute;
-  top: calc(var(--px) * 50) !important;
-  padding-top: calc(var(--px) * 10) !important;
+  top: calc(var(--px) * 20) !important;
+  padding: calc(var(--px) * 50) 5px 5px;
 }
 
 .farm-header {
@@ -47,9 +48,10 @@ button.clicker-button {
   flex-direction: column;
   align-items: end !important;
   justify-content: center !important;
+  padding: 5px;
 }
 
-.auto-walk-wrapper:hover {
+.auto-walk-wrapper:hover, .clicker-settings-wrapper {
   background-color: rgba(0, 0, 0, 0.3);
 }
 

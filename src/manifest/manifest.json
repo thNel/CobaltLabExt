@@ -11,7 +11,7 @@
     "default_title": "AutoRoulette",
     "default_popup": "index.html"
   },
-  "description": "Auto clicker for CobaltLab game",
+  "description": "Автокликер для игры CobaltLab",
   "icons": {
     "32": "images/icon32.png",
     "48": "images/icon48.png",

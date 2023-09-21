@@ -59,6 +59,7 @@ export const clicker = (cellType: typeof cellTypes[keyof typeof cellTypes] | und
         else {
           autoClicker.toggleMining();
           pushError('Нечем фармить!');
+          console.log('Нечем фармить!');
           return;
         }
         element.click();
@@ -72,6 +73,7 @@ export const clicker = (cellType: typeof cellTypes[keyof typeof cellTypes] | und
         else {
           autoClicker.toggleMining();
           pushError('Нечем фармить!');
+          console.log('Нечем фармить!');
           return;
         }
         element.click();
@@ -81,7 +83,8 @@ export const clicker = (cellType: typeof cellTypes[keyof typeof cellTypes] | und
           rockElement.click()
         } else {
           autoClicker.toggleMining();
-          pushError('Неизвестный ресурс! Могу бить только камнем!');
+          pushError('Неизвестный ресурс! Могу бить только камнем! И камень не обнаружен...');
+          console.log('Неизвестный ресурс! Могу бить только камнем! И камень не обнаружен...');
           return;
         }
         element.click();
@@ -96,11 +99,13 @@ export const clicker = (cellType: typeof cellTypes[keyof typeof cellTypes] | und
       if (!returnToMapElement) {
         autoWalkTryCounter += 1;
         if (autoWalkTryCounter < 11) {
-          setTimeout(clicker, 1000);
+          setTimeout(() => clicker(cellType), 1000);
           pushError(`Не удалось вернуться на карту. Попытка #${autoWalkTryCounter}`, true, 800);
+          console.log(`Не удалось вернуться на карту. Попытка #${autoWalkTryCounter}`);
           return;
         }
         pushError('Не найдена кнопка возврата на карту');
+        console.log('Не найдена кнопка возврата на карту');
         return;
       }
       returnToMapElement.click();

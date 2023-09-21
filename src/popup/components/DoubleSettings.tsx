@@ -1,10 +1,11 @@
 import Checkbox from "@mui/material/Checkbox";
-import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Input from "@mui/material/Input";
 import {Dispatch, ReactElement, SetStateAction} from "react";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import ToastUtils from "@/utils/toastUtils";
 
 export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
   isDouble: boolean;
@@ -13,11 +14,12 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
   setBidLimit: Dispatch<SetStateAction<number>>;
 }): ReactElement => {
   return (
-    <Container
+    <Box
       maxWidth='xl'
       sx={{
         display: 'flex',
         flex: '1 1 auto',
+        width: '100%',
         flexDirection: 'row',
         flexWrap: 'nowrap',
         alignItems: 'center',
@@ -25,7 +27,7 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
         padding: '8px',
       }}
     >
-      <FormGroup row>
+      <FormGroup sx={{flex: '1 1 auto', alignItems: 'center'}}>
         <FormControlLabel
           control={
             <Checkbox
@@ -39,15 +41,28 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
           label={<Typography>Удваивать ставку при проигрыше?</Typography>}/>
         {isDouble
           ? <FormControlLabel
+            sx={{
+              alignSelf: 'end',
+            }}
             control={
               <Input
-                sx={{width: '70px'}}
-                type={"number"}
-                id={"limit"}
+                sx={{width: '140px'}}
+                inputProps={{
+                  maxLength: 15
+                }}
                 value={bidLimit}
                 onChange={(event) => {
-                  setBidLimit(+event.target.value);
-                  localStorage.setItem('react_bidLimit', JSON.stringify(event.target.value));
+                  if (event.target.value.length === 0) {
+                    setBidLimit(0);
+                    localStorage.setItem('react_bidLimit', '0');
+                    return;
+                  }
+                  if (isNaN(+event.target.value) || event.target.value.includes('.') || event.target.value.includes(',') || +event.target.value < 0) {
+                    ToastUtils.error('Только целые числа!');
+                    return;
+                  }
+                  setBidLimit(parseInt(event.target.value));
+                  localStorage.setItem('react_bidLimit', JSON.stringify(parseInt(event.target.value)));
                 }}
               />}
             label={<Typography>Лимит суммы:&nbsp;&nbsp;</Typography>}
@@ -55,6 +70,6 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
           />
           : null}
       </FormGroup>
-    </Container>
+    </Box>
   )
 }
