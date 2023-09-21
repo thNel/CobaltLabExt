@@ -35,8 +35,10 @@ function Init() {
           autoClicker.clickerSettingsDiv.classList.add('d-none')
         },
       }));
-      if (autoWalk.enabled)
-        clicker(autoWalk.currentCellType)();
+      if (autoWalk.enabled) {
+        const activateClicker = clicker(autoWalk.currentCellType);
+        setTimeout(activateClicker, 500);
+      }
     }
   }, 1000);
 
