@@ -12,7 +12,13 @@ export const pushNotification = (text: string, autoDelete = false, deleteTimeout
     classes: `notiflist-item ${selfDeleteTag}`
   });
   const selfDelete = () => {
-    document.querySelector(`.${selfDeleteTag}`)?.remove();
+    const element = document.querySelector(`.${selfDeleteTag}`);
+    if (element) {
+      element.classList.add('slide-leave-active', 'slide-leave-to');
+      setTimeout(() => {
+        element.remove();
+      }, 1000);
+    }
   }
   notifyDiv.onclick = selfDelete;
   notifyList.append(notifyDiv);

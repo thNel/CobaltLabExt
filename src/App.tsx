@@ -8,7 +8,7 @@ import {ErrorMessage} from "./ErrorMessage";
 
 const App = (): ReactElement => {
   const [bid, setBid] = useState<[number, number, number, number, number]>(
-    JSON.parse(localStorage.getItem('react_bid') ?? '[]') ?? [0, 0, 0, 0, 0]
+    JSON.parse(localStorage.getItem('react_bid') ?? '[0, 0, 0, 0, 0]') ?? [0, 0, 0, 0, 0]
   );
   const [isInterval, setIsInterval] = useState(localStorage.getItem('react_isInterval') === 'true' ?? false);
   const [isDouble, setIsDouble] = useState(localStorage.getItem('react_isDouble') === 'true' ?? false);
