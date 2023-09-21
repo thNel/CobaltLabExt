@@ -1,13 +1,13 @@
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
-import Main from './pages/Main/'
 import './main.css'
-import {createTheme, ThemeProvider} from "@mui/material";
+import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
-import {materialDarkThemeOptions} from "./themes/dark";
+import App from "@/App";
+import {SnackbarProvider} from "notistack";
 
-const theme = createTheme(materialDarkThemeOptions);
+const theme = createTheme({palette: {mode: 'dark'}});
 
 const RootElement = document.getElementById('root');
 
@@ -16,13 +16,16 @@ if (RootElement) {
 
   root.render(
     <StrictMode>
-      <ThemeProvider theme={theme}>
-        <DevSupport ComponentPreviews={ComponentPreviews}
-                    useInitialHook={useInitial}
-        >
-          <Main/>
-        </DevSupport>
-      </ThemeProvider>
+      <SnackbarProvider maxSnack={3}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline/>
+          <DevSupport ComponentPreviews={ComponentPreviews}
+                      useInitialHook={useInitial}
+          >
+            <App/>
+          </DevSupport>
+        </ThemeProvider>
+      </SnackbarProvider>
     </StrictMode>
   )
 } else {

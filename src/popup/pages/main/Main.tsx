@@ -1,10 +1,10 @@
 import {ReactElement, useState} from 'react'
-import './style.css'
-import {Bid} from "../../components/Bid";
-import {DoubleSettings} from "../../components/DoubleSettings";
-import {Periodic} from "../../components/Periodic";
-import {ControlButtons} from "../../components/ControlButtons";
-import {ErrorMessage} from "../../components/ErrorMessage";
+import {Bid} from "@/components/Bid";
+import {DoubleSettings} from "@/components/DoubleSettings";
+import {Periodic} from "@/components/Periodic";
+import {ControlButtons} from "@/components/ControlButtons";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 
 const Main = (): ReactElement => {
   const [bid, setBid] = useState<[number, number, number, number, number]>(
@@ -15,26 +15,37 @@ const Main = (): ReactElement => {
   const [delay, setDelay] = useState(JSON.parse(localStorage.getItem('react_delay') ?? '200') ?? 200);
   const [bidLimit, setBidLimit] = useState(JSON.parse(localStorage.getItem('react_bidLimit') ?? '0') ?? 0);
   const [sum, setSum] = useState(0);
-  const [errorMessage, setErrorMessage] = useState('');
   const [lastWin, setLastWin] = useState(0);
 
-
   return (
-    <div className="App">
-      <div>
-        <img src="/images/bigLogo.png" className="logo" alt="CobaltLab logo"/>
-      </div>
+    <Container
+      maxWidth='xl'
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '16px',
+      }}
+    >
       <Bid bid={bid} setBid={setBid}/>
       <DoubleSettings isDouble={isDouble} setIsDouble={setIsDouble} bidLimit={bidLimit} setBidLimit={setBidLimit}/>
       <Periodic isInterval={isInterval} setIsInterval={setIsInterval} delay={delay} setDelay={setDelay}/>
-      <ControlButtons setErrorMessage={setErrorMessage} bid={bid} setBid={setBid} setLastWin={setLastWin} sum={sum}
+      <ControlButtons bid={bid} setBid={setBid} setLastWin={setLastWin} sum={sum}
                       setSum={setSum} isDouble={isDouble} bidLimit={bidLimit} delay={delay} isInterval={isInterval}/>
-      <div className='card'>
-        <span>Выигрыш: {lastWin}</span>
-        <span>Прибыль: {sum}</span>
-      </div>
-      <ErrorMessage message={errorMessage}/>
-    </div>
+      <Container
+        maxWidth='xl'
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '16px',
+        }}
+      >
+        <Typography>Выигрыш: {lastWin}</Typography>
+        <Typography>Прибыль: {sum}</Typography>
+      </Container>
+    </Container>
   )
 }
 

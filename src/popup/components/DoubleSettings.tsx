@@ -13,8 +13,19 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
   setBidLimit: Dispatch<SetStateAction<number>>;
 }): ReactElement => {
   return (
-    <Container maxWidth={"xl"} className={"card"}>
-      <FormGroup>
+    <Container
+      maxWidth='xl'
+      sx={{
+        display: 'flex',
+        flex: '1 1 auto',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '8px',
+      }}
+    >
+      <FormGroup row>
         <FormControlLabel
           control={
             <Checkbox
@@ -30,6 +41,7 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
           ? <FormControlLabel
             control={
               <Input
+                sx={{width: '70px'}}
                 type={"number"}
                 id={"limit"}
                 value={bidLimit}

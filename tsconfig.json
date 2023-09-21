@@ -19,16 +19,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
-  },
-  "paths": {
-    "@/*": [
-      "src/popup/*"
-    ]
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/popup/*"
+      ]
+    }
   },
   "include": [
-    "src",
-    "src/**/*"
+    "./src",
+    "./src/**/*.ts",
+    "./src/**/*.tsx"
   ],
   "references": [
     {

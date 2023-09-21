@@ -14,8 +14,15 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
   setDelay: Dispatch<SetStateAction<number>>;
 }): ReactElement => {
   return (
-    <Container maxWidth={"xl"} className="card">
-      <FormGroup>
+    <Container
+      maxWidth='xl'
+      sx={{
+        display: 'flex',
+        flex: '1 1 auto',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <FormGroup row>
         <FormControlLabel
           control={
             <Checkbox
@@ -32,6 +39,7 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
           ? <FormControlLabel
             control={
               <Input
+                sx={{width: '100px'}}
                 type={"number"}
                 id="delay"
                 value={delay}

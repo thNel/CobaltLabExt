@@ -1,8 +1,8 @@
 import axios from "axios";
 import {Dispatch, SetStateAction} from "react";
+import ToastUtils from "@/utils/toastUtils";
 
-export const bidHandler = ({setErrorMessage, setSum, setLastWin, bid, sum, setBid, isDouble}: {
-  setErrorMessage: Dispatch<SetStateAction<string>>;
+export const bidHandler = ({setSum, setLastWin, bid, sum, setBid, isDouble}: {
   bid: [number, number, number, number, number];
   setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
   setLastWin: Dispatch<SetStateAction<number>>;
@@ -10,7 +10,6 @@ export const bidHandler = ({setErrorMessage, setSum, setLastWin, bid, sum, setBi
   setSum: Dispatch<SetStateAction<number>>;
   isDouble: boolean;
 }) => async () => {
-  setErrorMessage('');
   setSum(0);
   setLastWin(0);
   try {
@@ -41,11 +40,12 @@ export const bidHandler = ({setErrorMessage, setSum, setLastWin, bid, sum, setBi
       }
     } else {
       setLastWin(0);
-      setErrorMessage(data.message);
+      ToastUtils.error(data.message);
     }
   } catch (e: any) {
     setLastWin(0);
-    setErrorMessage(String(e.message ?? e));
+    console.log('catched', e);
+    ToastUtils.error(String(e.message ?? e));
     return;
   }
 }
@@ -53,7 +53,6 @@ export const bidHandler = ({setErrorMessage, setSum, setLastWin, bid, sum, setBi
 export const intervalHandler = (
   {
     delay,
-    setErrorMessage,
     setSum,
     setLastWin,
     bid,
@@ -64,7 +63,6 @@ export const intervalHandler = (
     bidLimit,
     setCounter
   }: {
-    setErrorMessage: Dispatch<SetStateAction<string>>;
     bid: [number, number, number, number, number];
     setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
     setLastWin: Dispatch<SetStateAction<number>>;
@@ -84,7 +82,6 @@ export const intervalHandler = (
     setRunningInterval(false);
     setCounter(0);
   };
-  setErrorMessage('');
   setRunningInterval(true);
   let localCounter = 0;
   let localSum = 0;
@@ -96,7 +93,7 @@ export const intervalHandler = (
     const bidSum = localBid.reduce((acc, item) => acc + item, 0);
     if (bidLimit > 0 && bidSum > bidLimit) {
       abortInterval();
-      setErrorMessage('Превышен заданный лимит');
+      ToastUtils.error('Превышен заданный лимит');
       return;
     }
     try {
@@ -135,11 +132,11 @@ export const intervalHandler = (
         }
       } else {
         abortInterval();
-        setErrorMessage(data.message);
+        ToastUtils.error(data.message);
       }
     } catch (e: any) {
       abortInterval();
-      setErrorMessage(String(e.message ?? e));
+      ToastUtils.error(String(e.message ?? e));
       return;
     }
   }, delay);

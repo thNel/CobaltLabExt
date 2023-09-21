@@ -1,10 +1,8 @@
-import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Input from "@mui/material/Input";
 import {Dispatch, ReactElement, SetStateAction} from "react";
-import Typography from "@mui/material/Typography";
 
 export const Bid = ({bid, setBid}: {
   bid: [number, number, number, number, number];
@@ -12,31 +10,39 @@ export const Bid = ({bid, setBid}: {
 }): ReactElement => {
   const multipliers: [string, string, string, string, string] = ['x1', 'x3', 'x5', 'x10', 'x20'];
   return (
-    <Container maxWidth={"xl"} className={"card"}>
-      <FormGroup>
+    <Container
+      maxWidth='xl'
+      sx={{
+        display: 'flex',
+        flex: '1 1 auto',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <FormGroup row sx={{gap: '16px'}}>
         {bid.map((bidNow, index) =>
-          <Box className={'bid-column'} key={index}>
-            <FormControlLabel
-              className={"bid-column"}
-              control={
-                <Input
-                  type={"number"}
-                  value={bidNow}
-                  onChange={(event) => {
-                    setBid(
-                      bid.map(
-                        (item, bidIndex) => index === bidIndex ? +event.target.value : item
-                      ) as typeof bid
-                    );
-                    localStorage.setItem('react_bid', JSON.stringify(bid.map(
+          <FormControlLabel
+            key={index}
+            control={
+              <Input
+                sx={{width: '60px'}}
+                type={"number"}
+                value={bidNow}
+                onChange={(event) => {
+                  setBid(
+                    bid.map(
                       (item, bidIndex) => index === bidIndex ? +event.target.value : item
-                    )));
-                  }}
-                />
-              }
-              label={<Typography>{multipliers[index]}</Typography>}
-            />
-          </Box>
+                    ) as typeof bid
+                  );
+                  localStorage.setItem('react_bid', JSON.stringify(bid.map(
+                    (item, bidIndex) => index === bidIndex ? +event.target.value : item
+                  )));
+                }}
+              />
+            }
+            label={multipliers[index]}
+            labelPlacement='bottom'
+          />
         )}
       </FormGroup>
     </Container>
