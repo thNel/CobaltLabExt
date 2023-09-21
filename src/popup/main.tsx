@@ -1,16 +1,13 @@
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
-import App from './App'
-import './index.css'
+import Main from './pages/Main/'
+import './main.css'
 import {createTheme, ThemeProvider} from "@mui/material";
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
+import {materialDarkThemeOptions} from "./themes/dark";
 
-const theme = createTheme({
-  palette: {
-    mode: "dark"
-  }
-});
+const theme = createTheme(materialDarkThemeOptions);
 
 const RootElement = document.getElementById('root');
 
@@ -23,7 +20,7 @@ if (RootElement) {
         <DevSupport ComponentPreviews={ComponentPreviews}
                     useInitialHook={useInitial}
         >
-          <App/>
+          <Main/>
         </DevSupport>
       </ThemeProvider>
     </StrictMode>

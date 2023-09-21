@@ -1,12 +1,12 @@
 import {ReactElement, useState} from 'react'
-import './App.css'
-import {Bid} from "./Bid";
-import {DoubleSettings} from "./DoubleSettings";
-import {Periodic} from "./Periodic";
-import {ControlButtons} from "./ControlButtons";
-import {ErrorMessage} from "./ErrorMessage";
+import './style.css'
+import {Bid} from "../../components/Bid";
+import {DoubleSettings} from "../../components/DoubleSettings";
+import {Periodic} from "../../components/Periodic";
+import {ControlButtons} from "../../components/ControlButtons";
+import {ErrorMessage} from "../../components/ErrorMessage";
 
-const App = (): ReactElement => {
+const Main = (): ReactElement => {
   const [bid, setBid] = useState<[number, number, number, number, number]>(
     JSON.parse(localStorage.getItem('react_bid') ?? '[0, 0, 0, 0, 0]') ?? [0, 0, 0, 0, 0]
   );
@@ -38,4 +38,4 @@ const App = (): ReactElement => {
   )
 }
 
-export default App;
+export default Main;

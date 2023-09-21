@@ -17,14 +17,14 @@ import ReactIntlPalette from "@react-buddy/palette-react-intl";
 
 export const PaletteTree = () => (
   <Palette>
-    <AntdPalette/> 
+    <AntdPalette/>
     <ReactIntlPalette/>
-    <Category name="App templates">
+    <Category name="Index templates">
       <Component name="Card">
         <Variant name="Loading">
           <Card title="Card title">
             <Skeleton loading={true} avatar active>
-                Card content
+              Card content
             </Skeleton>
           </Card>
         </Variant>

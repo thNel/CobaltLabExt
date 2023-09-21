@@ -4,6 +4,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Input from "@mui/material/Input";
 import {Dispatch, ReactElement, SetStateAction} from "react";
+import Typography from "@mui/material/Typography";
 
 export const Bid = ({bid, setBid}: {
   bid: [number, number, number, number, number];
@@ -33,7 +34,7 @@ export const Bid = ({bid, setBid}: {
                   }}
                 />
               }
-              label={multipliers[index]}
+              label={<Typography>{multipliers[index]}</Typography>}
             />
           </Box>
         )}

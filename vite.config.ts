@@ -8,13 +8,15 @@ const ENV_PREFIX = ["REACT_APP_", "SERVER_", "VITE_"];
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, "config", ENV_PREFIX);
-  
+
   return {
     envDir: 'config',
+    root: 'src/popup',
+    publicDir: '../../public',
     resolve: {
       alias: {
         process: "process/browser",
-        '@': `${resolve(__dirname, 'src')}`,
+        '@': `${resolve(__dirname, 'src/popup')}`,
       },
     },
     plugins: [
@@ -40,22 +42,22 @@ export default defineConfig(({mode}) => {
     },
     build: {
       assetsDir: 'assets',
-      outDir: 'dist/' + env.REACT_APP_NAME,
+      target: 'chrome100',
+      outDir: '../../dist/' + env.REACT_APP_NAME,
       emptyOutDir: true,
-      // rollupOptions: {
-      //   output: {
-      //     manualChunks: (libraryName) => {
-      //       if (libraryName.includes('@mui/')) {
-      //         return 'vendor_MUI';
-      //       } else if (libraryName.includes('axios')) {
-      //         return 'vendor_axios';
-      //       } else if (libraryName.includes('node_modules')) {
-      //         return 'vendor';
-      //       }
-      //       return 'unknown';
-      //     }
-      //   }
-      // }
+      rollupOptions: {
+        output: {
+          manualChunks: (libraryName) => {
+            // if (libraryName.includes('@mui/')) {
+            //   return 'vendor_MUI';
+            // } else
+            if (libraryName.includes('axios')) {
+              return 'vendor_axios';
+            }
+            return 'vendor';
+          }
+        }
+      }
     },
   }
 })

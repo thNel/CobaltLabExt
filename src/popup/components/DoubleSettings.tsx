@@ -4,6 +4,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Input from "@mui/material/Input";
 import {Dispatch, ReactElement, SetStateAction} from "react";
+import Typography from "@mui/material/Typography";
 
 export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
   isDouble: boolean;
@@ -24,7 +25,7 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
               }}
             />
           }
-          label={'Удваивать ставку при проигрыше?'}/>
+          label={<Typography>Удваивать ставку при проигрыше?</Typography>}/>
         {isDouble
           ? <FormControlLabel
             control={
@@ -37,7 +38,7 @@ export const DoubleSettings = ({isDouble, setIsDouble, bidLimit, setBidLimit}: {
                   localStorage.setItem('react_bidLimit', JSON.stringify(event.target.value));
                 }}
               />}
-            label={'Лимит суммы:\u00A0\u00A0'}
+            label={<Typography>Лимит суммы:&nbsp;&nbsp;</Typography>}
             labelPlacement={"start"}
           />
           : null}

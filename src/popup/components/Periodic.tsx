@@ -5,6 +5,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Input from "@mui/material/Input";
 import InputAdornment from '@mui/material/InputAdornment';
+import Typography from "@mui/material/Typography";
 
 export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
   isInterval: boolean;
@@ -26,7 +27,7 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
               }}
             />
           }
-          label={'Периодично?'}/>
+          label={<Typography>Периодично?</Typography>}/>
         {isInterval
           ? <FormControlLabel
             control={
@@ -41,7 +42,7 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
                 endAdornment={<InputAdornment position="end">ms</InputAdornment>}
               />
             }
-            label={"Интервал:\u00A0\u00A0"}
+            label={<Typography>Интервал:&nbsp;&nbsp;</Typography>}
             labelPlacement={"start"}
           />
           : null}
