@@ -50,6 +50,7 @@ body, #root {
   justify-content: center;
   height: 572px;
   width: 544px;
+  max-width: 544px;
   padding: 4px;
 }
 
