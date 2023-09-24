@@ -1,9 +1,10 @@
 import {createSpan} from "./createSpan";
 import {createDiv} from "./createDiv";
-import {generateErrorSvg} from "../components/errorSVG";
+import {generateErrorSvg} from "@contentScript/components/errorSVG";
+import settings from "@contentScript/store/settings";
 
-export const pushError = (text: string, autoDelete = false, deleteTimeout = 2000) => {
-  const errorList = document.querySelector<HTMLSpanElement>('span.notiflist.errorsend');
+export const pushError = (text: string, autoDelete = false, deleteTimeout = 3000) => {
+  const errorList = settings.gameBody.querySelector<HTMLSpanElement>('span.notiflist.errorsend');
   if (!errorList)
     throw new Error('Не найдено место для ошибок');
   const errorText = createSpan(text);
@@ -23,6 +24,8 @@ export const pushError = (text: string, autoDelete = false, deleteTimeout = 2000
   }
   errorDiv.onclick = selfDelete;
   errorList.append(errorDiv);
+
+  console.log(text);
 
   if (autoDelete)
     setTimeout(selfDelete, deleteTimeout);

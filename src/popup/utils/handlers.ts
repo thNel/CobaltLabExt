@@ -2,13 +2,16 @@ import axios from "axios";
 import {Dispatch, SetStateAction} from "react";
 import ToastUtils from "@/utils/toastUtils";
 
-export const bidHandler = ({setSum, setLastWin, bid, sum, setBid, isDouble}: {
+export const bidHandler = ({setSum, setLastWin, bid, sum, setBid, isDouble, setScrap, setMaxWin, maxWin}: {
   bid: [number, number, number, number, number];
   setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
   setLastWin: Dispatch<SetStateAction<number>>;
   sum: number;
   setSum: Dispatch<SetStateAction<number>>;
   isDouble: boolean;
+  setScrap: Dispatch<SetStateAction<string>>;
+  setMaxWin: Dispatch<SetStateAction<number>>;
+  maxWin: number;
 }) => async () => {
   setSum(0);
   setLastWin(0);
@@ -16,13 +19,14 @@ export const bidHandler = ({setSum, setLastWin, bid, sum, setBid, isDouble}: {
     const {data} = (await axios.post<{
       status: string;
       data: {
-        winSum: string;
+        winSum: number;
+        scrap: number;
       };
       message: string
     }>(
       'https://cobaltlab.tech/api/cobaltGame/roulette/spin',
       {
-        bet: bid,
+        bet: bid.map(item => item === 0 ? null : item),
       },
       {
         headers: {
@@ -32,9 +36,11 @@ export const bidHandler = ({setSum, setLastWin, bid, sum, setBid, isDouble}: {
       }
     ));
     if (data.status === 'success') {
-      setLastWin(+data.data.winSum);
-      setSum(sum - bid.reduce((acc, item) => acc + item, 0) + +data.data.winSum);
-      if (+data.data.winSum < 2 && isDouble) {
+      setScrap(data.data.scrap.toString());
+      setMaxWin(data.data.winSum > maxWin ? data.data.winSum : maxWin);
+      setLastWin(data.data.winSum);
+      setSum(sum - bid.reduce((acc, item) => acc + item, 0) + data.data.winSum);
+      if (data.data.winSum < 2 && isDouble) {
         setBid(bid.map(item => item * 2) as typeof bid);
         localStorage.setItem('react_bid', JSON.stringify(bid.map(item => item * 2)));
       }
@@ -61,7 +67,10 @@ export const intervalHandler = (
     setRunningInterval,
     setTimer,
     bidLimit,
-    setCounter
+    setCounter,
+    maxWin,
+    setMaxWin,
+    setScrap,
   }: {
     bid: [number, number, number, number, number];
     setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
@@ -73,6 +82,9 @@ export const intervalHandler = (
     bidLimit: number;
     setCounter: Dispatch<SetStateAction<number>>;
     delay: number;
+    setScrap: Dispatch<SetStateAction<string>>;
+    setMaxWin: Dispatch<SetStateAction<number>>;
+    maxWin: number;
   }) => () => {
   let localTimer = setInterval(() => {
   }, 100000);
@@ -100,13 +112,14 @@ export const intervalHandler = (
       const {data} = await axios.post<{
         status: string;
         data: {
-          winSum: string;
+          winSum: number;
+          scrap: number;
         };
         message: string
       }>(
         'https://cobaltlab.tech/api/cobaltGame/roulette/spin',
         {
-          bet: bid,
+          bet: localBid.map(item => item === 0 ? null : item),
         },
         {
           headers: {
@@ -116,12 +129,14 @@ export const intervalHandler = (
         }
       )
       if (data.status === 'success') {
-        setLastWin(+data.data.winSum);
+        setScrap(data.data.scrap.toString());
+        setMaxWin(data.data.winSum > maxWin ? data.data.winSum : maxWin);
+        setLastWin(data.data.winSum);
         localCounter += 1;
         setCounter(localCounter);
-        localSum = localSum - bidSum + +data.data.winSum;
+        localSum = localSum - bidSum + data.data.winSum;
         setSum(localSum);
-        if (+data.data.winSum < 2 && isDouble) {
+        if (data.data.winSum < 2 && isDouble) {
           localBid = localBid.map(item => item * 2) as typeof localBid;
           setBid(localBid);
           localStorage.setItem('react_bid', JSON.stringify(localBid));

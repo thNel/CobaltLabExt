@@ -1,9 +1,9 @@
 import autoWalk from "../store/autoWalk";
-import {pushError} from "../utils/pushError";
+import {pushError} from "../utils/hud/pushError";
 import settings from "../store/settings";
 import {move} from "./move";
 import {cycleOrder} from "../store/cycleOrder";
-import {sortByCell} from "../utils/sortByCell";
+import {sortByCell} from "../utils/sorts/sortByCell";
 
 export const nextStep = () => {
   if (autoWalk.enabled) {
@@ -11,7 +11,6 @@ export const nextStep = () => {
       if (!Object.values(autoWalk.settings).reduce((acc, item) => acc || item, false)) {
         autoWalk.toggleEnabled();
         pushError('Выберите типы ресурсов!', true);
-        console.log('Выберите типы ресурсов!');
         return;
       }
       const mapFarming = Object.values(settings.mapFarmingObject).reduce((acc, item, index) => {
@@ -33,38 +32,33 @@ export const nextStep = () => {
               return cycleOrder.findIndex(item => item === a.label) - cycleOrder.findIndex(item => item === b.label)
             }
           )
-        : autoWalk.reversed
-          ? mapFarming.reverse()
-          : mapFarming;
-      if (!mapFarmingCells.some(item => item.isUser)) {
-        move(mapFarmingCells[0]);
-        autoWalk.currentCellType = mapFarmingCells[0].type;
+        : mapFarming;
+      const farmMap = autoWalk.reversed
+        ? mapFarmingCells.reverse()
+        : mapFarmingCells;
+      if (!farmMap.some(item => item.isUser)) {
+        move(farmMap[0]);
         return;
       } else {
-        const userCellIndex = mapFarmingCells.findIndex(item => item.isUser);
-        if (userCellIndex === mapFarmingCells.length - 1) {
+        const userCellIndex = farmMap.findIndex(item => item.isUser);
+        if (userCellIndex === farmMap.length - 1) {
           if (autoWalk.autoReverse)
             autoWalk.toggleReversed();
           else {
-            move(mapFarmingCells[0]);
-            autoWalk.currentCellType = mapFarmingCells[0].type;
+            move(farmMap[0]);
             return;
           }
           nextStep();
           return;
         }
-        move(mapFarmingCells[userCellIndex + 1]);
-        autoWalk.currentCellType = mapFarmingCells[userCellIndex + 1].type;
+        move(farmMap[userCellIndex + 1]);
       }
     } catch (e: any) {
       if (e.cause !== 'MapNotFound')
         autoWalk.toggleEnabled();
       pushError(e?.message ?? e, true, 10000);
-      console.log(e);
     }
   } else {
     pushError('Автоходьба была отключена!');
-    console.log('Автоходьба была отключена!');
   }
-
 }

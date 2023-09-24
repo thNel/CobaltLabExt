@@ -13,7 +13,12 @@ export const ControlButtons = (
     delay,
     bid,
     bidLimit,
-    setBid
+    setBid,
+    setRunningInterval,
+    runningInterval,
+    setMaxWin,
+    setScrap,
+    maxWin
   }: {
     bid: [number, number, number, number, number];
     setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
@@ -24,9 +29,13 @@ export const ControlButtons = (
     bidLimit: number;
     delay: number;
     isInterval: boolean;
+    setRunningInterval: Dispatch<SetStateAction<boolean>>;
+    runningInterval: boolean;
+    setScrap: Dispatch<SetStateAction<string>>;
+    setMaxWin: Dispatch<SetStateAction<number>>;
+    maxWin: number;
   }): ReactElement => {
   const [timer, setTimer] = useState<ReturnType<typeof setInterval>>();
-  const [runningInterval, setRunningInterval] = useState(false);
   const [counter, setCounter] = useState(0);
 
   const abortInterval = () => {
@@ -60,7 +69,7 @@ export const ControlButtons = (
       <Button
         variant={"contained"}
         className={runningInterval || isInterval ? 'hidden' : ''}
-        onClick={bidHandler({bid, setBid, setSum, sum, setLastWin, isDouble})}
+        onClick={bidHandler({bid, setBid, setSum, sum, setLastWin, isDouble, maxWin, setMaxWin, setScrap})}
       >
         Сделать ставку
       </Button>
@@ -77,7 +86,10 @@ export const ControlButtons = (
           setBid,
           bid,
           bidLimit,
-          setTimer
+          setTimer,
+          setScrap,
+          maxWin,
+          setMaxWin,
         })}
       >
         Сделать ставку

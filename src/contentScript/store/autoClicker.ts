@@ -1,10 +1,9 @@
-import {createSpan} from "../utils/createSpan";
-import {createButton} from "../utils/createButton";
-import {cellTypes} from "./cellTypes";
-import {clicker} from "../handlers/autoClicker";
-import {pushError} from "../utils/pushError";
-import {createInput} from "../utils/createInput";
-import {createDiv} from "../utils/createDiv";
+import {createSpan} from "../utils/hud/createSpan";
+import {createButton} from "../utils/hud/createButton";
+import {clicker} from "../handlers/clicker";
+import {pushError} from "../utils/hud/pushError";
+import {createInput} from "../utils/hud/createInput";
+import {createDiv} from "../utils/hud/createDiv";
 
 class AutoClicker {
   private _mining = false;
@@ -12,78 +11,86 @@ class AutoClicker {
   private readonly _settings = this._savedSettings ?
     {
       autoSelectTool: this._savedSettings.autoSelectTool ?? true,
-      delay: +this._savedSettings.delay ?? 600,
-      fastDelay: +this._savedSettings.fastDelay ?? 350
+      autoRepairTool: this._savedSettings.autoRepairTool ?? false,
+      autoDeleteTool: this._savedSettings.autoDeleteTool ?? false,
+      delay: this._savedSettings.delay ?? 600,
     }
     : {
       autoSelectTool: true,
+      autoRepairTool: false,
+      autoDeleteTool: false,
       delay: 600,
-      fastDelay: 350
     }
 
-  private _activateButton;
   private readonly _activateButtonSpan;
-  private readonly _autoSelectToolSpan;
+  private readonly _activateButton;
   private readonly _autoSelectToolButton;
+  private readonly _autoRepairButton;
+  private readonly _autoDeleteButton;
   private readonly _delayInput;
-  private readonly _fastDelayInput;
-  private readonly _clickerSettingsDiv;
+  private readonly _clickerSettingsWrapper;
 
   constructor() {
+    // Activate
     this._activateButtonSpan = createSpan('Автокликер', 'clicker-button-text');
     this._activateButton = createButton({
       innerElements: [this._activateButtonSpan],
       classes: 'btn btn-icon btn-small inherit clicker-button',
+      onClick: clicker,
     });
-    this._autoSelectToolSpan = createSpan('Автоинструмент', 'btn-clicker-settings-text');
+    // Select tool
     this._autoSelectToolButton = createButton({
-      innerElements: [this._autoSelectToolSpan],
+      innerText: 'Автоинструмент',
       classes: 'btn btn-blue btn-clicker-settings',
       onClick: this.toggleAutoSelectTool.bind(this),
     });
     this._autoSelectToolButton.style.cssText = this._settings.autoSelectTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    // Repair tool
+    this._autoRepairButton = createButton({
+      innerText: 'Починка камня',
+      classes: 'btn btn-blue btn-clicker-settings',
+      onClick: this.toggleAutoRepairTool.bind(this),
+    });
+    this._autoRepairButton.style.cssText = this._settings.autoRepairTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    // Delete tool
+    this._autoDeleteButton = createButton({
+      innerText: 'Удаление сломанных',
+      classes: 'btn btn-blue btn-clicker-settings',
+      onClick: this.toggleAutoDeleteTool.bind(this),
+    });
+    this._autoDeleteButton.style.cssText = this._settings.autoDeleteTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    // Delay
     this._delayInput = createInput(this._settings.delay, 'inp-clicker-settings', (event: any) => {
       if (!isNaN(+event?.target?.value)) {
         if (+event.target.value < 1) {
-          pushError('Только положительные числа!', true);
+          pushError('Задержка может быть только положительным числом!', true);
           this._delayInput.value = this._settings.delay.toString();
           return;
         }
         this.delay = +event.target.value
       } else {
-        pushError('Только числа!', true);
+        pushError('Задержка может быть только числом!', true);
         this._delayInput.value = this._settings.delay.toString();
-      }
-    });
-    this._fastDelayInput = createInput(this._settings.fastDelay, 'inp-clicker-settings', (event: any) => {
-      if (!isNaN(+event?.target?.value)) {
-        if (+event.target.value < 0) {
-          pushError('Только положительные числа!', true);
-          this._fastDelayInput.value = this._settings.fastDelay.toString();
-          return;
-        }
-        if (+event.target.value < this._settings.delay)
-          this.fastDelay = +event.target.value
-        else {
-          pushError('Ускоренная добыча не может быть медленнее обычной!', true);
-          this._fastDelayInput.value = this._settings.fastDelay.toString();
-        }
-      } else {
-        pushError('Только числа!', true);
-        this._fastDelayInput.value = this._settings.fastDelay.toString();
       }
     });
     const delayBlock = createDiv({
       innerElements: [createSpan('Скорость добычи'), this._delayInput, createSpan('ms')],
-      classes: 'clicker-settings',
+      classes: 'clicker-settings-row',
     });
-    const fastDelayBlock = createDiv({
-      innerElements: [createSpan('Ускоренная добыча'), this._fastDelayInput, createSpan('ms')],
-      classes: 'clicker-settings',
-    });
-    this._clickerSettingsDiv = createDiv({
-      innerElements: [this._autoSelectToolButton, delayBlock, fastDelayBlock],
-      classes: 'clicker-settings-wrapper d-none',
+    // Controls
+    const controls = createDiv({
+      innerElements: [this._autoSelectToolButton, this._autoRepairButton, this._autoDeleteButton, delayBlock],
+      classes: 'clicker-settings d-none',
+    })
+    this._clickerSettingsWrapper = createDiv({
+      innerElements: [this._activateButton, controls],
+      classes: 'clicker-wrapper',
+      onMouseEnter: () => {
+        controls.classList.remove('d-none');
+      },
+      onMouseLeave: () => {
+        controls.classList.add('d-none');
+      },
     })
   }
 
@@ -91,16 +98,12 @@ class AutoClicker {
     return this._mining;
   }
 
-  public get activateButton() {
-    return this._activateButton;
-  }
-
   public get settings() {
     return this._settings;
   }
 
-  public get clickerSettingsDiv() {
-    return this._clickerSettingsDiv;
+  public get controlsDiv(): HTMLDivElement {
+    return this._clickerSettingsWrapper;
   }
 
   public toggleMining(success?: boolean) {
@@ -126,39 +129,32 @@ class AutoClicker {
     }
   }
 
-  public newClickerButton(cellType: typeof cellTypes[keyof typeof cellTypes] | undefined) {
-    this._activateButton = createButton({
-      innerElements: [this._activateButtonSpan],
-      classes: 'btn btn-icon btn-small inherit clicker-button',
-      onClick: clicker(cellType),
-    });
-  }
-
   public toggleAutoSelectTool() {
     this._settings.autoSelectTool = !this._settings.autoSelectTool;
     this._autoSelectToolButton.style.cssText = this._settings.autoSelectTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
 
+  public toggleAutoRepairTool() {
+    this._settings.autoRepairTool = !this._settings.autoRepairTool;
+    this._autoRepairButton.style.cssText = this._settings.autoRepairTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
+  }
+
+  public toggleAutoDeleteTool() {
+    this._settings.autoDeleteTool = !this._settings.autoDeleteTool;
+    this._autoDeleteButton.style.cssText = this._settings.autoDeleteTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
+  }
+
   public set delay(ms: number) {
-    const condition = ms >= this._settings.fastDelay;
-    this._settings.delay = ms;
-    this.fastDelay = condition ? this._settings.fastDelay : this._settings.delay - 1;
-    if (!condition) {
-      this._fastDelayInput.value = this._settings.fastDelay.toString();
-      pushError('Ускоренная добыча не может быть медленнее обычной!', true);
+    if (ms < 1) {
+      pushError('Задержка может быть только положительным числом!');
+      this._delayInput.value = this._settings.delay;
     }
+    this._settings.delay = ms;
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
-
-  public set fastDelay(ms: number) {
-    const condition = ms < this._settings.delay;
-    this._settings.fastDelay = condition ? ms : this._settings.delay;
-    if (!condition)
-      pushError('Ускоренная добыча не может быть медленнее обычной!', true);
-    localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
-  }
-
 }
 
 export default new AutoClicker();

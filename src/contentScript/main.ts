@@ -1,11 +1,10 @@
 import autoWalk from "./store/autoWalk";
 import {nextStep} from "./handlers/nextStep";
 import settings from "./store/settings";
-import {pushError} from "./utils/pushError";
-import {pushNotification} from "./utils/pushNotification";
+import {pushError} from "./utils/hud/pushError";
+import {pushNotification} from "./utils/hud/pushNotification";
 import autoClicker from "./store/autoClicker";
-import {clicker} from "./handlers/autoClicker";
-import {createDiv} from "./utils/createDiv";
+import {clicker} from "./handlers/clicker";
 
 function Init() {
   setInterval(() => {
@@ -24,20 +23,9 @@ function Init() {
     if (!farmHeader)
       return;
     if (!farmHeader.querySelector('button.clicker-button')) {
-      autoClicker.newClickerButton(autoWalk.currentCellType);
-      farmHeader.append(createDiv({
-        innerElements: [autoClicker.activateButton, autoClicker.clickerSettingsDiv],
-        classes: 'clicker-wrapper',
-        onMouseEnter: () => {
-          autoClicker.clickerSettingsDiv.classList.remove('d-none')
-        },
-        onMouseLeave: () => {
-          autoClicker.clickerSettingsDiv.classList.add('d-none')
-        },
-      }));
+      farmHeader.append(autoClicker.controlsDiv);
       if (autoWalk.enabled) {
-        const activateClicker = clicker(autoWalk.currentCellType);
-        setTimeout(activateClicker, 500);
+        setTimeout(clicker, 1000);
       }
     }
   }, 1000);
@@ -46,24 +34,24 @@ function Init() {
 
   const autoWalkTimer = setInterval(() => {
     try {
-      if (!settings.gameBody.querySelector('.map'))
-        return;
       tryCount += 1;
-      if (tryCount > 10) {
-        clearInterval(autoWalkTimer);
-        pushError('Не получилось установить автоходьбу :(');
-        console.log('Не получилось установить автоходьбу :(');
+      if (!settings.gameBody.querySelector('.map')) {
+        if (tryCount > 40) {
+          clearInterval(autoWalkTimer);
+          pushError('Не получилось установить автоходьбу :(');
+          return;
+        }
+        pushNotification(`Не найдена карта мира! Попытка #${tryCount}`, true)
         return;
       }
       clearInterval(autoWalkTimer);
       tryCount = 0;
       settings.gameBody.append(autoWalk.controlsDiv);
       pushNotification('Автоходьба установлена!', true);
-      console.log('Автоходьба установлена!');
     } catch (e: any) {
       alert(e?.message ?? e);
     }
-  }, 400);
+  }, 1000);
 }
 
 

@@ -24,6 +24,9 @@
     "paths": {
       "@/*": [
         "./src/popup/*"
+      ],
+      "@contentScript/*": [
+        "./src/contentScript/*"
       ]
     }
   },
