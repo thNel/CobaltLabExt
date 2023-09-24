@@ -79,8 +79,9 @@ export const clicker = () => {
             if (autoClicker.mining) {
               autoClicker.toggleMining();
               console.log(autoClicker.mining);
-              pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(selectedTool.availableAfter * 100 / 60) / 100} минут. Когда камень починится...`);
-              setTimeout(clicker, selectedTool.availableAfter * 1000 + 1000);
+              const timeOut = selectedTool.availableAfter * 1000 + 1000;
+              pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(timeOut / 600) / 100} минут. Когда камень починится...`, true, timeOut);
+              setTimeout(clicker, timeOut);
             }
             return;
           }
