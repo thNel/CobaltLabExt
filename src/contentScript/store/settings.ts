@@ -1,6 +1,6 @@
 import {cellTypes} from "./cellTypes";
 import autoWalk from "./autoWalk";
-import {sortByCell} from "../utils/sortByCell";
+import {sortByCell} from "../utils/sorts/sortByCell";
 
 class Settings {
   private _gameBody: HTMLDivElement | null = null;

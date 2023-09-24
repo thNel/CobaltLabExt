@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CobaltLab Helper",
-  "version": "1.1.1.0",
+  "version": "1.1.1.1",
   "action": {
     "default_icon": {
       "32": "images/icon32.png",
@@ -49,5 +49,5 @@
     "keyword": "aString"
   },
   "short_name": "AutoCobaltLab",
-  "version_name": "Bacon"
+  "version_name": "Doubly Bacon"
 }

@@ -1,9 +1,9 @@
 import {cellTypes} from "./cellTypes";
-import {createSpan} from "../utils/createSpan";
-import {createButton} from "../utils/createButton";
+import {createSpan} from "../utils/hud/createSpan";
+import {createButton} from "../utils/hud/createButton";
 import {generateWalkingSVG} from "../components/walkingSVG";
-import {pushError} from "../utils/pushError";
-import {createDiv} from "../utils/createDiv";
+import {pushError} from "../utils/hud/pushError";
+import {createDiv} from "../utils/hud/createDiv";
 import {walker} from "../handlers/walker";
 
 class AutoWalk {
@@ -11,7 +11,6 @@ class AutoWalk {
   private _reversed = localStorage.getItem('walkerReversed') === 'true';
   private _cycled = localStorage.getItem('walkerCycled') === 'true';
   private _autoReverse = localStorage.getItem('walkerAutoReverse') !== 'false';
-  private _currentCellType: "ore" | "road" | "wood" | undefined = undefined;
   private readonly _savedSettings = JSON.parse(localStorage.getItem('walkerSettings') ?? '{}');
   private readonly _settings: Record<typeof cellTypes[keyof typeof cellTypes], boolean> = this._savedSettings ?
     {
@@ -102,15 +101,11 @@ class AutoWalk {
     })
   }
 
-  public get enabled() {
+  public get enabled(): Boolean {
     return this._enabled;
   }
 
-  public get currentCellType() {
-    return this._currentCellType;
-  }
-
-  public get controlsDiv() {
+  public get controlsDiv(): HTMLDivElement {
     return this._controlsDiv;
   }
 
@@ -163,10 +158,6 @@ class AutoWalk {
   }
 
   public toggleReversed() {
-    if (this._cycled) {
-      pushError('При обходе по кругу нельзя разворачиваться', true);
-      return
-    }
     this._reversed = !this._reversed;
     this._reverseButton.style.cssText = this._reversed ? 'background-color: rgba(46,139,87,0.3) !important' : '';
     localStorage.setItem('walkerReversed', JSON.stringify(this._reversed));
@@ -196,16 +187,12 @@ class AutoWalk {
 
   public toggleAutoReverse() {
     if (this._cycled) {
-      pushError('При обходе по кругу нельзя разворачиваться', true);
+      pushError('При обходе по кругу нельзя автоматически разворачиваться', true);
       return
     }
     this._autoReverse = !this._autoReverse;
     this._autoReverseButton.style.cssText = this._autoReverse ? 'background-color: rgba(46,139,87,0.3) !important' : '';
     localStorage.setItem('walkerAutoReverse', JSON.stringify(this._autoReverse));
-  }
-
-  public set currentCellType(type) {
-    this._currentCellType = type;
   }
 
 }

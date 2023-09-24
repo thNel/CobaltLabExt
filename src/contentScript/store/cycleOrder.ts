@@ -27,6 +27,7 @@ export const cycleOrder = [
   'C7',
   'D7',
   'D6',
+  'E5',
   'B5',
   'B4',
   'B3',

@@ -3,12 +3,16 @@ button.clicker-button {
   z-index: 3;
 }
 
+.btn {
+  height: min-content;
+}
+
 .clicker-wrapper {
   display: flex;
   flex-direction: column;
   align-items: end;
   justify-content: center;
-  gap: 24px;
+  gap: 16px;
 }
 
 .inp-clicker-settings {
@@ -16,21 +20,19 @@ button.clicker-button {
   text-align: end;
 }
 
-.clicker-settings {
+.clicker-settings-row {
   display: flex;
   gap: 8px;
   justify-content: end;
 }
 
-.clicker-settings-wrapper {
+.clicker-settings {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   justify-content: center;
   align-items: end;
-  position: absolute;
-  top: calc(var(--px) * 20) !important;
-  padding: calc(var(--px) * 50) 5px 5px;
+  padding: 5px;
 }
 
 .farm-header {
@@ -51,7 +53,7 @@ button.clicker-button {
   padding: 5px;
 }
 
-.auto-walk-wrapper:hover, .clicker-settings-wrapper {
+.auto-walk-wrapper:hover, .clicker-wrapper:hover {
   background-color: rgba(0, 0, 0, 0.3);
 }
 

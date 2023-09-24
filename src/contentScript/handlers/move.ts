@@ -1,8 +1,9 @@
 import {cellTypes} from "../store/cellTypes";
 import settings from "../store/settings";
 import autoWalk from "../store/autoWalk";
-import {triggerMouseEvent} from "../utils/mouseEvent";
-import {pushError} from "../utils/pushError";
+import {triggerMouseEvent} from "../utils/hud/mouseEvent";
+import {pushError} from "../utils/hud/pushError";
+import {pushNotification} from "@contentScript/utils/hud/pushNotification";
 
 export const move = (target: {
   id: string | undefined,
@@ -21,11 +22,9 @@ export const move = (target: {
           clearInterval(walkButtonInterval);
           autoWalk.toggleEnabled();
           pushError('Не получилось сходить на следующую клетку :(');
-          console.log('Не получилось сходить на следующую клетку :(');
           return;
         }
-        pushError(`Не найдена целевая клетка. Попытка #${tryCounter}`, true, 600);
-        console.log(`Не найдена целевая клетка. Попытка #${tryCounter}`);
+        pushNotification(`Не найдена целевая клетка. Попытка #${tryCounter}`, true, 600);
         return;
       }
       targetClicked = true;
@@ -39,11 +38,9 @@ export const move = (target: {
           clearInterval(walkButtonInterval);
           autoWalk.toggleEnabled();
           pushError('Не получилось сходить на следующую клетку :(');
-          console.log('Не получилось сходить на следующую клетку :(');
           return;
         }
-        pushError(`Не найдена кнопка ходьбы. Попытка #${tryCounter}`, true, 600);
-        console.log(`Не найдена кнопка ходьбы. Попытка #${tryCounter}`);
+        pushNotification(`Не найдена кнопка ходьбы. Попытка #${tryCounter}`, true, 600);
         return;
       }
       clearInterval(walkButtonInterval);
