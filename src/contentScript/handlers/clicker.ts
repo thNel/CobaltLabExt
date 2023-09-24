@@ -78,7 +78,6 @@ export const clicker = () => {
             clearInterval(clickerTimer);
             if (autoClicker.mining) {
               autoClicker.toggleMining();
-              console.log(autoClicker.mining);
               const timeOut = selectedTool.availableAfter * 1000 + 1000;
               pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(timeOut / 600) / 100} минут. Когда камень починится...`, true, timeOut);
               setTimeout(clicker, timeOut);
