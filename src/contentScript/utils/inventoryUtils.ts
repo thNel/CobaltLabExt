@@ -34,7 +34,7 @@ const fetchTools = async () => (await getItems('3')).map((item) => {
 export const getTools = async () => {
   let tools = await fetchTools();
   if (autoClicker.settings.autoDeleteTool) {
-    const deleteList = tools.filter(item => item.type !== 'rock' && item.durability < 1);
+    const deleteList = tools.filter(item => item.type !== 'rock' && item.type?.slice(-1) !== '4' && item.durability < 1);
     if (deleteList.length > 0) {
       for (const item of deleteList) {
         await deleteItem({boxID: '3', itemID: item.itemID, slotID: item.slotID, quantity: item.quantity});
