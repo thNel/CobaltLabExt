@@ -23,7 +23,6 @@ export const clicker = () => {
         return;
       }
       const elementInfo = getClickerElement();
-      console.log(elementInfo);
       if (elementInfo !== null) {
         if (!autoClicker.settings.autoSelectTool) {
           elementInfo.element.click();
