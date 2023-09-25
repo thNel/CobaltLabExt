@@ -32,7 +32,7 @@ export const getTools = async () => {
     }
   }).filter(item => item.itemID && item.quantity && item.durability !== null) as filteredTool[];
   if (autoClicker.settings.autoDeleteTool) {
-    const deleteList = tools.filter(item => item.type !== 'rock' && item.durability === 0);
+    const deleteList = tools.filter(item => item.type !== 'rock' && item.durability < 1);
     for (const item of deleteList) {
       await deleteItem({boxID: '3', itemID: item.itemID, slotID: item.slotID, quantity: item.quantity});
     }
