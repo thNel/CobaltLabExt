@@ -23,6 +23,7 @@ export const clicker = () => {
         return;
       }
       const elementInfo = getClickerElement();
+      console.log(elementInfo);
       if (elementInfo !== null) {
         if (!autoClicker.settings.autoSelectTool) {
           elementInfo.element.click();
@@ -94,10 +95,14 @@ export const clicker = () => {
       }
 
       clearInterval(clickerTimer);
-      const returnToMapElement = getReturnToMap();
       autoClicker.toggleMining(true);
+      const returnToMapElement = getReturnToMap();
       if (autoWalk.enabled) {
-        if (returnToMapElement === null) {
+        if (returnToMapElement !== null) {
+          returnToMapElement.click();
+          setTimeout(nextStep, 800);
+        }
+        if (returnToMapElement === null && !autoClicker.mining) {
           autoWalkTryCounter += 1;
           if (autoWalkTryCounter > 10) {
             clearInterval(clickerTimer);
@@ -108,8 +113,6 @@ export const clicker = () => {
           pushNotification(`Не найдены элементы иры. Попытка #${autoWalkTryCounter}`, true);
           return;
         }
-        returnToMapElement.click();
-        setTimeout(nextStep, 800);
       }
     }, autoClicker.settings.delay);
   } catch (e) {
