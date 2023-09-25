@@ -11,7 +11,8 @@ function Init() {
     const startGame = document.querySelector<HTMLButtonElement>('div.start-game button.btn-medium:has(span)');
     if (startGame) {
       startGame.click();
-      if (autoWalk.enabled) nextStep();
+      if (autoWalk.enabled)
+        setTimeout(nextStep, 2000);
     }
   }, 5000);
 

@@ -62,7 +62,7 @@ export const clicker = () => {
               return;
             } else {
               counter += 1;
-              if (counter > 20) {
+              if (counter > 10) {
                 clearInterval(clickerTimer);
                 if (autoClicker.mining) {
                   autoClicker.toggleMining();
@@ -80,14 +80,14 @@ export const clicker = () => {
               autoClicker.toggleMining();
               const timeOut = selectedTool.availableAfter * 1000 + 1000;
               pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(timeOut / 600) / 100} минут. Когда камень починится...`, true, timeOut);
-              setTimeout(clicker, timeOut);
+              autoClicker.setIdle(setTimeout(clicker, timeOut), timeOut);
             }
             return;
           }
           elementInfo.element.click();
           return;
         }
-      } else if (counter < 21) {
+      } else if (counter < 10) {
         counter += 1;
         pushNotification(`Попытка найти,что бить, #${counter}`, true, 1000);
         return;
