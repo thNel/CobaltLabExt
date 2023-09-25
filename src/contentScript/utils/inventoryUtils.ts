@@ -21,21 +21,24 @@ export const getItems = async (boxID: string): Promise<inventoryItem[]> => {
   return data.data;
 }
 
+const fetchTools = async () => (await getItems('3')).map((item) => {
+  const type = item.itemID ? resourceTypes[item.itemID] : undefined;
+  if (!type && item.itemID !== null)
+    console.log({...item, type});
+  return {
+    ...item,
+    type,
+  }
+}).filter(item => item.itemID && item.quantity && item.durability !== null) as filteredTool[]
+
 export const getTools = async () => {
-  const tools = (await getItems('3')).map((item) => {
-    const type = item.itemID ? resourceTypes[item.itemID] : undefined;
-    if (!type && item.itemID !== null)
-      console.log({...item, type});
-    return {
-      ...item,
-      type,
-    }
-  }).filter(item => item.itemID && item.quantity && item.durability !== null) as filteredTool[];
+  let tools = await fetchTools();
   if (autoClicker.settings.autoDeleteTool) {
     const deleteList = tools.filter(item => item.type !== 'rock' && item.durability < 1);
     for (const item of deleteList) {
       await deleteItem({boxID: '3', itemID: item.itemID, slotID: item.slotID, quantity: item.quantity});
     }
+    tools = await fetchTools();
   }
   return {
     axes: tools.filter(item => item.type?.startsWith('axe') && item.durability > 0)
