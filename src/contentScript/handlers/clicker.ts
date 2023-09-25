@@ -26,6 +26,7 @@ export const clicker = () => {
       if (elementInfo !== null) {
         if (!autoClicker.settings.autoSelectTool) {
           elementInfo.element.click();
+          return;
         } else {
           const {axes, pickaxes, rock} = await getTools();
           if (rock?.durability === 0 && autoClicker.settings.autoRepairTool) {
@@ -62,7 +63,7 @@ export const clicker = () => {
               return;
             } else {
               counter += 1;
-              if (counter > 20) {
+              if (counter > 10) {
                 clearInterval(clickerTimer);
                 if (autoClicker.mining) {
                   autoClicker.toggleMining();
@@ -78,26 +79,30 @@ export const clicker = () => {
             clearInterval(clickerTimer);
             if (autoClicker.mining) {
               autoClicker.toggleMining();
-              console.log(autoClicker.mining);
-              pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(selectedTool.availableAfter * 100 / 60) / 100} минут. Когда камень починится...`);
-              setTimeout(clicker, selectedTool.availableAfter * 1000 + 1000);
+              const timeOut = selectedTool.availableAfter * 1000 + 1000;
+              pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(timeOut / 600) / 100} минут. Когда камень починится...`, true, timeOut);
+              autoClicker.setIdle(setTimeout(clicker, timeOut), timeOut);
             }
             return;
           }
           elementInfo.element.click();
           return;
         }
-      } else if (counter < 21) {
+      } else if (counter < 10) {
         counter += 1;
         pushNotification(`Попытка найти,что бить, #${counter}`, true, 1000);
         return;
       }
 
       clearInterval(clickerTimer);
-      const returnToMapElement = getReturnToMap();
       autoClicker.toggleMining(true);
+      const returnToMapElement = getReturnToMap();
       if (autoWalk.enabled) {
-        if (returnToMapElement === null) {
+        if (returnToMapElement !== null) {
+          returnToMapElement.click();
+          setTimeout(nextStep, 800);
+        }
+        if (returnToMapElement === null && !autoClicker.mining) {
           autoWalkTryCounter += 1;
           if (autoWalkTryCounter > 10) {
             clearInterval(clickerTimer);
@@ -108,8 +113,6 @@ export const clicker = () => {
           pushNotification(`Не найдены элементы иры. Попытка #${autoWalkTryCounter}`, true);
           return;
         }
-        returnToMapElement.click();
-        setTimeout(nextStep, 800);
       }
     }, autoClicker.settings.delay);
   } catch (e) {

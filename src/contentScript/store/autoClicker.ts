@@ -4,9 +4,15 @@ import {clicker} from "../handlers/clicker";
 import {pushError} from "../utils/hud/pushError";
 import {createInput} from "../utils/hud/createInput";
 import {createDiv} from "../utils/hud/createDiv";
+import {pushNotification} from "@contentScript/utils/hud/pushNotification";
 
 class AutoClicker {
   private _mining = false;
+  private readonly _idle = {
+    timer: setTimeout(() => {
+    }, 1),
+    delay: 0,
+  };
   private readonly _savedSettings = JSON.parse(localStorage.getItem('clickerSettings') ?? '{}');
   private readonly _settings = this._savedSettings ?
     {
@@ -106,8 +112,14 @@ class AutoClicker {
     return this._clickerSettingsWrapper;
   }
 
-  public toggleMining(success?: boolean) {
+  public toggleMining(success = false) {
     this._mining = !this._mining;
+    if (this.idle) {
+      if (this.getTimeLeft(this._idle.timer) < -1)
+        this.clearIdle(true);
+      else
+        this.clearIdle();
+    }
     if (this._mining) {
       this._activateButton.style.backgroundColor = 'rgba(105,105,105,0.3)';
       this._activateButtonSpan.innerText = 'Добыча...';
@@ -131,17 +143,32 @@ class AutoClicker {
 
   public toggleAutoSelectTool() {
     this._settings.autoSelectTool = !this._settings.autoSelectTool;
+    if (this.settings.autoSelectTool) {
+      this._autoDeleteButton.classList.remove('d-none');
+      this._autoRepairButton.classList.remove('d-none');
+    } else {
+      this._autoDeleteButton.classList.add('d-none');
+      this._autoRepairButton.classList.add('d-none');
+    }
     this._autoSelectToolButton.style.cssText = this._settings.autoSelectTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
 
   public toggleAutoRepairTool() {
+    if (!this.settings.autoSelectTool) {
+      pushError('Нельзя активировать без автовыбора инструментов!', true);
+      return;
+    }
     this._settings.autoRepairTool = !this._settings.autoRepairTool;
     this._autoRepairButton.style.cssText = this._settings.autoRepairTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
 
   public toggleAutoDeleteTool() {
+    if (!this.settings.autoSelectTool) {
+      pushError('Нельзя активировать без автовыбора инструментов!', true);
+      return;
+    }
     this._settings.autoDeleteTool = !this._settings.autoDeleteTool;
     this._autoDeleteButton.style.cssText = this._settings.autoDeleteTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
@@ -154,6 +181,30 @@ class AutoClicker {
     }
     this._settings.delay = ms;
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
+  }
+
+  public get idle() {
+    return this._idle.delay > 0;
+  }
+
+  private clearIdle(fromIdle = false) {
+    if (!fromIdle) {
+      pushNotification('Ожидание починки камня было остановлено', true, this.getTimeLeft(this._idle.timer));
+      clearTimeout(this._idle.timer);
+    }
+    this._idle.delay = 0;
+  }
+
+  public setIdle(timer: typeof this._idle.timer, delay: number) {
+    this._idle.timer = timer;
+    this._idle.delay = delay;
+  }
+
+  private getTimeLeft(timeout: typeof this._idle.timer & { _idleStart?: number, _idleTimeout?: number }) {
+    if (timeout._idleStart && timeout._idleTimeout) {
+      return Math.ceil((timeout._idleStart + timeout._idleTimeout - Date.now()));
+    }
+    return this._idle.delay;
   }
 }
 

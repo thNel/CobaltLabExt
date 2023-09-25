@@ -7,7 +7,7 @@ import {createDiv} from "../utils/hud/createDiv";
 import {walker} from "../handlers/walker";
 
 class AutoWalk {
-  private _enabled = false;
+  private _enabled = localStorage.getItem('walkerEnabled') === 'true';
   private _reversed = localStorage.getItem('walkerReversed') === 'true';
   private _cycled = localStorage.getItem('walkerCycled') === 'true';
   private _autoReverse = localStorage.getItem('walkerAutoReverse') !== 'false';
@@ -41,6 +41,7 @@ class AutoWalk {
       classes: 'btn btn-blue btn-icon btn-auto-walk',
       onClick: walker,
     });
+    this._activateButton.style.cssText = this._enabled ? 'background-color: rgba(46,139,87,1) !important' : '';
     this._reverseButton = createButton({
       innerText: 'Реверс маршрута',
       classes: 'btn btn-blue btn-auto-walk-settings',
@@ -129,6 +130,7 @@ class AutoWalk {
     this._enabled = !this._enabled;
     this._activateButton.style.cssText = this._enabled ? 'background-color: rgba(46,139,87,1) !important' : '';
     this._activateButtonSpan.innerText = this._enabled ? 'Вкл' : 'Выкл';
+    localStorage.setItem('walkerEnabled', JSON.stringify(this._enabled));
   }
 
   public toggleOres() {

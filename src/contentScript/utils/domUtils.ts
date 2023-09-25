@@ -5,10 +5,11 @@ export const getClickerElement = (): {
   type: string;
   element: HTMLImageElement | HTMLDivElement;
 } | null => {
-  const farmElement = settings.gameBody.querySelector<HTMLDivElement>('.farm-wrapper__clicker-item');
-  if (farmElement) {
-    const iskra = farmElement.querySelector<HTMLImageElement>('.iskra');
-    const cross = farmElement.querySelector<HTMLImageElement>('.x');
+  const farmElementWrapper = settings.gameBody.querySelector<HTMLDivElement>('.farm-wrapper__clicker');
+  if (farmElementWrapper) {
+    const iskra = farmElementWrapper.querySelector<HTMLImageElement>('.iskra');
+    const cross = farmElementWrapper.querySelector<HTMLImageElement>('.x');
+    const farmElement = farmElementWrapper.querySelector<HTMLDivElement>('.farm-wrapper__clicker-item');
     if (cross)
       return {
         type: 'wood',
@@ -19,10 +20,12 @@ export const getClickerElement = (): {
         type: 'ore',
         element: iskra,
       }
-    return {
-      type: 'road',
-      element: farmElement,
-    }
+    if (farmElement)
+      return {
+        type: 'road',
+        element: farmElement,
+      }
+    return null;
   } else {
     return null;
   }
