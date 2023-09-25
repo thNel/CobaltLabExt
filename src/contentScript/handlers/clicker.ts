@@ -26,6 +26,7 @@ export const clicker = () => {
       if (elementInfo !== null) {
         if (!autoClicker.settings.autoSelectTool) {
           elementInfo.element.click();
+          return;
         } else {
           const {axes, pickaxes, rock} = await getTools();
           if (rock?.durability === 0 && autoClicker.settings.autoRepairTool) {

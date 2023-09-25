@@ -188,7 +188,6 @@ class AutoClicker {
   }
 
   private clearIdle(fromIdle = false) {
-    console.log('clearIdle', fromIdle);
     if (!fromIdle) {
       pushNotification('Ожидание починки камня было остановлено', true, this.getTimeLeft(this._idle.timer));
       clearTimeout(this._idle.timer);
