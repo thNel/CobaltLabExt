@@ -41,7 +41,7 @@ export const bidHandler = (
     }>(
       'https://cobaltlab.tech/api/cobaltGame/roulette/spin',
       {
-        bet: bid.map(item => item === 0 ? null : item),
+        bet: bid.map(item => item === 0 ? null : Math.round(item)),
       },
       {
         headers: {
@@ -57,7 +57,8 @@ export const bidHandler = (
       setSum(sum - bid.reduce((acc, item) => acc + item, 0) + data.data.winSum);
       if (data.data.winSum < 2 && isDouble) {
         if (isSmartDouble) {
-          setBid(bid.map((item, index) => Math.round(item + (item / multipliers[index]))) as BidType);
+          setBid(bid.map((item, index) => item + (item / multipliers[index])) as BidType);
+          localStorage.setItem('react_bid', JSON.stringify(bid.map((item, index) => item + (item / multipliers[index]))));
         } else {
           setBid(bid.map(item => item * 2) as BidType);
           localStorage.setItem('react_bid', JSON.stringify(bid.map(item => item * 2)));
@@ -140,7 +141,7 @@ export const intervalHandler = (
       }>(
         'https://cobaltlab.tech/api/cobaltGame/roulette/spin',
         {
-          bet: localBid.map(item => item === 0 ? null : item),
+          bet: localBid.map(item => item === 0 ? null : Math.round(item)),
         },
         {
           headers: {
@@ -159,7 +160,7 @@ export const intervalHandler = (
         setSum(localSum);
         if (data.data.winSum < 2 && isDouble) {
           if (isSmartDouble) {
-            localBid = localBid.map((item, index) => Math.round(item + (item / multipliers[index]))) as BidType;
+            localBid = localBid.map((item, index) => item + (item / multipliers[index])) as BidType;
           } else {
             localBid = localBid.map(item => item * 2) as BidType;
           }

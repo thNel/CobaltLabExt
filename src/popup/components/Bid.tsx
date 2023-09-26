@@ -29,7 +29,7 @@ export const Bid = ({bid, setBid, runningInterval}: {
             control={
               <Input
                 sx={{width: '64px'}}
-                value={bidNow}
+                value={Math.round(bidNow)}
                 disabled={runningInterval}
                 inputProps={{
                   maxLength: 7
