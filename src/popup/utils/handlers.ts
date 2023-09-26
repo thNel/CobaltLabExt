@@ -1,18 +1,33 @@
 import axios from "axios";
 import {Dispatch, SetStateAction} from "react";
 import ToastUtils from "@/utils/toastUtils";
+import {multipliers} from "@/store";
+import {BidType} from "@/types";
 
-export const bidHandler = ({setSum, setLastWin, bid, sum, setBid, isDouble, setScrap, setMaxWin, maxWin}: {
-  bid: [number, number, number, number, number];
-  setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
-  setLastWin: Dispatch<SetStateAction<number>>;
-  sum: number;
-  setSum: Dispatch<SetStateAction<number>>;
-  isDouble: boolean;
-  setScrap: Dispatch<SetStateAction<string>>;
-  setMaxWin: Dispatch<SetStateAction<number>>;
-  maxWin: number;
-}) => async () => {
+export const bidHandler = (
+  {
+    setSum,
+    setLastWin,
+    bid,
+    sum,
+    setBid,
+    isDouble,
+    isSmartDouble,
+    setScrap,
+    setMaxWin,
+    maxWin
+  }: {
+    bid: BidType;
+    setBid: Dispatch<SetStateAction<BidType>>;
+    setLastWin: Dispatch<SetStateAction<number>>;
+    sum: number;
+    setSum: Dispatch<SetStateAction<number>>;
+    isDouble: boolean;
+    isSmartDouble: boolean;
+    setScrap: Dispatch<SetStateAction<string>>;
+    setMaxWin: Dispatch<SetStateAction<number>>;
+    maxWin: number;
+  }) => async () => {
   setSum(0);
   setLastWin(0);
   try {
@@ -41,8 +56,12 @@ export const bidHandler = ({setSum, setLastWin, bid, sum, setBid, isDouble, setS
       setLastWin(data.data.winSum);
       setSum(sum - bid.reduce((acc, item) => acc + item, 0) + data.data.winSum);
       if (data.data.winSum < 2 && isDouble) {
-        setBid(bid.map(item => item * 2) as typeof bid);
-        localStorage.setItem('react_bid', JSON.stringify(bid.map(item => item * 2)));
+        if (isSmartDouble) {
+          setBid(bid.map((item, index) => Math.round(item + (item / multipliers[index]))) as BidType);
+        } else {
+          setBid(bid.map(item => item * 2) as BidType);
+          localStorage.setItem('react_bid', JSON.stringify(bid.map(item => item * 2)));
+        }
       }
     } else {
       setLastWin(0);
@@ -64,6 +83,7 @@ export const intervalHandler = (
     bid,
     setBid,
     isDouble,
+    isSmartDouble,
     setRunningInterval,
     setTimer,
     bidLimit,
@@ -72,11 +92,12 @@ export const intervalHandler = (
     setMaxWin,
     setScrap,
   }: {
-    bid: [number, number, number, number, number];
-    setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
+    bid: BidType;
+    setBid: Dispatch<SetStateAction<BidType>>;
     setLastWin: Dispatch<SetStateAction<number>>;
     setSum: Dispatch<SetStateAction<number>>;
     isDouble: boolean;
+    isSmartDouble: boolean;
     setRunningInterval: Dispatch<SetStateAction<boolean>>;
     setTimer: Dispatch<SetStateAction<ReturnType<typeof setInterval> | undefined>>;
     bidLimit: number;
@@ -137,7 +158,11 @@ export const intervalHandler = (
         localSum = localSum - bidSum + data.data.winSum;
         setSum(localSum);
         if (data.data.winSum < 2 && isDouble) {
-          localBid = localBid.map(item => item * 2) as typeof localBid;
+          if (isSmartDouble) {
+            localBid = localBid.map((item, index) => Math.round(item + (item / multipliers[index]))) as BidType;
+          } else {
+            localBid = localBid.map(item => item * 2) as BidType;
+          }
           setBid(localBid);
           localStorage.setItem('react_bid', JSON.stringify(localBid));
         } else {

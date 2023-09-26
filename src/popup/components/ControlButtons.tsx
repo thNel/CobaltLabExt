@@ -2,6 +2,7 @@ import {bidHandler, intervalHandler} from "@/utils/handlers";
 import {Dispatch, ReactElement, SetStateAction, useEffect, useState} from "react";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
+import {BidType} from "@/types";
 
 export const ControlButtons = (
   {
@@ -10,6 +11,7 @@ export const ControlButtons = (
     sum,
     setLastWin,
     isDouble,
+    isSmartDouble,
     delay,
     bid,
     bidLimit,
@@ -20,12 +22,13 @@ export const ControlButtons = (
     setScrap,
     maxWin
   }: {
-    bid: [number, number, number, number, number];
-    setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
+    bid: BidType;
+    setBid: Dispatch<SetStateAction<BidType>>;
     setLastWin: Dispatch<SetStateAction<number>>;
     sum: number;
     setSum: Dispatch<SetStateAction<number>>;
     isDouble: boolean;
+    isSmartDouble: boolean;
     bidLimit: number;
     delay: number;
     isInterval: boolean;
@@ -69,7 +72,18 @@ export const ControlButtons = (
       <Button
         variant={"contained"}
         className={runningInterval || isInterval ? 'hidden' : ''}
-        onClick={bidHandler({bid, setBid, setSum, sum, setLastWin, isDouble, maxWin, setMaxWin, setScrap})}
+        onClick={bidHandler({
+          bid,
+          setBid,
+          setSum,
+          sum,
+          setLastWin,
+          isDouble,
+          isSmartDouble,
+          maxWin,
+          setMaxWin,
+          setScrap
+        })}
       >
         Сделать ставку
       </Button>
@@ -83,6 +97,7 @@ export const ControlButtons = (
           setSum,
           setLastWin,
           isDouble,
+          isSmartDouble,
           setBid,
           bid,
           bidLimit,

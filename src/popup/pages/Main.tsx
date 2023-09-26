@@ -5,14 +5,16 @@ import {Periodic} from "@/components/Periodic";
 import {ControlButtons} from "@/components/ControlButtons";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import {BidType} from "@/types";
 
 const Main = (): ReactElement => {
-  const [bid, setBid] = useState<[number, number, number, number, number]>(
+  const [bid, setBid] = useState<BidType>(
     JSON.parse(localStorage.getItem('react_bid') ?? '[0, 0, 0, 0, 0]') ?? [0, 0, 0, 0, 0]
   );
   const [runningInterval, setRunningInterval] = useState(false);
   const [isInterval, setIsInterval] = useState(localStorage.getItem('react_isInterval') === 'true' ?? false);
   const [isDouble, setIsDouble] = useState(localStorage.getItem('react_isDouble') === 'true' ?? false);
+  const [isSmartDouble, setIsSmartDouble] = useState(localStorage.getItem('react_isSmartDouble') === 'true' ?? false);
   const [delay, setDelay] = useState(JSON.parse(localStorage.getItem('react_delay') ?? '200') ?? 200);
   const [bidLimit, setBidLimit] = useState(JSON.parse(localStorage.getItem('react_bidLimit') ?? '0') ?? 0);
   const [sum, setSum] = useState(0);
@@ -33,12 +35,13 @@ const Main = (): ReactElement => {
       className='main-page'
     >
       <Bid bid={bid} setBid={setBid} runningInterval={runningInterval}/>
-      <DoubleSettings isDouble={isDouble} setIsDouble={setIsDouble} bidLimit={bidLimit} setBidLimit={setBidLimit}/>
+      <DoubleSettings isDouble={isDouble} setIsDouble={setIsDouble} bidLimit={bidLimit} setBidLimit={setBidLimit}
+                      isSmartDouble={isSmartDouble} setIsSmartDouble={setIsSmartDouble}/>
       <Periodic isInterval={isInterval} setIsInterval={setIsInterval} delay={delay} setDelay={setDelay}/>
       <ControlButtons bid={bid} setBid={setBid} setLastWin={setLastWin} sum={sum}
                       setSum={setSum} isDouble={isDouble} bidLimit={bidLimit} delay={delay} isInterval={isInterval}
                       runningInterval={runningInterval} setRunningInterval={setRunningInterval} setScrap={setScrap}
-                      setMaxWin={setMaxWin} maxWin={maxWin}/>
+                      setMaxWin={setMaxWin} maxWin={maxWin} isSmartDouble={isSmartDouble}/>
       <Box
         maxWidth='xl'
         sx={{

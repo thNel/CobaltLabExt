@@ -4,13 +4,14 @@ import Input from "@mui/material/Input";
 import {Dispatch, ReactElement, SetStateAction} from "react";
 import Box from "@mui/material/Box";
 import ToastUtils from "@/utils/toastUtils";
+import {multipliers} from "@/store";
+import {BidType} from '@/types';
 
 export const Bid = ({bid, setBid, runningInterval}: {
-  bid: [number, number, number, number, number];
-  setBid: Dispatch<SetStateAction<[number, number, number, number, number]>>;
+  bid: BidType;
+  setBid: Dispatch<SetStateAction<BidType>>;
   runningInterval: boolean;
 }): ReactElement => {
-  const multipliers: [string, string, string, string, string] = ['x1', 'x3', 'x5', 'x10', 'x20'];
   return (
     <Box
       sx={{
@@ -60,7 +61,7 @@ export const Bid = ({bid, setBid, runningInterval}: {
                 }}
               />
             }
-            label={multipliers[index]}
+            label={`x${multipliers[index]}`}
             labelPlacement='bottom'
           />
         )}

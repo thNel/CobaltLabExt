@@ -1,0 +1,1 @@
+export type BidType = [number, number, number, number, number];

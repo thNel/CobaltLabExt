@@ -36,7 +36,7 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
               }}
             />
           }
-          label={<Typography>Периодично?</Typography>}/>
+          label={<Typography>Автоставка</Typography>}/>
         {isInterval
           ? <FormControlLabel
             sx={{
