@@ -120,6 +120,7 @@ export const intervalHandler = (
   let localCounter = 0;
   let localSum = 0;
   let localBid: typeof bid = [...bid];
+  let localMaxWin = maxWin;
   const startBid: typeof bid = [...bid];
   setSum(localSum);
   setLastWin(0);
@@ -152,7 +153,8 @@ export const intervalHandler = (
       )
       if (data.status === 'success') {
         setScrap(data.data.scrap.toString());
-        setMaxWin(data.data.winSum > maxWin ? data.data.winSum : maxWin);
+        localMaxWin = data.data.winSum > localMaxWin ? data.data.winSum : localMaxWin
+        setMaxWin(localMaxWin);
         setLastWin(data.data.winSum);
         localCounter += 1;
         setCounter(localCounter);

@@ -57,6 +57,7 @@ export const ControlButtons = (
         flex: '1 1 auto',
         alignItems: 'center',
         justifyContent: 'center',
+        gap: '12px',
       }}>
       <Button
         variant={"contained"}
