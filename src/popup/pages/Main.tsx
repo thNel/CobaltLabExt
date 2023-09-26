@@ -73,7 +73,7 @@ const Main = (): ReactElement => {
           <Typography>Максимальный выигрыш: {maxWin}</Typography>
           <Typography>Скрапа сейчас: {scrap}</Typography>
         </Box>
-        <Typography>Сумма текущей ставки: {bid.reduce((acc, item) => acc + item, 0)}</Typography>
+        <Typography>Сумма текущей ставки: {bid.reduce((acc, item) => acc + Math.round(item), 0)}</Typography>
       </Box>
     </Box>
   )
