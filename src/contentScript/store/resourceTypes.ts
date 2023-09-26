@@ -41,7 +41,9 @@ export enum resourceTypes {
   axe2 = 60,
   sheet = 61,
   axe5 = 62,
+  pickaxe6 = 63,
   pickaxe5 = 64,
   pickaxe8 = 65,
+  pickaxe7 = 66,
   c4 = 68,
 }
