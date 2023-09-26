@@ -54,7 +54,7 @@ export const bidHandler = (
       setScrap(data.data.scrap.toString());
       setMaxWin(data.data.winSum > maxWin ? data.data.winSum : maxWin);
       setLastWin(data.data.winSum);
-      setSum(sum - bid.reduce((acc, item) => acc + item, 0) + data.data.winSum);
+      setSum(sum - bid.reduce((acc, item) => acc + Math.round(item), 0) + data.data.winSum);
       if (data.data.winSum < 2 && isDouble) {
         if (isSmartDouble) {
           setBid(bid.map((item, index) => item + (item / multipliers[index])) as BidType);
@@ -124,7 +124,7 @@ export const intervalHandler = (
   setSum(localSum);
   setLastWin(0);
   localTimer = setInterval(async () => {
-    const bidSum = localBid.reduce((acc, item) => acc + item, 0);
+    const bidSum = localBid.reduce((acc, item) => acc + Math.round(item), 0);
     if (bidLimit > 0 && bidSum > bidLimit) {
       abortInterval();
       ToastUtils.error('Превышен заданный лимит');
