@@ -6,6 +6,7 @@ import {createButton} from "@contentScript/utils/hud/createButton";
 import {pushNotification} from "@contentScript/utils/hud/pushNotification";
 import {pushError} from "@contentScript/utils/hud/pushError";
 import {createSpan} from "@contentScript/utils/hud/createSpan";
+import {resourceTypes} from "@contentScript/types/resourceTypes";
 
 class Recycler {
   private _tryCount = 0;
@@ -13,12 +14,16 @@ class Recycler {
   private _started = false;
   private _timeout = setTimeout(() => {
   }, 1);
+  private _timerNotificationSelfDelete = () => {
+  };
 
   private readonly _fromHouse;
   private readonly _type;
   private readonly _label;
   private readonly _genderLabel;
   private readonly _button;
+
+  private readonly _blackList = [resourceTypes.canOfTuna, resourceTypes.electricFuse];
 
   constructor(type: RecyclerTypes, label: string) {
     this._type = type;
@@ -105,7 +110,7 @@ class Recycler {
           , 0);
         return max / (fuel?.from.time ?? 1)
       })();
-    this._remaining = (fuelTime > (forgeResourceTime ?? resourceTime) && !(this._type === RecyclerTypes.barn || this._type === RecyclerTypes.plant) ? (forgeResourceTime ?? resourceTime) : fuelTime) - (data.startTime ?? 0);
+    this._remaining = ((fuelTime < (forgeResourceTime ?? resourceTime) && !(this._type === RecyclerTypes.barn || this._type === RecyclerTypes.plant)) ? (forgeResourceTime ?? resourceTime) : fuelTime) - (data.startTime ?? 0);
     if (this._remaining > 0) {
       this._started = true;
       this._timeout = setTimeout(() => {
@@ -125,6 +130,7 @@ class Recycler {
       pushError(data.message || data.status, true);
     }
     this._button.style.cssText = '';
+    this._timerNotificationSelfDelete();
   }
 
   private async takeBack(restart = false): Promise<void> {
@@ -181,7 +187,7 @@ class Recycler {
 
       for (let i = 0; i < inventoriesArray.length; i++) {
         if (i > 0) break; //Напрямую из сундука чё-т не получается наполнять перерабы
-        const inventory = inventoriesArray[i];
+        const inventory = inventoriesArray[i].filter(item => item.itemID && !this._blackList.includes(item.itemID));
         // Заполнение ячеек переработки
         const filteredInventory = inventory.filter(
           item => recyclerInfo.data.variations[0]?.items?.some(
@@ -239,7 +245,7 @@ class Recycler {
       if (this._remaining > 0) {
         const date = new Date();
         date.setSeconds(this._remaining + date.getSeconds());
-        pushNotification(`${this._label} запущен${this._genderLabel}. Время перезапуска: ${date.toLocaleTimeString('ru-RU')}`, true, this._remaining * 1000);
+        this._timerNotificationSelfDelete = pushNotification(`${this._label} запущен${this._genderLabel}. Время перезапуска: ${date.toLocaleTimeString('ru-RU')}`, true, this._remaining * 1000);
       }
     } catch (e) {
       return Promise.reject(`Не удалось запустить ${this._label}. Причина: ${e}`);

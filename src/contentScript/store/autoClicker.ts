@@ -8,6 +8,9 @@ import {pushNotification} from "@contentScript/utils/hud/pushNotification";
 
 class AutoClicker {
   private _mining = false;
+  private _timerNotificationSelfDelete = () => {
+  };
+
   private readonly _idle = {
     timer: setTimeout(() => {
     }, 1),
@@ -189,7 +192,8 @@ class AutoClicker {
 
   private clearIdle(fromIdle = false) {
     if (!fromIdle) {
-      pushNotification('Ожидание починки камня было остановлено', true, this.getTimeLeft(this._idle.timer));
+      pushNotification('Ожидание починки камня было остановлено', true);
+      this._timerNotificationSelfDelete();
       clearTimeout(this._idle.timer);
     }
     this._idle.delay = 0;
@@ -205,6 +209,10 @@ class AutoClicker {
       return Math.ceil((timeout._idleStart + timeout._idleTimeout - Date.now()));
     }
     return this._idle.delay;
+  }
+
+  public set selfDeleteTag(fn: () => void) {
+    this._timerNotificationSelfDelete = fn;
   }
 }
 

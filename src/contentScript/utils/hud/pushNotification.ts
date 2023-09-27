@@ -11,8 +11,8 @@ export const pushNotification = (text: string, autoDelete = false, deleteTimeout
     innerElements: [notifyText],
     classes: `notiflist-item ${selfDeleteTag} bg-dark`
   });
-  const selfDelete = () => {
-    const element = document.querySelector(`.${selfDeleteTag}`);
+  const selfDelete = (deleteTag: string) => () => {
+    const element = document.querySelector(`.${deleteTag}`);
     if (element) {
       element.classList.add('slide-leave-active', 'slide-leave-to');
       setTimeout(() => {
@@ -20,10 +20,12 @@ export const pushNotification = (text: string, autoDelete = false, deleteTimeout
       }, 1000);
     }
   }
-  notifyDiv.onclick = escapeClick ? null : selfDelete;
+  notifyDiv.onclick = escapeClick ? null : selfDelete(selfDeleteTag);
   notifyList.append(notifyDiv);
 
   if (autoDelete)
-    setTimeout(selfDelete, deleteTimeout);
+    setTimeout(selfDelete(selfDeleteTag), deleteTimeout);
+
+  return selfDelete(selfDeleteTag);
 }
 

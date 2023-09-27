@@ -80,7 +80,7 @@ export const clicker = () => {
             if (autoClicker.mining) {
               autoClicker.toggleMining();
               const timeOut = selectedTool.availableAfter * 1000 + 1000;
-              pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(timeOut / 600) / 100} минут. Когда камень починится...`, true, timeOut);
+              autoClicker.selfDeleteTag = pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(timeOut / 600) / 100} минут. Когда камень починится...`, true, timeOut);
               autoClicker.setIdle(setTimeout(clicker, timeOut), timeOut);
             }
             return;

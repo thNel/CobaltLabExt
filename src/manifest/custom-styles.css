@@ -104,12 +104,12 @@ button.clicker-button {
   white-space: nowrap;
 }
 
-.notiflist {
+.notiflist:not(.errorsend) {
   z-index: 3;
 }
 
 .notiflist-item {
-  max-width: calc(var(--px) * 450) !important;
+  max-width: calc(var(--px) * 500) !important;
 }
 
 .bg-dark {
