@@ -54,11 +54,6 @@ class Recycler {
         return;
       }
       await this.init();
-      if (this._remaining > 0) {
-        const date = new Date();
-        date.setSeconds(this._remaining + date.getSeconds());
-        pushNotification(`${this._label} запущен${this._genderLabel}. Время перезапуска: ${date.toLocaleTimeString('ru-RU')}`, true, this._remaining * 1000, true);
-      }
     } catch (e) {
       return Promise.reject(e);
     }
@@ -241,6 +236,11 @@ class Recycler {
         }
       }
       await this.turnOn();
+      if (this._remaining > 0) {
+        const date = new Date();
+        date.setSeconds(this._remaining + date.getSeconds());
+        pushNotification(`${this._label} запущен${this._genderLabel}. Время перезапуска: ${date.toLocaleTimeString('ru-RU')}`, true, this._remaining * 1000);
+      }
     } catch (e) {
       return Promise.reject(`Не удалось запустить ${this._label}. Причина: ${e}`);
     }
