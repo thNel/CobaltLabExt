@@ -89,7 +89,7 @@ const App = () => {
         {(() => {
           switch (currentPage) {
             case 0:
-              return <Main/>
+              return <Main/>;
           }
         })()}
       </Container>

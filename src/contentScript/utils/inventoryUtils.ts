@@ -1,7 +1,7 @@
 import axios from "axios";
 import {filteredTool, inventoryItem} from "../types/tools";
 import {pushError} from "./hud/pushError";
-import {resourceTypes} from "../store/resourceTypes";
+import {resourceTypes} from "../types/resourceTypes";
 import {toolSortFn} from "./sorts/toolSort";
 import autoClicker from "@contentScript/store/autoClicker";
 import settings from "@contentScript/store/settings";
@@ -14,7 +14,7 @@ export const getItems = async (boxID: string): Promise<inventoryItem[]> => {
   }>(`https://cobaltlab.tech/api/cobaltGame/inventory?boxID=${boxID}`);
 
   if (data.status !== 'success') {
-    pushError(data.message, true);
+    pushError(data.message || data.status, true);
     throw new Error(data.message);
   }
 
@@ -62,10 +62,7 @@ export const repairItem = async (boxID: string, slotID: number) => {
   });
 
   if (data.status !== 'success')
-    pushError(data.message, true);
-
-
-  console.log('repairItem response', data);
+    pushError(data.message || data.status, true);
 
   return data.data;
 }
@@ -80,16 +77,14 @@ export const moveItem = async (moveInfo: {
     status: string;
     data: any;
     message: string;
-  }>('https://cobaltlab.tech/api/cobaltGame/inventoryRepair', {
+  }>('https://cobaltlab.tech/api/cobaltGame/inventoryMove', {
     ...moveInfo,
   });
 
   if (data.status !== 'success') {
-    pushError(data.message, true);
-    throw new Error(data.message);
+    pushError(data.message || data.status, true);
+    return Promise.reject(data.message || data.status);
   }
-
-  console.log('moveItem response', data);
 
   return data.data;
 }
@@ -105,7 +100,7 @@ export const splitItem = async (boxID: string, slotID: number) => {
   });
 
   if (data.status !== 'success') {
-    pushError(data.message, true);
+    pushError(data.message || data.status, true);
     throw new Error(data.message);
   }
 
@@ -130,7 +125,7 @@ export const deleteItem = async (itemInfo: {
   })
 
   if (data.status !== 'success') {
-    pushError(data.message, true);
+    pushError(data.message || data.status, true);
   }
 
   console.log('deleteItem response', data);
@@ -139,16 +134,16 @@ export const deleteItem = async (itemInfo: {
 }
 
 export const selectQuickSlot = async (slotID: number) => {
-  // const {data} = await axios.get<{
-  //   status: string;
-  //   data: any;
-  //   message: string;
-  // }>(`https://cobaltlab.tech/api/cobaltGame/selectQuickSlot?slotID=${slotID}`);
-  //
-  // if (data.status !== 'success') {
-  //   pushError(data.message, true);
-  // }
-  //
+  const {data} = await axios.get<{
+    status: string;
+    data: any;
+    message: string;
+  }>(`https://cobaltlab.tech/api/cobaltGame/selectQuickSlot?slotID=${slotID}`);
+
+  if (data.status !== 'success') {
+    pushError(data.message || data.status, true);
+  }
+
   // console.log('selectQuickSlot response', data);
 
   // return data.data;

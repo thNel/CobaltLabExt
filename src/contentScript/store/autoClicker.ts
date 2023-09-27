@@ -50,21 +50,21 @@ class AutoClicker {
       classes: 'btn btn-blue btn-clicker-settings',
       onClick: this.toggleAutoSelectTool.bind(this),
     });
-    this._autoSelectToolButton.style.cssText = this._settings.autoSelectTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._autoSelectToolButton.style.cssText = this._settings.autoSelectTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     // Repair tool
     this._autoRepairButton = createButton({
       innerText: 'Починка камня',
       classes: 'btn btn-blue btn-clicker-settings',
       onClick: this.toggleAutoRepairTool.bind(this),
     });
-    this._autoRepairButton.style.cssText = this._settings.autoRepairTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._autoRepairButton.style.cssText = this._settings.autoRepairTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     // Delete tool
     this._autoDeleteButton = createButton({
       innerText: 'Удаление сломанных',
       classes: 'btn btn-blue btn-clicker-settings',
       onClick: this.toggleAutoDeleteTool.bind(this),
     });
-    this._autoDeleteButton.style.cssText = this._settings.autoDeleteTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._autoDeleteButton.style.cssText = this._settings.autoDeleteTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     // Delay
     this._delayInput = createInput(this._settings.delay, 'inp-clicker-settings', (event: any) => {
       if (!isNaN(+event?.target?.value)) {
@@ -150,7 +150,7 @@ class AutoClicker {
       this._autoDeleteButton.classList.add('d-none');
       this._autoRepairButton.classList.add('d-none');
     }
-    this._autoSelectToolButton.style.cssText = this._settings.autoSelectTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._autoSelectToolButton.style.cssText = this._settings.autoSelectTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
 
@@ -160,7 +160,7 @@ class AutoClicker {
       return;
     }
     this._settings.autoRepairTool = !this._settings.autoRepairTool;
-    this._autoRepairButton.style.cssText = this._settings.autoRepairTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._autoRepairButton.style.cssText = this._settings.autoRepairTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
 
@@ -170,7 +170,7 @@ class AutoClicker {
       return;
     }
     this._settings.autoDeleteTool = !this._settings.autoDeleteTool;
-    this._autoDeleteButton.style.cssText = this._settings.autoDeleteTool ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._autoDeleteButton.style.cssText = this._settings.autoDeleteTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
   }
 

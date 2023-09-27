@@ -1,7 +1,7 @@
 import {createSpan} from "./createSpan";
 import {createDiv} from "./createDiv";
 
-export const pushNotification = (text: string, autoDelete = false, deleteTimeout = 2000) => {
+export const pushNotification = (text: string, autoDelete = false, deleteTimeout = 2000, escapeClick = false) => {
   const notifyList = document.querySelector<HTMLSpanElement>('span.notiflist:not(.errorsend)');
   if (!notifyList)
     throw new Error('Не найдено место для уведомлений');
@@ -9,7 +9,7 @@ export const pushNotification = (text: string, autoDelete = false, deleteTimeout
   const selfDeleteTag = `selfDelete-${Math.round(Math.random() * (10 ** 5))}`;
   const notifyDiv = createDiv({
     innerElements: [notifyText],
-    classes: `notiflist-item ${selfDeleteTag}`
+    classes: `notiflist-item ${selfDeleteTag} bg-dark`
   });
   const selfDelete = () => {
     const element = document.querySelector(`.${selfDeleteTag}`);
@@ -20,7 +20,7 @@ export const pushNotification = (text: string, autoDelete = false, deleteTimeout
       }, 1000);
     }
   }
-  notifyDiv.onclick = selfDelete;
+  notifyDiv.onclick = escapeClick ? null : selfDelete;
   notifyList.append(notifyDiv);
 
   if (autoDelete)

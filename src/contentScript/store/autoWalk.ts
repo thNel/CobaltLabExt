@@ -41,43 +41,43 @@ class AutoWalk {
       classes: 'btn btn-blue btn-icon btn-auto-walk',
       onClick: walker,
     });
-    this._activateButton.style.cssText = this._enabled ? 'background-color: rgba(46,139,87,1) !important' : '';
+    this._activateButton.style.cssText = this._enabled ? 'background-color: rgba(46,139,87,1) !important;' : '';
     this._reverseButton = createButton({
       innerText: 'Реверс маршрута',
       classes: 'btn btn-blue btn-auto-walk-settings',
       onClick: this.toggleReversed.bind(this),
     })
-    this._reverseButton.style.cssText = this._reversed ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._reverseButton.style.cssText = this._reversed ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     this._autoReverseButton = createButton({
       innerText: 'Авторазворот',
       classes: 'btn btn-blue btn-auto-walk-settings',
       onClick: this.toggleAutoReverse.bind(this),
     })
-    this._autoReverseButton.style.cssText = this._autoReverse ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._autoReverseButton.style.cssText = this._autoReverse ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     this._oreButton = createButton({
       innerText: 'Камень / Руды',
       classes: 'btn btn-blue btn-auto-walk-settings',
       onClick: this.toggleOres.bind(this),
     })
-    this._oreButton.style.cssText = this._settings.ore ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._oreButton.style.cssText = this._settings.ore ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     this._woodButton = createButton({
       innerText: 'Дерево',
       classes: 'btn btn-blue btn-auto-walk-settings',
       onClick: this.toggleWood.bind(this),
     })
-    this._woodButton.style.cssText = this._settings.wood ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._woodButton.style.cssText = this._settings.wood ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     this._roadButton = createButton({
       innerText: 'Дорога',
       classes: 'btn btn-blue btn-auto-walk-settings',
       onClick: this.toggleRoad.bind(this),
     })
-    this._roadButton.style.cssText = this._settings.road ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._roadButton.style.cssText = this._settings.road ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     this._cycledButton = createButton({
       innerText: 'По-кругу',
       classes: 'btn btn-blue btn-auto-walk-settings',
       onClick: this.toggleCycled.bind(this),
     })
-    this._cycledButton.style.cssText = this._cycled ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._cycledButton.style.cssText = this._cycled ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     const left = createDiv({
       innerElements: [this._reverseButton, this._autoReverseButton, this._cycledButton],
       classes: 'button-group',
@@ -128,7 +128,7 @@ class AutoWalk {
 
   public toggleEnabled() {
     this._enabled = !this._enabled;
-    this._activateButton.style.cssText = this._enabled ? 'background-color: rgba(46,139,87,1) !important' : '';
+    this._activateButton.style.cssText = this._enabled ? 'background-color: rgba(46,139,87,1) !important;' : '';
     this._activateButtonSpan.innerText = this._enabled ? 'Вкл' : 'Выкл';
     localStorage.setItem('walkerEnabled', JSON.stringify(this._enabled));
   }
@@ -139,7 +139,7 @@ class AutoWalk {
       return
     }
     this._settings.ore = !this._settings.ore;
-    this._oreButton.style.cssText = this._settings.ore ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._oreButton.style.cssText = this._settings.ore ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('walkerSettings', JSON.stringify(this._settings));
   }
 
@@ -149,19 +149,19 @@ class AutoWalk {
       return
     }
     this._settings.wood = !this._settings.wood;
-    this._woodButton.style.cssText = this._settings.wood ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._woodButton.style.cssText = this._settings.wood ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('walkerSettings', JSON.stringify(this._settings));
   }
 
   public toggleRoad() {
     this._settings.road = !this._settings.road;
-    this._roadButton.style.cssText = this._settings.road ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._roadButton.style.cssText = this._settings.road ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('walkerSettings', JSON.stringify(this._settings));
   }
 
   public toggleReversed() {
     this._reversed = !this._reversed;
-    this._reverseButton.style.cssText = this._reversed ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._reverseButton.style.cssText = this._reversed ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('walkerReversed', JSON.stringify(this._reversed));
   }
 
@@ -183,7 +183,7 @@ class AutoWalk {
         this.toggleWood();
     }
     this._cycled = !this._cycled;
-    this._cycledButton.style.cssText = this._cycled ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._cycledButton.style.cssText = this._cycled ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('walkerCycled', JSON.stringify(this._cycled));
   }
 
@@ -193,7 +193,7 @@ class AutoWalk {
       return
     }
     this._autoReverse = !this._autoReverse;
-    this._autoReverseButton.style.cssText = this._autoReverse ? 'background-color: rgba(46,139,87,0.3) !important' : '';
+    this._autoReverseButton.style.cssText = this._autoReverse ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('walkerAutoReverse', JSON.stringify(this._autoReverse));
   }
 

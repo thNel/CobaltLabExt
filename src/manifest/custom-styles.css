@@ -103,3 +103,15 @@ button.clicker-button {
 .btn-auto-walk * {
   white-space: nowrap;
 }
+
+.notiflist {
+  z-index: 3;
+}
+
+.notiflist-item {
+  max-width: calc(var(--px) * 450) !important;
+}
+
+.bg-dark {
+  background-color: rgba(0, 0, 0, 0.3);
+}
