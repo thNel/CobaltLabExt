@@ -17,11 +17,17 @@ class AutoWalk {
       ore: !!this._savedSettings.ore,
       road: !!this._savedSettings.road,
       wood: !!this._savedSettings.wood,
+      bandit: !!this._savedSettings.bandit,
+      card: !!this._savedSettings.card,
+      city: !!this._savedSettings.city,
     }
     : {
       ore: false,
       road: false,
       wood: false,
+      bandit: false,
+      card: false,
+      city: false,
     };
   private readonly _activateButtonSpan;
   private readonly _activateButton;
