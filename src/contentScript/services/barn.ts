@@ -83,7 +83,7 @@ class Barn {
         })
       }
       if (fuels.length === 0) {
-        return Promise.reject(`Нет еды для "${this.recycler.title}"!`);
+        return Promise.reject(`Нет топлива для "${this.recycler.title}"!`);
       }
 
       const freeFuelSlots: number[] = [];

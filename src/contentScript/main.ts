@@ -39,9 +39,8 @@ function Init() {
     if (bandit) {
       if ([...bandit.querySelectorAll('div.bandit-list__modal-title')].some(item => item.textContent === 'НПЗ')) {
         const cityHeader = bandit.querySelector('div.bandit-content > div.bandit-header');
-        if (cityHeader && !cityHeader.querySelector('button.btn-recycler')) {// && cityHeader.querySelectorAll('button.btn-recycler')?.length < 2) {
-          // cityHeader.querySelectorAll('button.btn-recycler').forEach(item => item.remove());
-          cityHeader.append(refinery.button, cityRecycler.button);
+        if (cityHeader && !cityHeader.querySelector('button.btn-recycler')) {
+          cityHeader.append(cityRecycler.button, refinery.button);
         }
       } else {
         const banditHeader = bandit.querySelector('div.bandit-content > div.bandit-header');

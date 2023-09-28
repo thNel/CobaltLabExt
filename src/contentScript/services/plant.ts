@@ -82,7 +82,7 @@ class Plant {
         })
       }
       if (fuels.length === 0) {
-        return Promise.reject(`Нет дерьма для "${this.recycler.title}"!`);
+        return Promise.reject(`Нет топлива для "${this.recycler.title}"!`);
       }
 
       const freeFuelSlots: number[] = [];

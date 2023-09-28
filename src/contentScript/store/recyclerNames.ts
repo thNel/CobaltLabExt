@@ -2,7 +2,7 @@ import {RecyclerTypes} from "@contentScript/types/recyclerTypes";
 
 export const recyclerStrings: Record<RecyclerTypes, { title: string; gender: string }> = {
   [RecyclerTypes.furnace]: {
-    title: 'Печь',
+    title: 'Печка',
     gender: 'a',
   },
   [RecyclerTypes.barn]: {

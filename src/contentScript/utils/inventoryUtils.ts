@@ -39,7 +39,12 @@ export const getTools = async () => {
     const deleteList = tools.filter(item => item.type !== 'rock' && item.type?.slice(-1) !== '4' && item.durability < 1);
     if (deleteList.length > 0) {
       for (const item of deleteList) {
-        await deleteItem({boxID: '3', itemID: item.itemID, slotID: item.slotID, quantity: item.quantity});
+        await deleteItem({
+          boxID: InventoryTypes.toolbar,
+          itemID: item.itemID,
+          slotID: item.slotID,
+          quantity: item.quantity
+        });
       }
       tools = await fetchTools();
     }
@@ -118,7 +123,7 @@ export const splitItem = async (boxID: InventoryTypes, slotID: number) => {
 }
 
 export const deleteItem = async (itemInfo: {
-  boxID: string;
+  boxID: InventoryTypes;
   slotID: number;
   itemID: ResourceTypes;
   quantity: number;
@@ -129,6 +134,7 @@ export const deleteItem = async (itemInfo: {
     message: string;
   }>('https://cobaltlab.tech/api/cobaltGame/inventoryRemove', {
     ...itemInfo,
+    boxID: itemInfo.boxID.toString(),
     confirmed: 1,
   })
 

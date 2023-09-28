@@ -4,20 +4,23 @@ import {createButton} from "@contentScript/utils/hud/createButton";
 import {createSpan} from "@contentScript/utils/hud/createSpan";
 import {pushError} from "@contentScript/utils/hud/pushError";
 import {pushNotification} from "@contentScript/utils/hud/pushNotification";
-import {getItems} from "@contentScript/utils/inventoryUtils";
+import {deleteItem, getItems} from "@contentScript/utils/inventoryUtils";
 import {InventoryTypes} from "@contentScript/types/inventoryTypes";
 import {InventoryItem} from "@contentScript/types/tools";
 import {ResourceTypes} from "@contentScript/types/resourceTypes";
+import {createDiv} from "@contentScript/utils/hud/createDiv";
 
 class Refinery {
   private _remaining = 0;
   private _started = false;
   private _timeout = setTimeout(() => {
   }, 1);
-  private _blackList = JSON.parse(localStorage.getItem('furnaceBlackList') ?? `[]`);
-  private _deleteCoal = JSON.parse(localStorage.getItem('furnaceDeleteCoal') ?? 'false');
+  private _blackList = JSON.parse(localStorage.getItem('refineryBlackList') ?? `[]`);
+  private _deleteCoal = JSON.parse(localStorage.getItem('refineryDeleteCoal') ?? 'false');
 
   private readonly _button;
+  private readonly _coalButton;
+  private readonly _wrapper;
   private readonly recycler;
 
   constructor() {
@@ -32,6 +35,26 @@ class Refinery {
           pushError(e?.message ?? e.reason ?? e, true, 4000);
         }
       },
+    });
+    this._coalButton = createButton({
+      innerElements: [createSpan('Удалять уголь')],
+      classes: 'btn btn-blue btn-small btn-recycler-coal d-none',
+      onClick: () => {
+        this._deleteCoal = !this._deleteCoal;
+        this._coalButton.style.cssText = this._deleteCoal ? 'background-color: rgba(46,139,87,0.8) !important;' : '';
+        localStorage.setItem('refineryDeleteCoal', this._deleteCoal)
+      }
+    });
+    this._coalButton.style.cssText = this._deleteCoal ? 'background-color: rgba(46,139,87,0.8) !important;' : '';
+    this._wrapper = createDiv({
+      innerElements: [this._button, this._coalButton],
+      classes: 'recycler-furnace-wrapper',
+      onMouseEnter: () => {
+        this._coalButton.classList.remove('d-none');
+      },
+      onMouseLeave: () => {
+        this._coalButton.classList.add('d-none');
+      }
     });
   }
 
@@ -70,10 +93,25 @@ class Refinery {
       await this.recycler.turnOffRecycler();
       await this.recycler.emptyRecycler();
       const recyclerInfo = await this.recycler.getRecyclerInfo();
-      const userInventory = (await getItems(InventoryTypes.user)).filter((item) => item.itemID && item.quantity !== null && !this._blackList.includes(item.itemID)) as (InventoryItem & {
+      let userInventory = (await getItems(InventoryTypes.user)).filter((item) => item.itemID && item.quantity !== null && !this._blackList.includes(item.itemID)) as (InventoryItem & {
         itemID: ResourceTypes;
         quantity: number;
       })[];
+      if (this._deleteCoal) {
+        const coalList = userInventory.filter(item => item.itemID === ResourceTypes.coal);
+        for (const coal of coalList) {
+          await deleteItem({
+            boxID: InventoryTypes.user,
+            slotID: coal.slotID,
+            quantity: coal.quantity,
+            itemID: coal.itemID
+          });
+        }
+        userInventory = (await getItems(InventoryTypes.user)).filter((item) => item.itemID && item.quantity !== null && !this._blackList.includes(item.itemID)) as (InventoryItem & {
+          itemID: ResourceTypes;
+          quantity: number;
+        })[];
+      }
       const resources: (InventoryItem & { itemID: ResourceTypes; quantity: number; time: number })[] = [];
       const fuels: (InventoryItem & { itemID: ResourceTypes; quantity: number; time: number })[] = [];
       for (const variation of this.recycler.variations) {
@@ -167,7 +205,7 @@ class Refinery {
   }
 
   public get button() {
-    return this._button;
+    return this._wrapper;
   }
 }
 

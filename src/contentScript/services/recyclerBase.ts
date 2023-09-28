@@ -171,8 +171,7 @@ class RecyclerBase {
       time: number
     })[],
     freeResourceSlots: number[],
-    restart: (() => Promise<void>) | null = null,
-  ) {
+  ): Promise<(InventoryItem & { itemID: ResourceTypes; quantity: number; time: number })[]> {
     const groupedResources = groupBy(resources, 'itemID');
     const resourcesToLoad = Object.entries(groupedResources)
       .reduce<(InventoryItem & { itemID: ResourceTypes; quantity: number; time: number })[]>(
@@ -191,11 +190,24 @@ class RecyclerBase {
         },
         []
       ).sort((a, b) => a.quantity - b.quantity);
-    if (restart !== null) {
+    if (this._type === RecyclerTypes.furnace) {
       if (resourcesToLoad.length === 1 && resourcesToLoad[0].quantity > 1 && this._type === RecyclerTypes.furnace) {
-        await splitItem(InventoryTypes.user, resourcesToLoad[0].slotID);
-        await restart();
-        return Promise.reject('Разбиваю последний стак такого вида ресурсов пополам. Перезапускаю');
+        await this.emptyRecycler();
+        const newInventory = (await splitItem(InventoryTypes.user, resourcesToLoad[0].slotID)).filter((item) => resources.some(elem => elem.itemID === item.itemID)) as (InventoryItem & {
+          itemID: ResourceTypes;
+          quantity: number;
+        })[];
+        const newResources: (InventoryItem & { itemID: ResourceTypes; quantity: number; time: number })[] = [];
+        for (const variation of this._variations) {
+          newInventory.forEach(inventoryItem => {
+            const variationItem = variation.items?.find(elem => elem.from.itemID === inventoryItem.itemID)?.from;
+            if (variationItem) {
+              newResources.push({...inventoryItem, time: variationItem.time});
+            }
+          })
+        }
+        pushNotification('Разбиваю последний стак такого вида ресурсов пополам. Перезапускаю', true)
+        return await this.loadResources(newResources, freeResourceSlots);
       }
     }
     const movedResources: (InventoryItem & { itemID: ResourceTypes; quantity: number; time: number })[] = [];

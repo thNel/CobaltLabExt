@@ -4,10 +4,11 @@ import {createButton} from "@contentScript/utils/hud/createButton";
 import {createSpan} from "@contentScript/utils/hud/createSpan";
 import {pushError} from "@contentScript/utils/hud/pushError";
 import {pushNotification} from "@contentScript/utils/hud/pushNotification";
-import {getItems} from "@contentScript/utils/inventoryUtils";
+import {deleteItem, getItems} from "@contentScript/utils/inventoryUtils";
 import {InventoryTypes} from "@contentScript/types/inventoryTypes";
 import {InventoryItem} from "@contentScript/types/tools";
 import {ResourceTypes} from "@contentScript/types/resourceTypes";
+import {createDiv} from "@contentScript/utils/hud/createDiv";
 
 class Furnace {
   private _remaining = 0;
@@ -18,6 +19,8 @@ class Furnace {
   private _deleteCoal = JSON.parse(localStorage.getItem('furnaceDeleteCoal') ?? 'false');
 
   private readonly _button;
+  private readonly _coalButton;
+  private readonly _wrapper;
   private readonly recycler;
 
   constructor() {
@@ -32,6 +35,26 @@ class Furnace {
           pushError(e?.message ?? e.reason ?? e, true, 4000);
         }
       },
+    });
+    this._coalButton = createButton({
+      innerElements: [createSpan('Удалять уголь')],
+      classes: 'btn btn-blue btn-small btn-recycler-coal d-none',
+      onClick: () => {
+        this._deleteCoal = !this._deleteCoal;
+        this._coalButton.style.cssText = this._deleteCoal ? 'background-color: rgba(46,139,87,0.8) !important;' : '';
+        localStorage.setItem('furnaceDeleteCoal', this._deleteCoal)
+      }
+    });
+    this._coalButton.style.cssText = this._deleteCoal ? 'background-color: rgba(46,139,87,0.8) !important;' : '';
+    this._wrapper = createDiv({
+      innerElements: [this._button, this._coalButton],
+      classes: 'recycler-furnace-wrapper',
+      onMouseEnter: () => {
+        this._coalButton.classList.remove('d-none');
+      },
+      onMouseLeave: () => {
+        this._coalButton.classList.add('d-none');
+      }
     });
   }
 
@@ -70,10 +93,25 @@ class Furnace {
       await this.recycler.turnOffRecycler();
       await this.recycler.emptyRecycler();
       const recyclerInfo = await this.recycler.getRecyclerInfo();
-      const userInventory = (await getItems(InventoryTypes.user)).filter((item) => item.itemID && item.quantity !== null && !this._blackList.includes(item.itemID)) as (InventoryItem & {
+      let userInventory = (await getItems(InventoryTypes.user)).filter((item) => item.itemID && item.quantity !== null && !this._blackList.includes(item.itemID)) as (InventoryItem & {
         itemID: ResourceTypes;
         quantity: number;
       })[];
+      if (this._deleteCoal) {
+        const coalList = userInventory.filter(item => item.itemID === ResourceTypes.coal);
+        for (const coal of coalList) {
+          await deleteItem({
+            boxID: InventoryTypes.user,
+            slotID: coal.slotID,
+            quantity: coal.quantity,
+            itemID: coal.itemID
+          });
+        }
+        userInventory = (await getItems(InventoryTypes.user)).filter((item) => item.itemID && item.quantity !== null && !this._blackList.includes(item.itemID)) as (InventoryItem & {
+          itemID: ResourceTypes;
+          quantity: number;
+        })[];
+      }
       const resources: (InventoryItem & { itemID: ResourceTypes; quantity: number; time: number })[] = [];
       const fuels: (InventoryItem & { itemID: ResourceTypes; quantity: number; time: number })[] = [];
       for (const variation of this.recycler.variations) {
@@ -118,7 +156,7 @@ class Furnace {
         itemID: ResourceTypes;
         quantity: number;
         time: number
-      })[] = await this.recycler.loadResources(resources, freeResourceSlots, this.init.bind(this));
+      })[] = await this.recycler.loadResources(resources, freeResourceSlots);
 
       // Загрузка топлива в печь
       const movedFuel: (InventoryItem & {
@@ -127,35 +165,37 @@ class Furnace {
         time: number
       })[] = await this.recycler.loadFuel(fuels, freeFuelSlots);
 
-      await this.recycler.turnOnRecycler(() => {
-        // Вычисляем когда доставать
-        const fuelTime = movedFuel.reduce((acc, item) => {
-          const time = item.quantity * item.time;
-          if (time > 0 && (time < acc || acc === 0))
-            return time;
-          return acc;
-        }, 0);
-        const resourceTime = movedResources.reduce((acc, item) => {
-          const time = item.quantity * item.time;
-          if (time > 0 && (time < acc || acc === 0))
-            return time;
-          return acc;
-        }, 0);
-        this._remaining = (fuelTime < resourceTime ? fuelTime : resourceTime) - (recyclerInfo.startTime ?? 0);
+      await this.recycler.turnOnRecycler(
+        () => {
+          // Вычисляем когда доставать
+          const fuelTime = movedFuel.reduce((acc, item) => {
+            const time = item.quantity * item.time;
+            if (time > 0 && (time < acc || acc === 0))
+              return time;
+            return acc;
+          }, 0);
+          const resourceTime = movedResources.reduce((acc, item) => {
+            const time = item.quantity * item.time;
+            if (time > 0 && (time < acc || acc === 0))
+              return time;
+            return acc;
+          }, 0);
+          this._remaining = (fuelTime < resourceTime ? fuelTime : resourceTime) - (recyclerInfo.startTime ?? 0);
 
-        // Печь запущена, ждём окончания
-        if (this._remaining > 0) {
-          this._timeout = setTimeout(() => {
-            this.init().catch(e => {
-              this.disableState();
-              pushError(e?.message ?? e.reason ?? e, true, 4000);
-            });
-          }, this._remaining * 1000);
-          pushNotification(`${this.recycler.title} заполнен${this.recycler.gender} по-максимуму. Включаю...`, true);
-        } else {
-          return Promise.reject(`Все ресурсы для "${this.recycler.title}" переработаны!`);
+          // Печь запущена, ждём окончания
+          if (this._remaining > 0) {
+            this._timeout = setTimeout(() => {
+              this.init().catch(e => {
+                this.disableState();
+                pushError(e?.message ?? e.reason ?? e, true, 4000);
+              });
+            }, this._remaining * 1000 + 1000);
+            pushNotification(`${this.recycler.title} заполнен${this.recycler.gender} по-максимуму. Включаю...`, true);
+          } else {
+            return Promise.reject(`Все ресурсы для "${this.recycler.title}" переработаны!`);
+          }
         }
-      });
+      );
       if (this._remaining > 0) {
         const date = new Date();
         date.setSeconds(this._remaining + date.getSeconds());
@@ -167,7 +207,7 @@ class Furnace {
   }
 
   public get button() {
-    return this._button;
+    return this._wrapper;
   }
 }
 

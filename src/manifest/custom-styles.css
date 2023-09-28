@@ -7,10 +7,19 @@ button.clicker-button {
   height: min-content;
 }
 
+.recycler-furnace-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  gap: 16px;
+  max-height: min-content;
+}
+
 .clicker-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: center;
   justify-content: center;
   gap: 16px;
 }
@@ -53,11 +62,11 @@ button.clicker-button {
   padding: 5px;
 }
 
-.auto-walk-wrapper:hover, .clicker-wrapper:hover {
+.auto-walk-wrapper:hover, .clicker-wrapper:hover, .recycler-furnace-wrapper:hover {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.btn-auto-walk-settings, .btn-auto-walk, .btn-clicker-settings {
+.btn-auto-walk-settings, .btn-auto-walk, .btn-clicker-settings, .btn-recycler, .btn-recycler-coal {
   max-width: 100%;
   height: calc(var(--px) * 22);
   padding: calc(var(--px) * 4) !important;
@@ -70,13 +79,24 @@ button.clicker-button {
   white-space: nowrap;
 }
 
-.btn-clicker-settings {
+.btn-recycler {
+  max-width: min-content;
+}
+
+.btn-recycler-coal > span {
+  flex-wrap: wrap;
+  white-space: break-spaces;
+  max-width: min-content;
+}
+
+.btn-clicker-settings, .btn-recycler {
   height: calc(var(--px) * 30);
+  max-height: calc(var(--px) * 30);
   padding: calc(var(--px) * 8) !important;
 }
 
-.btn-clicker-settings > span {
-  font-size: calc(var(--px) * 14) !important;
+.btn-clicker-settings > span, .btn-recycler-coal > span {
+  font-size: calc(var(--px) * 12) !important;
 }
 
 .auto-walk-controls {
