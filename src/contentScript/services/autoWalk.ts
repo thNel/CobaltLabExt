@@ -1,4 +1,4 @@
-import {cellTypes} from "./cellTypes";
+import {cellTypes} from "../store/cellTypes";
 import {createSpan} from "../utils/hud/createSpan";
 import {createButton} from "../utils/hud/createButton";
 import {generateWalkingSVG} from "../components/walkingSVG";

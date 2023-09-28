@@ -1,21 +1,20 @@
-import autoWalk from "./store/autoWalk";
+import autoWalk from "./services/autoWalk";
 import {nextStep} from "./handlers/nextStep";
 import settings from "./store/settings";
 import {pushError} from "./utils/hud/pushError";
 import {pushNotification} from "./utils/hud/pushNotification";
-import autoClicker from "./store/autoClicker";
+import autoClicker from "./services/autoClicker";
 import {clicker} from "./handlers/clicker";
-import Recycler from "@contentScript/store/recycler";
+import furnace from "@contentScript/services/furnace";
+import plant from "@contentScript/services/plant";
+import barn from "@contentScript/services/barn";
+import refinery from "@contentScript/services/refinery";
+import Recycler from "@contentScript/services/recycler";
 import {RecyclerTypes} from "@contentScript/types/recyclerTypes";
 
 function Init() {
-  const cityRecycler = new Recycler(RecyclerTypes.cityRecycler, 'Переработчик');
-  const banditRecycler = new Recycler(RecyclerTypes.banditRecycler, 'Переработчик');
-  const refinery = new Recycler(RecyclerTypes.NPZ, 'НПЗ');
-  const forge = new Recycler(RecyclerTypes.forge, 'Печка');
-  const barn = new Recycler(RecyclerTypes.barn, 'Конюшня');
-  const plant = new Recycler(RecyclerTypes.plant, 'Плантация');
-
+  const cityRecycler = new Recycler(RecyclerTypes.cityRecycler)
+  const banditRecycler = new Recycler(RecyclerTypes.banditRecycler)
   setInterval(() => {
     const startGame = document.querySelector<HTMLButtonElement>('div.start-game button.btn-medium:has(span)');
     if (startGame) {
@@ -40,8 +39,8 @@ function Init() {
     if (bandit) {
       if ([...bandit.querySelectorAll('div.bandit-list__modal-title')].some(item => item.textContent === 'НПЗ')) {
         const cityHeader = bandit.querySelector('div.bandit-content > div.bandit-header');
-        if (cityHeader && cityHeader.querySelectorAll('button.btn-recycler')?.length < 2) {
-          cityHeader.querySelectorAll('button.btn-recycler').forEach(item => item.remove());
+        if (cityHeader && !cityHeader.querySelector('button.btn-recycler')) {// && cityHeader.querySelectorAll('button.btn-recycler')?.length < 2) {
+          // cityHeader.querySelectorAll('button.btn-recycler').forEach(item => item.remove());
           cityHeader.append(refinery.button, cityRecycler.button);
         }
       } else {
@@ -55,7 +54,11 @@ function Init() {
     // Переработчики в доме
     const homeHeader = settings.gameBody.querySelector('div.home-header__right');
     if (homeHeader && !homeHeader.querySelector('button.btn-recycler')) {
-      homeHeader.append(plant.button, barn.button, forge.button);
+      homeHeader.append(
+        plant.button,
+        barn.button,
+        furnace.button,
+      );
     }
   }, 1000);
 

@@ -1,7 +1,9 @@
-export type inventoryItem = {
+import {ResourceTypes} from "@contentScript/types/resourceTypes";
+
+export type InventoryItem = {
   availableAfter: number | null;
   durability: number | null;
-  itemID: number | null;
+  itemID: ResourceTypes | null;
   quantity: number | null;
   slotID: number;
 };
@@ -9,7 +11,7 @@ export type inventoryItem = {
 export type filteredTool = {
   availableAfter: number | null;
   durability: number;
-  itemID: number;
+  itemID: ResourceTypes;
   quantity: number;
   slotID: number;
   type: string | undefined;

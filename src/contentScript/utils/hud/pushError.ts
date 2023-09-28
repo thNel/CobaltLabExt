@@ -7,10 +7,9 @@ export const pushError = (text: string, autoDelete = false, deleteTimeout = 3000
   const errorList = settings.gameBody.querySelector<HTMLSpanElement>('span.notiflist.errorsend');
   if (!errorList)
     throw new Error('Не найдено место для ошибок');
-  const errorText = createSpan(text);
   const selfDeleteTag = `selfDelete-${Math.round(Math.random() * (10 ** 5))}`;
   const errorDiv = createDiv({
-    innerElements: [generateErrorSvg(), errorText],
+    innerElements: [generateErrorSvg(), createSpan(text)],
     classes: `notiflist-item error ${selfDeleteTag}`
   });
   const selfDelete = () => {

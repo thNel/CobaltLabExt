@@ -110,6 +110,8 @@ button.clicker-button {
 
 .notiflist-item {
   max-width: calc(var(--px) * 500) !important;
+  max-height: min-content !important;
+  height: 100% !important;
 }
 
 .bg-dark {

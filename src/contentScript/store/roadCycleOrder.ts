@@ -1,4 +1,4 @@
-export const cycleOrder = [
+export const roadCycleOrder = [
   'E2',
   'F0',
   'F1',

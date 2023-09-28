@@ -1,8 +1,8 @@
-import autoWalk from "../store/autoWalk";
+import autoWalk from "../services/autoWalk";
 import {pushError} from "../utils/hud/pushError";
 import settings from "../store/settings";
 import {move} from "./move";
-import {cycleOrder} from "../store/cycleOrder";
+import {roadCycleOrder} from "../store/roadCycleOrder";
 import {sortByCell} from "../utils/sorts/sortByCell";
 
 export const nextStep = () => {
@@ -22,14 +22,14 @@ export const nextStep = () => {
       }, []);
       const mapFarmingCells = autoWalk.cycled
         ? mapFarming
-          .filter(elem => elem.isUser || cycleOrder.findIndex(item => item === elem.label) > -1)
+          .filter(elem => elem.isUser || roadCycleOrder.findIndex(item => item === elem.label) > -1)
           .sort((a, b) => {
-              if ((a.isUser && cycleOrder.findIndex(item => item === a.label) === -1)
-                || (b.isUser && cycleOrder.findIndex(item => item === b.label) === -1)
+              if ((a.isUser && roadCycleOrder.findIndex(item => item === a.label) === -1)
+                || (b.isUser && roadCycleOrder.findIndex(item => item === b.label) === -1)
               ) {
                 return sortByCell(a, b);
               }
-              return cycleOrder.findIndex(item => item === a.label) - cycleOrder.findIndex(item => item === b.label)
+              return roadCycleOrder.findIndex(item => item === a.label) - roadCycleOrder.findIndex(item => item === b.label)
             }
           )
         : mapFarming;
@@ -56,7 +56,7 @@ export const nextStep = () => {
     } catch (e: any) {
       if (e.cause !== 'MapNotFound')
         autoWalk.toggleEnabled();
-      pushError(e?.message ?? e, true, 10000);
+      pushError(e?.message ?? e.reason ?? e, true, 10000);
     }
   } else {
     pushError('Автоходьба была отключена!');

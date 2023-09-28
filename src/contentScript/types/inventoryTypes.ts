@@ -1,5 +1,5 @@
 export enum InventoryTypes {
-  'main' = 1,
-  'crate' = 2,
-  'toolbar' = 3,
+  user = 1,
+  crate = 2,
+  toolbar = 3,
 }

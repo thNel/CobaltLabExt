@@ -1,4 +1,4 @@
-import autoWalk from "../store/autoWalk";
+import autoWalk from "../services/autoWalk";
 import {pushError} from "../utils/hud/pushError";
 import {nextStep} from "./nextStep";
 

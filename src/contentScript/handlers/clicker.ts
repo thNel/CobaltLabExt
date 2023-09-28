@@ -1,6 +1,6 @@
 import {pushError} from "../utils/hud/pushError";
-import autoWalk from "../store/autoWalk";
-import autoClicker from "../store/autoClicker";
+import autoWalk from "../services/autoWalk";
+import autoClicker from "../services/autoClicker";
 import {nextStep} from "./nextStep";
 import {getTools, repairItem, selectQuickSlot} from "../utils/inventoryUtils";
 import {getClickerElement, getReturnToMap} from "../utils/domUtils";

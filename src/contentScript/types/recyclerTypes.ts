@@ -1,10 +1,38 @@
+import {ResourceTypes} from "@contentScript/types/resourceTypes";
+
 export enum RecyclerTypes {
-  'forge' = 6,
-  'NPZ' = 10,
-  'cityRecycler' = 11,
-  'banditRecycler' = 12,
-  'barn' = 18,
-  'plant' = 17,
+  furnace = 6,
+  NPZ = 10,
+  cityRecycler = 11,
+  banditRecycler = 12,
+  carrierStones = 14,
+  carrierSulfur = 15,
+  carrierOre = 16,
+  plant = 17,
+  barn = 18,
+  carrierBig = 19,
+}
+
+export type VariationItem = {
+  from: {
+    itemID: ResourceTypes;
+    time: number;
+  };
+  to: {
+    itemID: ResourceTypes;
+    quantity: number;
+  }[];
+}
+
+export type Variation = {
+  fuel: null | VariationItem & { slotID: number };
+  items: null | VariationItem[];
+}
+
+export type loadedItem = {
+  slotID: number;
+  itemID: ResourceTypes | null;
+  quantity: number | null;
 }
 
 export type RecyclerInfo = {
@@ -13,42 +41,8 @@ export type RecyclerInfo = {
   data: {
     status: 1 | 0;
     startTime: number | null;
-    variations: [
-      {
-        fuel: null | {
-          slotID: number;
-          from: {
-            "itemID": number;
-            "time": number;
-          };
-          to:
-            {
-              itemID: number;
-              quantity: number;
-            }[];
-        };
-        items:
-          {
-            from: {
-              itemID: number;
-              time: number;
-            };
-            to: {
-              itemID: number;
-              quantity: number;
-            }[];
-          }[];
-      },
-    ];
-    in: {
-      slotID: number;
-      itemID: number | null;
-      quantity: number | null;
-    }[];
-    out: {
-      slotID: number;
-      itemID: number | null;
-      quantity: number | null;
-    }[];
+    variations: Variation[];
+    in: loadedItem[];
+    out: loadedItem[];
   };
 }

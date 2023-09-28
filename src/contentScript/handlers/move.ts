@@ -1,6 +1,6 @@
 import {cellTypes} from "../store/cellTypes";
 import settings from "../store/settings";
-import autoWalk from "../store/autoWalk";
+import autoWalk from "../services/autoWalk";
 import {triggerMouseEvent} from "../utils/hud/mouseEvent";
 import {pushError} from "../utils/hud/pushError";
 import {pushNotification} from "@contentScript/utils/hud/pushNotification";

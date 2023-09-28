@@ -1,5 +1,5 @@
 import {cellTypes} from "./cellTypes";
-import autoWalk from "./autoWalk";
+import autoWalk from "../services/autoWalk";
 import {sortByCell} from "../utils/sorts/sortByCell";
 
 class Settings {
@@ -21,7 +21,7 @@ class Settings {
     if (elements.length > 0)
       return elements;
     else
-      throw new Error('Невозможно обнаружить карту :(. Если вы в локации, попробуйте нажать "Автокликер" в правом верхнем углу', {cause: 'MapNotFound'});
+      throw new Error('Ошибка обнаружения карты!', {cause: 'MapNotFound'});
   }
 
   public get mapFarmingObject() {
