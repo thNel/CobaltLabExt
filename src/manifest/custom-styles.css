@@ -19,7 +19,7 @@ button.clicker-button {
 .clicker-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: end;
   justify-content: center;
   gap: 16px;
 }

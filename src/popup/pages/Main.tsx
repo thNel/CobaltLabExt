@@ -32,7 +32,6 @@ const Main = (): ReactElement => {
         justifyContent: 'center',
         gap: '16px',
       }}
-      className='main-page'
     >
       <Bid bid={bid} setBid={setBid} runningInterval={runningInterval}/>
       <DoubleSettings isDouble={isDouble} setIsDouble={setIsDouble} bidLimit={bidLimit} setBidLimit={setBidLimit}
