@@ -1,7 +1,7 @@
 {
   "name": "chrome-extension",
   "private": true,
-  "version": "1.4.0.0",
+  "version": "1.4.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -32,6 +32,7 @@
     "cpx": "^1.5.0",
     "esbuild": "^0.19.3",
     "path": "^0.12.7",
+    "sass": "^1.68.0",
     "typescript": "^4.6.4",
     "vite": "^3.1.0",
     "vite-plugin-html": "^3.2.0"

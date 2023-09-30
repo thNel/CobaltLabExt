@@ -1,5 +1,6 @@
 type MouseEventType =
-  'dblclick'
+  'click'
+  | 'dblclick'
   | 'mousedown'
   | 'mouseenter'
   | 'mouseleave'

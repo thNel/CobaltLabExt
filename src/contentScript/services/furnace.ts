@@ -186,7 +186,10 @@ class Furnace {
           if (this._remaining > 0) {
             this._timeout = setTimeout(() => {
               this.init().catch(e => {
-                this.disableState();
+                this.disableState().catch(e => {
+                  pushError(e?.message ?? e.reason ?? e, true, 4000);
+                });
+                ;
                 pushError(e?.message ?? e.reason ?? e, true, 4000);
               });
             }, this._remaining * 1000 + 1000);

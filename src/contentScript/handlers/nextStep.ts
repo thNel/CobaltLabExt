@@ -2,8 +2,7 @@ import autoWalk from "../services/autoWalk";
 import {pushError} from "../utils/hud/pushError";
 import settings from "../store/settings";
 import {move} from "./move";
-import {roadCycleOrder} from "../store/roadCycleOrder";
-import {sortByCell} from "../utils/sorts/sortByCell";
+import {alphabet, roadCycleOrder} from "../store/roadCycleOrder";
 
 export const nextStep = () => {
   if (autoWalk.enabled) {
@@ -20,19 +19,38 @@ export const nextStep = () => {
           acc.push(...item.reverse());
         return acc;
       }, []);
+      let minimalLength = 1000;
       const mapFarmingCells = autoWalk.cycled
         ? mapFarming
           .filter(elem => elem.isUser || roadCycleOrder.findIndex(item => item === elem.label) > -1)
-          .sort((a, b) => {
-              if ((a.isUser && roadCycleOrder.findIndex(item => item === a.label) === -1)
-                || (b.isUser && roadCycleOrder.findIndex(item => item === b.label) === -1)
-              ) {
-                return sortByCell(a, b);
-              }
-              return roadCycleOrder.findIndex(item => item === a.label) - roadCycleOrder.findIndex(item => item === b.label)
-            }
+          .sort((a, b) =>
+            roadCycleOrder.findIndex(item => item === a.label) - roadCycleOrder.findIndex(item => item === b.label)
           )
         : mapFarming;
+      if (mapFarmingCells[0].isUser && autoWalk.cycled) {
+        const user = mapFarmingCells.shift();
+        if (user) {
+          const userX = alphabet.indexOf(user?.label[0]);
+          const userY = +user.label.slice(1);
+          mapFarmingCells.forEach(item => {
+            const itemX = alphabet.indexOf(item.label[0]);
+            const itemY = +item.label.slice(1);
+            const length = Math.sqrt((userX - itemX) ** 2 + (userY - itemY) ** 2);
+            if (length < minimalLength)
+              minimalLength = length;
+          });
+          const nextCell = mapFarmingCells.find(item => {
+            const itemX = alphabet.indexOf(item.label[0]);
+            const itemY = +item.label.slice(1);
+            const length = Math.sqrt((userX - itemX) ** 2 + (userY - itemY) ** 2);
+            return length === minimalLength;
+          });
+          if (nextCell) {
+            move(nextCell);
+            return;
+          }
+        }
+      }
       const farmMap = autoWalk.reversed
         ? mapFarmingCells.reverse()
         : mapFarmingCells;

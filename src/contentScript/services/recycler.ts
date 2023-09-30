@@ -14,7 +14,7 @@ class Recycler {
   private _started = false;
   private _timeout = setTimeout(() => {
   }, 1);
-  private _blackList = JSON.parse(localStorage.getItem('furnaceBlackList') ?? `[${ResourceTypes.canOfTuna}, ${ResourceTypes.electricFuse}]`);
+  private _blackList = JSON.parse(localStorage.getItem('furnaceBlackList') ?? `[${ResourceTypes.canOfTuna}, ${ResourceTypes.electricFuse}, ${ResourceTypes.c4}]`);
 
   private readonly _button;
   private readonly recyclerBase;
@@ -115,7 +115,9 @@ class Recycler {
         if (this._remaining > 0) {
           this._timeout = setTimeout(() => {
             this.init().catch(e => {
-              this.disableState();
+              this.disableState().catch(e => {
+                pushError(e?.message ?? e.reason ?? e, true, 4000);
+              });
               pushError(e?.message ?? e.reason ?? e, true, 4000);
             });
           }, this._remaining * 1000);

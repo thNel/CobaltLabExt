@@ -189,7 +189,7 @@ class RecyclerBase {
           }
         },
         []
-      ).sort((a, b) => a.quantity - b.quantity);
+      ).sort((a, b) => b.quantity - a.quantity);
     if (this._type === RecyclerTypes.furnace) {
       if (resourcesToLoad.length === 1 && resourcesToLoad[0].quantity > 1 && this._type === RecyclerTypes.furnace) {
         await this.emptyRecycler();

@@ -1,4 +1,9 @@
+export const alphabet = ['A', 'B', 'C', 'D', 'E', ' F', 'G', 'H', 'I', 'J', 'K', 'L']
+
 export const roadCycleOrder = [
+  'B5',
+  'B4',
+  'B3',
   'E2',
   'F0',
   'F1',
@@ -28,7 +33,4 @@ export const roadCycleOrder = [
   'D7',
   'D6',
   'E5',
-  'B5',
-  'B4',
-  'B3',
 ]
