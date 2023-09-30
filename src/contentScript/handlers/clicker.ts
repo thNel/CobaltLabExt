@@ -1,10 +1,10 @@
 import {pushError} from "../utils/hud/pushError";
-import autoWalk from "../services/autoWalk";
 import autoClicker from "../services/autoClicker";
 import {nextStep} from "./nextStep";
-import {getTools, repairItem, selectQuickSlot} from "../utils/inventoryUtils";
+import {deleteItem, getItems, getTools, repairItem, selectQuickSlot} from "../utils/inventoryUtils";
 import {getClickerElement, getReturnToMap} from "../utils/domUtils";
 import {pushNotification} from "../utils/hud/pushNotification";
+import {InventoryTypes} from "@contentScript/types/inventoryTypes";
 
 export const clicker = () => {
   try {
@@ -96,23 +96,34 @@ export const clicker = () => {
 
       clearInterval(clickerTimer);
       autoClicker.toggleMining(true);
-      const returnToMapElement = getReturnToMap();
-      if (autoWalk.enabled) {
-        if (returnToMapElement !== null) {
-          returnToMapElement.click();
-          setTimeout(nextStep, 800);
-        }
-        if (returnToMapElement === null && !autoClicker.mining) {
-          autoWalkTryCounter += 1;
-          if (autoWalkTryCounter > 10) {
-            clearInterval(clickerTimer);
-            pushError('Не найдена кнопка возврата на карту');
-            return;
+      if (autoClicker.deleteList?.length > 0) {
+        const userInventory = await getItems(InventoryTypes.user);
+        for (const item of userInventory) {
+          if (item.itemID && item.quantity && autoClicker.deleteList.includes(item.itemID)) {
+            await deleteItem({
+              boxID: InventoryTypes.user,
+              itemID: item.itemID,
+              slotID: item.slotID,
+              quantity: item.quantity,
+            })
           }
-          setTimeout(clicker, 1000);
-          pushNotification(`Не найдены элементы иры. Попытка #${autoWalkTryCounter}`, true);
+        }
+      }
+      const returnToMapElement = getReturnToMap();
+      if (returnToMapElement !== null) {
+        returnToMapElement.click();
+        setTimeout(nextStep, 800);
+      }
+      if (returnToMapElement === null && !autoClicker.mining) {
+        autoWalkTryCounter += 1;
+        if (autoWalkTryCounter > 10) {
+          clearInterval(clickerTimer);
+          pushError('Не найдена кнопка возврата на карту');
           return;
         }
+        setTimeout(clicker, 1000);
+        pushNotification(`Не найдены элементы иры. Попытка #${autoWalkTryCounter}`, true);
+        return;
       }
     }, autoClicker.settings.delay);
   } catch (e) {

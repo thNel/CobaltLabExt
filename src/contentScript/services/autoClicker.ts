@@ -5,11 +5,29 @@ import {pushError} from "../utils/hud/pushError";
 import {createInput} from "../utils/hud/createInput";
 import {createDiv} from "../utils/hud/createDiv";
 import {pushNotification} from "@contentScript/utils/hud/pushNotification";
+import {ResourceTypes} from "@contentScript/types/resourceTypes";
 
 class AutoClicker {
   private _mining = false;
   private _timerNotificationSelfDelete = () => {
   };
+
+  public get deleteList(): ResourceTypes[] {
+    return [
+      // ResourceTypes.canOfTuna,
+      // ResourceTypes.waterJug,
+      // ResourceTypes.propaneTank,
+      // ResourceTypes.cloth,
+      // ResourceTypes.sewingKit,
+      // ResourceTypes.pickles,
+      // ResourceTypes.ropes,
+      // ResourceTypes.crudeOil,
+      // ResourceTypes.tarp,
+      // ResourceTypes.metalBlade,
+      // ResourceTypes.electricFuse,
+      // ResourceTypes.greenCard,
+    ];
+  }
 
   private readonly _idle = {
     timer: setTimeout(() => {

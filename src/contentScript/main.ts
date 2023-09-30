@@ -22,7 +22,7 @@ function Init() {
       if (autoWalk.enabled)
         setTimeout(nextStep, 2000);
     }
-  }, 5000);
+  }, 3000);
 
   setInterval(() => {
     // Автокликер

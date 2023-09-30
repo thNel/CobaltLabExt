@@ -2,7 +2,7 @@ import autoWalk from "../services/autoWalk";
 import {pushError} from "../utils/hud/pushError";
 import settings from "../store/settings";
 import {move} from "./move";
-import {alphabet, roadCycleOrder} from "../store/roadCycleOrder";
+import {alphabet, cycleOrder} from "../store/cycleOrder";
 
 export const nextStep = () => {
   if (autoWalk.enabled) {
@@ -12,22 +12,11 @@ export const nextStep = () => {
         pushError('Выберите типы ресурсов!', true);
         return;
       }
-      const mapFarming = Object.values(settings.mapFarmingObject).reduce((acc, item, index) => {
-        if (index % 2 === 0)
-          acc.push(...item)
-        else
-          acc.push(...item.reverse());
-        return acc;
-      }, []);
+      const mapFarming = settings.mapFarmingCells;
       let minimalLength = 1000;
-      const mapFarmingCells = autoWalk.cycled
-        ? mapFarming
-          .filter(elem => elem.isUser || roadCycleOrder.findIndex(item => item === elem.label) > -1)
-          .sort((a, b) =>
-            roadCycleOrder.findIndex(item => item === a.label) - roadCycleOrder.findIndex(item => item === b.label)
-          )
-        : mapFarming;
-      if (mapFarmingCells[0].isUser && autoWalk.cycled) {
+      const mapFarmingCells = mapFarming
+        .filter(elem => elem.isUser || cycleOrder.findIndex(item => item === elem.label) > -1);
+      if (mapFarmingCells[0].isUser) {
         const user = mapFarmingCells.shift();
         if (user) {
           const userX = alphabet.indexOf(user?.label[0]);
@@ -60,13 +49,7 @@ export const nextStep = () => {
       } else {
         const userCellIndex = farmMap.findIndex(item => item.isUser);
         if (userCellIndex === farmMap.length - 1) {
-          if (autoWalk.autoReverse)
-            autoWalk.toggleReversed();
-          else {
-            move(farmMap[0]);
-            return;
-          }
-          nextStep();
+          move(farmMap[0]);
           return;
         }
         move(farmMap[userCellIndex + 1]);

@@ -1,6 +1,6 @@
 import {cellTypes} from "./cellTypes";
 import autoWalk from "../services/autoWalk";
-import {sortByCell} from "../utils/sorts/sortByCell";
+import {cycleOrder} from "@contentScript/store/cycleOrder";
 
 class Settings {
   private _gameBody: HTMLDivElement | null = null;
@@ -24,7 +24,7 @@ class Settings {
       throw new Error('Ошибка обнаружения карты!', {cause: 'MapNotFound'});
   }
 
-  public get mapFarmingObject() {
+  public get mapFarmingCells() {
     return [...this.mapDOM]
       .map(item => {
         const svgType = item.querySelector('svg > path')?.getAttribute('d')?.slice(0, 4) as (keyof typeof cellTypes) | undefined;
@@ -36,20 +36,8 @@ class Settings {
         }
       })
       .filter(item => (item.type && autoWalk.settings[item.type]) ?? item.isUser)
-      .sort(sortByCell)
-      .reduce<Record<string, {
-        id: string | undefined,
-        label: string,
-        isUser: boolean,
-        type: typeof cellTypes[keyof typeof cellTypes] | undefined,
-      }[]>>((acc, item) => {
-        if (acc[item.label[0]])
-          acc[item.label[0]].push(item)
-        else
-          acc[item.label[0]] = [item];
-        acc[item.label[0]] = acc[item.label[0]].sort((a, b) => +a.label.slice(1) - +b.label.slice(1));
-        return acc;
-      }, {});
+      .sort((a, b) =>
+        cycleOrder.findIndex(item => item === a.label) - cycleOrder.findIndex(item => item === b.label));
   }
 
 }
