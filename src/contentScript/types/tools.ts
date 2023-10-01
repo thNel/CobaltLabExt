@@ -14,5 +14,5 @@ export type filteredTool = {
   itemID: ResourceTypes;
   quantity: number;
   slotID: number;
-  type: string | undefined;
+  type: keyof typeof ResourceTypes;
 }

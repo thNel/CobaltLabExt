@@ -48,6 +48,7 @@ export const cycleOrder = [
   'J9',
   'I8',
   'I7',
+  'H7',
   'H8',
   'H9',
   'I9',
@@ -80,5 +81,6 @@ export const cycleOrder = [
   'E6',
   'F5',
   'E5',
+  'F4',
   'D5',
 ]

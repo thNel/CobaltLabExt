@@ -5,14 +5,13 @@ import {pushError} from "../utils/hud/pushError";
 import {createInput} from "../utils/hud/createInput";
 import {createDiv} from "../utils/hud/createDiv";
 import {pushNotification} from "@contentScript/utils/hud/pushNotification";
-import {ResourceTypes} from "@contentScript/types/resourceTypes";
 
 class AutoClicker {
   private _mining = false;
   private _timerNotificationSelfDelete = () => {
   };
 
-  public get deleteList(): ResourceTypes[] {
+  public get deleteList() {
     return [
       // ResourceTypes.canOfTuna,
       // ResourceTypes.waterJug,

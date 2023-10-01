@@ -9,12 +9,10 @@ import furnace from "@contentScript/services/furnace";
 import plant from "@contentScript/services/plant";
 import barn from "@contentScript/services/barn";
 import refinery from "@contentScript/services/refinery";
-import Recycler from "@contentScript/services/recycler";
-import {RecyclerTypes} from "@contentScript/types/recyclerTypes";
+import banditRecycler from "@contentScript/services/banditRecycler";
+import cityRecycler from "@contentScript/services/cityRecycler";
 
 function Init() {
-  const cityRecycler = new Recycler(RecyclerTypes.cityRecycler)
-  const banditRecycler = new Recycler(RecyclerTypes.banditRecycler)
   setInterval(() => {
     const startGame = document.querySelector<HTMLButtonElement>('div.start-game button.btn-medium:has(span)');
     if (startGame) {
@@ -41,11 +39,18 @@ function Init() {
         const cityHeader = bandit.querySelector('div.bandit-content > div.bandit-header');
         if (cityHeader && !cityHeader.querySelector('button.btn-recycler')) {
           cityHeader.append(cityRecycler.button, refinery.button);
+          if (autoWalk.enabled) {
+            setTimeout(cityRecycler.toggle, 1000);
+            setTimeout(refinery.toggle, 2000);
+          }
         }
       } else {
         const banditHeader = bandit.querySelector('div.bandit-content > div.bandit-header');
         if (banditHeader && !banditHeader.querySelector('button.btn-recycler')) {
           banditHeader.append(banditRecycler.button);
+          if (autoWalk.enabled) {
+            setTimeout(banditRecycler.toggle, 1000);
+          }
         }
       }
     }

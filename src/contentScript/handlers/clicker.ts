@@ -6,7 +6,7 @@ import {getClickerElement, getReturnToMap} from "../utils/domUtils";
 import {pushNotification} from "../utils/hud/pushNotification";
 import {InventoryTypes} from "@contentScript/types/inventoryTypes";
 
-export const clicker = () => {
+export const clicker = async () => {
   try {
     autoClicker.toggleMining();
     let autoWalkTryCounter = 0;
@@ -14,8 +14,10 @@ export const clicker = () => {
       pushNotification('Автокликер был завершён!', true);
       return;
     }
-    let counter = 0;
+    let errorCounter = 0;
+    let clickCounter = 1;
     let selectedSlot = 0;
+    let {axes, pickaxes, rock} = await getTools();
     const clickerTimer = setInterval(async () => {
       if (!autoClicker.mining) {
         clearInterval(clickerTimer);
@@ -26,11 +28,15 @@ export const clicker = () => {
       if (elementInfo !== null) {
         if (!autoClicker.settings.autoSelectTool) {
           elementInfo.element.click();
+          clickCounter += 1;
           return;
         } else {
-          const {axes, pickaxes, rock} = await getTools();
           if (rock?.durability === 0 && autoClicker.settings.autoRepairTool) {
             await repairItem('3', rock.slotID);
+            const newTools = await getTools();
+            axes = newTools.axes;
+            pickaxes = newTools.pickaxes;
+            rock = newTools.rock;
             return;
           }
           let selectedTool = rock;
@@ -40,12 +46,12 @@ export const clicker = () => {
           if (elementInfo.type === 'ore' || elementInfo.type === 'road') {
             selectedTool = pickaxes[0] ?? rock;
           }
-          if (selectedTool?.durability === 0) {
-            clearInterval(clickerTimer);
-            if (autoClicker.mining) {
-              autoClicker.toggleMining();
-              pushError('Все инструменты сломаны :(');
-            }
+          if (clickCounter % 50 === 0 || selectedTool?.durability === 0) {
+            const newTools = await getTools();
+            axes = newTools.axes;
+            pickaxes = newTools.pickaxes;
+            rock = newTools.rock;
+            clickCounter += 1;
             return;
           }
           if (!selectedTool) {
@@ -62,8 +68,8 @@ export const clicker = () => {
               selectedSlot = selectedTool.slotID;
               return;
             } else {
-              counter += 1;
-              if (counter > 10) {
+              errorCounter += 1;
+              if (errorCounter > 10) {
                 clearInterval(clickerTimer);
                 if (autoClicker.mining) {
                   autoClicker.toggleMining();
@@ -71,7 +77,7 @@ export const clicker = () => {
                 }
                 return;
               }
-              pushNotification(`Не найден инструмент! Попытка #${counter}`, true);
+              pushNotification(`Не найден инструмент! Попытка #${errorCounter}`, true);
               return;
             }
           }
@@ -80,17 +86,26 @@ export const clicker = () => {
             if (autoClicker.mining) {
               autoClicker.toggleMining();
               const timeOut = selectedTool.availableAfter * 1000 + 1000;
-              autoClicker.selfDeleteTag = pushNotification(`Автокликер будет перезапущен автоматически через ${Math.round(timeOut / 600) / 100} минут. Когда камень починится...`, true, timeOut);
+              const date = new Date();
+              date.setSeconds(selectedTool.availableAfter + date.getSeconds());
+              autoClicker.selfDeleteTag = pushNotification(`Автокликер будет перезапущен автоматически в ${date.toLocaleTimeString(['ru', 'en-US'])}, когда камень починится...`, true, timeOut);
               autoClicker.setIdle(setTimeout(clicker, timeOut), timeOut);
             }
             return;
           }
           elementInfo.element.click();
+          clickCounter += 1;
+          if (elementInfo.type === 'wood') {
+            axes = axes.map((item, index) => index === 0 ? {...item, durability: item.durability - 1} : item);
+          }
+          if (elementInfo.type === 'ore' || elementInfo.type === 'road') {
+            pickaxes = pickaxes.map((item, index) => index === 0 ? {...item, durability: item.durability - 1} : item);
+          }
           return;
         }
-      } else if (counter < 10) {
-        counter += 1;
-        pushNotification(`Попытка найти,что бить, #${counter}`, true, 1000);
+      } else if (errorCounter < 10) {
+        errorCounter += 1;
+        pushNotification(`Попытка найти,что бить, #${errorCounter}`, true, 1000);
         return;
       }
 

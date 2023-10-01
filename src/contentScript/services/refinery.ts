@@ -9,6 +9,10 @@ import {InventoryTypes} from "@contentScript/types/inventoryTypes";
 import {InventoryItem} from "@contentScript/types/tools";
 import {ResourceTypes} from "@contentScript/types/resourceTypes";
 import {createDiv} from "@contentScript/utils/hud/createDiv";
+import autoWalk from "@contentScript/services/autoWalk";
+import cityRecycler from "@contentScript/services/cityRecycler";
+import {getReturnToMap} from "@contentScript/utils/domUtils";
+import {nextStep} from "@contentScript/handlers/nextStep";
 
 class Refinery {
   private _remaining = 0;
@@ -73,7 +77,7 @@ class Refinery {
     this.recycler.selfDeleteNotification();
   }
 
-  private async toggle(): Promise<void> {
+  public toggle = async (): Promise<void> => {
     try {
       if (this._started) {
         await this.disableState();
@@ -128,6 +132,17 @@ class Refinery {
       }
       if (resources.length === 0) {
         pushNotification(`Все ресурсы для "${this.recycler.title}" переработаны!`, true);
+        if (autoWalk.enabled && !cityRecycler.enabled) {
+          const returnToMapElement = getReturnToMap();
+          if (returnToMapElement !== null) {
+            returnToMapElement.click();
+            setTimeout(nextStep, 1800);
+          } else {
+            pushError('Не найдена кнопка возврата на карту');
+          }
+        } else if (autoWalk.enabled) {
+          pushError('Ждём переработчик', true);
+        }
         await this.disableState();
         return;
       }
@@ -188,7 +203,6 @@ class Refinery {
               this.disableState().catch(e => {
                 pushError(e?.message ?? e.reason ?? e, true, 4000);
               });
-              ;
               pushError(e?.message ?? e.reason ?? e, true, 4000);
             });
           }, this._remaining * 1000);
@@ -209,6 +223,10 @@ class Refinery {
 
   public get button() {
     return this._wrapper;
+  }
+
+  public get enabled() {
+    return this._started;
   }
 }
 

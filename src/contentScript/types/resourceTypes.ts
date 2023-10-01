@@ -93,7 +93,7 @@ export const stackSize = (itemID: ResourceTypes) => {
 
   if (itemID === ResourceTypes.pickles) return 48;
 
-  if (itemID === ResourceTypes.canOfTuna) return 34;
+  if (itemID === ResourceTypes.canOfTuna) return 32;
 
   if (
     [

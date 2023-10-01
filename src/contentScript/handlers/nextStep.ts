@@ -57,7 +57,7 @@ export const nextStep = () => {
     } catch (e: any) {
       if (e.cause !== 'MapNotFound')
         autoWalk.toggleEnabled();
-      pushError(e?.message ?? e.reason ?? e, true, 10000);
+      pushError(e?.message ?? e.reason ?? e, true, 5000);
     }
   } else {
     pushError('Автоходьба была отключена!');

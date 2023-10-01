@@ -2,7 +2,7 @@ import {pushError} from "./hud/pushError";
 import settings from "../store/settings";
 
 export const getClickerElement = (): {
-  type: string;
+  type: 'wood' | 'ore' | 'road';
   element: HTMLImageElement | HTMLDivElement;
 } | null => {
   const farmElementWrapper = settings.gameBody.querySelector<HTMLDivElement>('.farm-wrapper__clicker');
@@ -33,7 +33,9 @@ export const getClickerElement = (): {
 
 export const getReturnToMap = () => {
   const returnToMapCentralButton = settings.gameBody.querySelector<HTMLButtonElement>('div.farm-wrapper button.btn.btn-blue');
-  const returnToMapTopButton = settings.gameBody.querySelector<HTMLButtonElement>('div.farm-header > button');
+  const returnToMapTopButton =
+    settings.gameBody.querySelector<HTMLButtonElement>('div.farm-header > button')
+    ?? settings.gameBody.querySelector<HTMLButtonElement>('div.bandit-header > button');
   if (!(returnToMapCentralButton || returnToMapTopButton)) {
     pushError('Не удалось вернуться на карту!', true);
     return null;

@@ -17,7 +17,7 @@ class Settings {
   }
 
   public get mapDOM() {
-    const elements = this.gameBody.querySelectorAll<HTMLDivElement>('div.farm.active:not(.home):not(:has(div.map-item__wrapper > div.map-item__user)), div.map-item:has(div.map-item__wrapper > div.map-item__user)');
+    const elements = this.gameBody.querySelectorAll<HTMLDivElement>('div.map-item');
     if (elements.length > 0)
       return elements;
     else

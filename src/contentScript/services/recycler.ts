@@ -8,6 +8,10 @@ import {getItems} from "@contentScript/utils/inventoryUtils";
 import {InventoryTypes} from "@contentScript/types/inventoryTypes";
 import {InventoryItem} from "@contentScript/types/tools";
 import {ResourceTypes} from "@contentScript/types/resourceTypes";
+import autoWalk from "@contentScript/services/autoWalk";
+import {getReturnToMap} from "@contentScript/utils/domUtils";
+import {nextStep} from "@contentScript/handlers/nextStep";
+import refinery from "@contentScript/services/refinery";
 
 class Recycler {
   private _remaining = 0;
@@ -45,11 +49,11 @@ class Recycler {
     this._button.style.cssText = '';
     this._remaining = 0;
     await this.recyclerBase.turnOffRecycler();
-    await this.recyclerBase.emptyRecycler(true);
+    await this.recyclerBase.emptyRecycler(true, true);
     this.recyclerBase.selfDeleteNotification();
   }
 
-  private async toggle(): Promise<void> {
+  public toggle = async (): Promise<void> => {
     try {
       if (this._started) {
         await this.disableState();
@@ -84,6 +88,17 @@ class Recycler {
       }
       if (resources.length === 0) {
         pushNotification(`Все ресурсы для "${this.recyclerBase.title}" переработаны!`, true);
+        if (autoWalk.enabled && !refinery.enabled) {
+          const returnToMapElement = getReturnToMap();
+          if (returnToMapElement !== null) {
+            returnToMapElement.click();
+            setTimeout(nextStep, 1800);
+          } else {
+            pushError('Не найдена кнопка возврата на карту');
+          }
+        } else if (autoWalk.enabled) {
+          pushError('Ждём НПЗ', true);
+        }
         await this.disableState();
         return;
       }
@@ -111,7 +126,7 @@ class Recycler {
         }, 0);
         this._remaining = resourceTime - (recyclerInfo.startTime ?? 0);
 
-        // Печь запущена, ждём окончания
+        // Перераб запущен, ждём окончания
         if (this._remaining > 0) {
           this._timeout = setTimeout(() => {
             this.init().catch(e => {
@@ -138,6 +153,10 @@ class Recycler {
 
   public get button() {
     return this._button;
+  }
+
+  public get enabled() {
+    return this._started;
   }
 }
 

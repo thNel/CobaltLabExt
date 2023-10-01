@@ -29,6 +29,8 @@ class AutoWalk {
   private readonly _activateButtonSpan;
   private readonly _activateButton;
   private readonly _reverseButton;
+  private readonly _banditButton;
+  private readonly _cityButton;
   private readonly _oreButton;
   private readonly _woodButton;
   private readonly _roadButton;
@@ -43,12 +45,30 @@ class AutoWalk {
       onClick: walker,
     });
     this._activateButton.style.cssText = this._enabled ? 'background-color: rgba(46,139,87,1) !important;' : '';
+
     this._reverseButton = createButton({
       innerText: 'Реверс маршрута',
       classes: 'btn btn-blue btn-auto-walk-settings',
       onClick: this.toggleReversed.bind(this),
     })
     this._reverseButton.style.cssText = this._reversed ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
+    this._banditButton = createButton({
+      innerText: 'Бандитка',
+      classes: 'btn btn-blue btn-auto-walk-settings',
+      onClick: this.toggleBandit.bind(this),
+    })
+    this._banditButton.style.cssText = this._settings.bandit ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
+    this._cityButton = createButton({
+      innerText: 'Город',
+      classes: 'btn btn-blue btn-auto-walk-settings',
+      onClick: this.toggleCity.bind(this),
+    })
+    this._cityButton.style.cssText = this._settings.city ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
+    const left = createDiv({
+      innerElements: [this._reverseButton, this._banditButton, this._cityButton],
+      classes: 'button-group',
+    });
+
     this._oreButton = createButton({
       innerText: 'Камень / Руды',
       classes: 'btn btn-blue btn-auto-walk-settings',
@@ -67,14 +87,11 @@ class AutoWalk {
       onClick: this.toggleRoad.bind(this),
     })
     this._roadButton.style.cssText = this._settings.road ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
-    const left = createDiv({
-      innerElements: [this._reverseButton],
-      classes: 'button-group',
-    });
     const right = createDiv({
       innerElements: [this._woodButton, this._oreButton, this._roadButton],
       classes: 'button-group',
     });
+
     const controls = createDiv({
       innerElements: [left, right],
       classes: 'auto-walk-controls d-none',
@@ -137,6 +154,20 @@ class AutoWalk {
     this._reverseButton.style.cssText = this._reversed ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
     localStorage.setItem('walkerReversed', JSON.stringify(this._reversed));
   }
+
+  public toggleCity() {
+    this._settings.city = !this._settings.city;
+    this._cityButton.style.cssText = this._settings.city ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
+    localStorage.setItem('walkerSettings', JSON.stringify(this._settings));
+  }
+
+  public toggleBandit() {
+    this._settings.bandit = !this._settings.bandit;
+    this._banditButton.style.cssText = this._settings.bandit ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
+    localStorage.setItem('walkerSettings', JSON.stringify(this._settings));
+  }
+
+
 }
 
 export default new AutoWalk();

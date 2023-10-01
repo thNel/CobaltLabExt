@@ -81,7 +81,7 @@ class RecyclerBase {
     }
   }
 
-  public async emptyRecycler(restart = false, noAutoCompileItems = false): Promise<void> {
+  public async emptyRecycler(restart = false, autoCompileItems = false): Promise<void> {
     let deleteNotify = () => {
     };
     try {
@@ -111,11 +111,11 @@ class RecyclerBase {
             pushNotification(`Не удалось переместить предмет. Попытка #${this._emptyRecyclerTryCount}`, true);
           }
         }
-        return await this.emptyRecycler(true, noAutoCompileItems);
+        return await this.emptyRecycler(true, autoCompileItems);
       } else {
         this._emptyRecyclerTryCount = 0;
         if (restart) {
-          if (noAutoCompileItems) {
+          if (autoCompileItems) {
             deleteNotify = pushNotification('Запущена уборка в инвентаре. Подождите.')
             await compileItems(InventoryTypes.user);
             deleteNotify();

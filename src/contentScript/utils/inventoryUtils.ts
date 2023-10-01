@@ -25,8 +25,6 @@ export const getItems = async (boxID: InventoryTypes): Promise<InventoryItem[]> 
 
 const fetchTools = async () => (await getItems(InventoryTypes.toolbar)).map((item) => {
   const type = item.itemID ? ResourceTypes[item.itemID] : undefined;
-  if (!type && item.itemID !== null)
-    console.log({...item, type});
   return {
     ...item,
     type,
