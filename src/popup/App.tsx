@@ -10,8 +10,8 @@ import Typography from "@mui/material/Typography";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<number>(JSON.parse(localStorage.getItem('react_selectedPage') ?? '0') ?? 0);
-  const maxPage = 1;
-  const pageNames = ['Рулетка'];
+  const maxPage = 2; // начиная с 0
+  const pageNames = ['Рулетка', 'Цены в магазинах'];
   const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
   const setPage = (page: number) => {

@@ -121,10 +121,9 @@ class Plant {
               this.disableState().catch(e => {
                 pushError(e?.message ?? e.reason ?? e, true, 4000);
               });
-              ;
               pushError(e?.message ?? e.reason ?? e, true, 4000);
             });
-          }, this._remaining * 1000);
+          }, this._remaining * 1000 + 1000);
           pushNotification(`${this.recycler.title} заполнен${this.recycler.gender} по-максимуму. Включаю...`, true);
         } else {
           return Promise.reject(`Все ресурсы для "${this.recycler.title}" переработаны!`);
@@ -133,7 +132,7 @@ class Plant {
       if (this._remaining > 0) {
         const date = new Date();
         date.setSeconds(this._remaining + date.getSeconds());
-        this.recycler.selfDeleteNotification = pushNotification(`${this.recycler.title} запущен${this.recycler.gender}. Перезапуск произойдёт в ${date.toLocaleTimeString(['ru', 'en-US'])}`, true, this._remaining * 1000);
+        this.recycler.selfDeleteNotification = pushNotification(`${this.recycler.title} запущен${this.recycler.gender}. Перезапуск произойдёт в ${date.toLocaleTimeString(['ru', 'en-US'])}`, true, this._remaining * 1000 + 1000);
       }
     } catch (e: any) {
       return Promise.reject(`Не удалось запустить "${this.recycler.title}". Причина: "${e?.message ?? e.reason ?? e}"`);

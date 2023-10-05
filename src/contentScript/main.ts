@@ -11,6 +11,44 @@ import barn from "@contentScript/services/barn";
 import refinery from "@contentScript/services/refinery";
 import banditRecycler from "@contentScript/services/banditRecycler";
 import cityRecycler from "@contentScript/services/cityRecycler";
+import {createButton} from "@contentScript/utils/hud/createButton";
+
+function shopper() {
+  const shopList = settings.gameBody.querySelector('div.shop-list');
+  if (!shopList) {
+    pushError('Нет магазина!', true);
+    return;
+  }
+  for (const element of shopList.querySelectorAll('div.upgrade-item')) {
+    const buttonDiv = element.querySelector<HTMLDivElement>('div.upgrade-item__rewards');
+    if (!buttonDiv) {
+      pushError('Нет блока с кнопкой продажи', true)
+      continue;
+    }
+    if (buttonDiv.querySelector('.auto-sell-btn')) {
+      pushNotification('Уже есть кнопка авто', true);
+      continue;
+    }
+    const sellButton = buttonDiv.querySelector('button');
+    if (!sellButton) {
+      pushError('Не найдена кнопка продажи', true);
+      continue;
+    }
+    const autoSell = createButton({
+      innerText: 'Авто',
+      classes: 'btn btn-blue btn-small upgrade-item__buy btn-icon auto-sell-btn',
+      onClick: () => {
+        const timer = setInterval(() => {
+          if (sellButton.getAttribute('disabled') === 'disabled') {
+            clearInterval(timer);
+          }
+          sellButton.click();
+        }, 500)
+      }
+    });
+    buttonDiv.append(autoSell);
+  }
+}
 
 function Init() {
   setInterval(() => {
@@ -27,7 +65,7 @@ function Init() {
     const farmHeader = settings.gameBody.querySelector('div.farm-header');
     if (farmHeader && !farmHeader.querySelector('button.clicker-button')) {
       farmHeader.append(autoClicker.controlsDiv);
-      if (autoWalk.enabled) {
+      if (autoWalk.enabled && !autoClicker.mining) {
         setTimeout(clicker, 1000);
       }
     }
@@ -39,8 +77,10 @@ function Init() {
         const cityHeader = bandit.querySelector('div.bandit-content > div.bandit-header');
         if (cityHeader && !cityHeader.querySelector('button.btn-recycler')) {
           cityHeader.append(cityRecycler.button, refinery.button);
-          if (autoWalk.enabled) {
+          if (autoWalk.enabled && !cityRecycler.enabled) {
             setTimeout(cityRecycler.toggle, 1000);
+          }
+          if (autoWalk.enabled && !refinery.enabled) {
             setTimeout(refinery.toggle, 2000);
           }
         }
@@ -48,11 +88,21 @@ function Init() {
         const banditHeader = bandit.querySelector('div.bandit-content > div.bandit-header');
         if (banditHeader && !banditHeader.querySelector('button.btn-recycler')) {
           banditHeader.append(banditRecycler.button);
-          if (autoWalk.enabled) {
+          if (autoWalk.enabled && !banditRecycler.enabled) {
             setTimeout(banditRecycler.toggle, 1000);
           }
         }
       }
+    }
+
+    const shopHeader = settings.gameBody.querySelector('div.pageload-header');
+    if (shopHeader && !shopHeader.querySelector('.btn-recycler')) {
+      const button = createButton({
+        innerText: 'Добавить автопродажи',
+        classes: 'btn btn-blue btn-small btn-icon btn-recycler',
+        onClick: shopper,
+      });
+      shopHeader.append(button);
     }
 
     // Переработчики в доме

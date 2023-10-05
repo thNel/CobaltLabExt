@@ -135,7 +135,7 @@ class Recycler {
               });
               pushError(e?.message ?? e.reason ?? e, true, 4000);
             });
-          }, this._remaining * 1000);
+          }, this._remaining * 1000 + 1000);
           pushNotification(`${this.recyclerBase.title} заполнен${this.recyclerBase.gender} по-максимуму. Включаю...`, true);
         } else {
           return Promise.reject(`Все ресурсы для "${this.recyclerBase.title}" переработаны!`);
@@ -144,7 +144,7 @@ class Recycler {
       if (this._remaining > 0) {
         const date = new Date();
         date.setSeconds(this._remaining + date.getSeconds());
-        this.recyclerBase.selfDeleteNotification = pushNotification(`${this.recyclerBase.title} запущен${this.recyclerBase.gender}. Перезапуск произойдёт в ${date.toLocaleTimeString(['ru', 'en-US'])}`, true, this._remaining * 1000);
+        this.recyclerBase.selfDeleteNotification = pushNotification(`${this.recyclerBase.title} запущен${this.recyclerBase.gender}. Перезапуск произойдёт в ${date.toLocaleTimeString(['ru', 'en-US'])}`, true, this._remaining * 1000 + 1000);
       }
     } catch (e: any) {
       return Promise.reject(`Не удалось запустить "${this.recyclerBase.title}". Причина: "${e?.message ?? e.reason ?? e}"`);
