@@ -96,7 +96,7 @@ function Init() {
     }
 
     const shopHeader = settings.gameBody.querySelector('div.pageload-header');
-    if (shopHeader && !shopHeader.querySelector('.btn-recycler')) {
+    if (shopHeader && settings.gameBody.querySelector('div.shop-list') && !shopHeader.querySelector('.btn-recycler')) {
       const button = createButton({
         innerText: 'Добавить автопродажи',
         classes: 'btn btn-blue btn-small btn-icon btn-recycler',

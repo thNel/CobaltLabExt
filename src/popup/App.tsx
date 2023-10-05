@@ -7,6 +7,7 @@ import ToastUtils from "@/utils/toastUtils";
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import Typography from "@mui/material/Typography";
+import Shop from "@/pages/Shop";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<number>(JSON.parse(localStorage.getItem('react_selectedPage') ?? '0') ?? 0);
@@ -90,6 +91,8 @@ const App = () => {
           switch (currentPage) {
             case 0:
               return <Main/>;
+            case 1:
+              return <Shop/>;
           }
         })()}
       </Container>
