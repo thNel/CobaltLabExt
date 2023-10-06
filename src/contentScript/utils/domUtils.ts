@@ -1,7 +1,7 @@
 import {pushError} from "./hud/pushError";
 import settings from "../store/settings";
 
-export const getClickerElement = (): {
+export const getClickerElement = (clickCounter: number): {
   type: 'wood' | 'ore' | 'road';
   element: HTMLImageElement | HTMLDivElement;
 } | null => {
@@ -10,15 +10,15 @@ export const getClickerElement = (): {
     const iskra = farmElementWrapper.querySelector<HTMLImageElement>('.iskra');
     const cross = farmElementWrapper.querySelector<HTMLImageElement>('.x');
     const farmElement = farmElementWrapper.querySelector<HTMLDivElement>('.farm-wrapper__clicker-item');
-    if (cross)
+    if (cross && farmElement)
       return {
         type: 'wood',
-        element: cross,
+        element: clickCounter % 3 === 0 ? cross : farmElement,
       }
-    if (iskra)
+    if (iskra && farmElement)
       return {
         type: 'ore',
-        element: iskra,
+        element: clickCounter % 3 === 0 ? iskra : farmElement,
       }
     if (farmElement)
       return {

@@ -13,7 +13,14 @@ import banditRecycler from "@contentScript/services/banditRecycler";
 import cityRecycler from "@contentScript/services/cityRecycler";
 import {createButton} from "@contentScript/utils/hud/createButton";
 
-function shopper() {
+
+const sellFn = (sellButton: HTMLButtonElement) => {
+  if (sellButton.getAttribute('disabled') === 'disabled') return;
+  sellButton.click();
+  setTimeout(sellFn, 500 + Math.round(Math.random() * 400), sellButton);
+}
+
+const shopper = () => {
   const shopList = settings.gameBody.querySelector('div.shop-list');
   if (!shopList) {
     pushError('Нет магазина!', true);
@@ -37,14 +44,7 @@ function shopper() {
     const autoSell = createButton({
       innerText: 'Авто',
       classes: 'btn btn-blue btn-small upgrade-item__buy btn-icon auto-sell-btn',
-      onClick: () => {
-        const timer = setInterval(() => {
-          if (sellButton.getAttribute('disabled') === 'disabled') {
-            clearInterval(timer);
-          }
-          sellButton.click();
-        }, 500)
-      }
+      onClick: () => sellFn(sellButton),
     });
     buttonDiv.append(autoSell);
   }
