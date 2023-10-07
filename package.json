@@ -1,15 +1,17 @@
 {
   "name": "chrome-extension",
   "private": true,
-  "version": "1.5.0.0",
+  "version": "1.6.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "postbuild": "npm run contentScriptBuild",
+    "postbuild": "npm run scriptsBuild",
+    "scriptsBuild": "npm run contentScriptBuild && npm run rouletteScriptBuild",
     "contentScriptBuild": "esbuild src/contentScript/main.ts --bundle --allow-overwrite --minify --sourcemap --target=chrome100 --outfile=\"dist/CobaltLab Helper/content-script.js\"",
+    "rouletteScriptBuild": "esbuild src/rouletteScript/main.ts --bundle --allow-overwrite --minify --sourcemap --target=chrome100 --outfile=\"dist/CobaltLab Helper/roulette-script.js\"",
     "copy-manifest": "cpx \"src/manifest/**/*\" \"dist/CobaltLab Helper\"",
-    "postcontentScriptBuild": "npm run copy-manifest"
+    "postscriptsBuild": "npm run copy-manifest"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

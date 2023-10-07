@@ -139,10 +139,6 @@ const clickFn = async () => {
       }
     }
   }
-  autoWalkTryCounter = 0;
-  errorCounter = 0;
-  clickCounter = 0;
-  selectedSlot = 0;
   const returnToMapElement = getReturnToMap();
   if (returnToMapElement !== null) {
     returnToMapElement.click();
@@ -159,6 +155,10 @@ const clickFn = async () => {
     pushNotification(`Не найдены элементы иры. Попытка #${autoWalkTryCounter}`, true);
     return;
   }
+  autoWalkTryCounter = 0;
+  errorCounter = 0;
+  clickCounter = 0;
+  selectedSlot = 0;
 }
 
 export const clicker = async () => {
@@ -168,6 +168,7 @@ export const clicker = async () => {
       pushNotification('Автокликер был завершён!', true);
       return;
     }
+    clickCounter = 0;
     setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
   } catch (e) {
     alert(e);
