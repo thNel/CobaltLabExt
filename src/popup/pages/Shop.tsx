@@ -6,13 +6,12 @@ const Shop = (): ReactElement => {
   return (
     <Grid
       container
-      spacing={2}
       sx={{
-        padding: 0,
-        paddingTop: '28px',
         paddingLeft: '6px',
-        alignItems: 'center',
+        alignItems: 'start',
         justifyContent: 'center',
+        padding: '0 !important',
+        marginTop: '20px',
       }}
     >
       <Grid
