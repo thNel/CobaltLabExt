@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CobaltLab Helper",
-  "version": "1.6.0.0",
+  "version": "1.7.0.0",
   "action": {
     "default_icon": {
       "32": "images/icon32.png",
@@ -60,5 +60,5 @@
     "keyword": "aString"
   },
   "short_name": "AutoCobaltLab",
-  "version_name": "Random 2.0"
+  "version_name": "Clicker 2.0"
 }

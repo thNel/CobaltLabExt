@@ -12,6 +12,8 @@ import refinery from "@contentScript/services/refinery";
 import banditRecycler from "@contentScript/services/banditRecycler";
 import cityRecycler from "@contentScript/services/cityRecycler";
 import {createButton} from "@contentScript/utils/hud/createButton";
+import {listener} from "@contentScript/services/connection";
+import Port = chrome.runtime.Port;
 
 
 const sellFn = (sellButton: HTMLButtonElement) => {
@@ -138,6 +140,24 @@ function Init() {
       alert(e?.message ?? e);
     }
   }, 1000);
+
+  let port: Port | null = null;
+
+  chrome.runtime.onMessage.addListener((msg) => {
+    if (msg === 'CobaltLab Helper ping') {
+      if (port) {
+        port.disconnect();
+      }
+      pushNotification('Подключение к расширению CobaltLab Helper', true);
+      port = chrome.runtime.connect({name: 'CobaltLab Helper popup'});
+      port.onDisconnect.addListener(() => pushNotification('Расширение отключилось от игры', true));
+      port.onMessage.addListener(listener(port));
+      return;
+    }
+    console.log('unknown msg', msg);
+  })
+
+
 }
 
 

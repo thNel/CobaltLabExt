@@ -114,7 +114,7 @@ const clickFn = async () => {
   }
 
   autoClicker.toggleMining(true);
-  if (autoClicker.deleteList?.length > 0) {
+  if (autoClicker.settings.deleteList?.length > 0) {
     const userInventory = await getItems(InventoryTypes.user);
     let cardCounter = 0;
     for (const item of userInventory) {
@@ -129,7 +129,7 @@ const clickFn = async () => {
           })
         }
       }
-      if (item.itemID && item.quantity && autoClicker.deleteList.includes(item.itemID)) {
+      if (item.itemID && item.quantity && autoClicker.settings.deleteList.includes(item.itemID)) {
         await deleteItem({
           boxID: InventoryTypes.user,
           itemID: item.itemID,

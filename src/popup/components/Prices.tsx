@@ -5,7 +5,7 @@ import axios from "axios";
 import ToastUtils from "@/utils/toastUtils";
 import {ShopInfo} from "@/types";
 import {Refresh} from "@mui/icons-material";
-import {Grid} from "@mui/material";
+import Grid from "@mui/material/Grid";
 import {ResourceTypes} from "@/types/resourceTypes";
 
 const Prices = ({title, code}: { title: string, code: string }): ReactElement => {
@@ -51,7 +51,7 @@ const Prices = ({title, code}: { title: string, code: string }): ReactElement =>
             flexWrap: 'nowrap',
             gap: '4px',
             justifyContent: 'center',
-            flex: '1 1 auto',
+            flex: '1 1 100%',
           }}>
             <Typography>{item.to.quantity}</Typography>
             <img

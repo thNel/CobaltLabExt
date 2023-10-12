@@ -40,7 +40,7 @@ export const Periodic = ({isInterval, setIsInterval, delay, setDelay}: {
         {isInterval
           ? <FormControlLabel
             sx={{
-              alignSelf: 'end',
+              alignSelf: 'start',
             }}
             control={
               <Input

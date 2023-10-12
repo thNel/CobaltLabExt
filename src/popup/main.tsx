@@ -1,6 +1,6 @@
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
-import './main.css'
+import './main.scss'
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";

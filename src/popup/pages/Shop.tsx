@@ -1,44 +1,35 @@
 import {ReactElement} from "react";
-import Box from "@mui/material/Box";
-import {Grid} from "@mui/material";
+import Grid from "@mui/material/Grid";
 import Prices from "@/components/Prices";
 
 const Shop = (): ReactElement => {
   return (
-    <Box
+    <Grid
+      container
+      spacing={2}
       sx={{
-        display: 'flex',
-        width: '100%',
-        flex: '1 1 auto',
-        alignItems: 'start',
-        justifyContent: 'center',
+        padding: 0,
         paddingTop: '28px',
+        paddingLeft: '6px',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <Grid
-        container
-        spacing={2}
-        sx={{
-          maxHeight: '430px',
-          overflow: 'auto',
-        }}
+        item
+        xs={6}
+        sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}
       >
-        <Grid
-          item
-          xs={6}
-          sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}
-        >
-          <Prices title={'Город'} code={'city'}/>
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}
-        >
-          <Prices title={'Бандитка'} code={'bc'}/>
-        </Grid>
+        <Prices title={'Город'} code={'city'}/>
       </Grid>
-    </Box>
+      <Grid
+        item
+        xs={6}
+        sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}
+      >
+        <Prices title={'Бандитка'} code={'bc'}/>
+      </Grid>
+    </Grid>
   );
 }
 

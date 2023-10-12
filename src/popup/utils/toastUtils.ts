@@ -1,4 +1,4 @@
-import {EnqueueSnackbar, SnackbarKey} from 'notistack';
+import {BaseVariant, EnqueueSnackbar, OptionsWithExtraProps, SnackbarKey} from 'notistack';
 import {ReactElement} from 'react';
 import SnackbarCloseButton from "@/components/SnackBarCloseButton";
 
@@ -8,7 +8,7 @@ export const voidFn = () => {
 class ToastUtils {
   private enqueueSnackbar: EnqueueSnackbar = () => 0;
   private closeSnackbar: (key?: SnackbarKey) => void = voidFn;
-  private defaultOpts = {
+  private defaultOpts: OptionsWithExtraProps<BaseVariant> = {
     autoHideDuration: 3500,
     preventDuplicate: true,
     anchorOrigin: {vertical: 'top' as const, horizontal: 'right' as const},
@@ -23,41 +23,37 @@ class ToastUtils {
     this.closeSnackbar = closeSnackbar;
   }
 
-  success(msg: string | ReactElement, options = {}) {
+  success(msg: string | ReactElement, options: OptionsWithExtraProps<'success'> = {}) {
     return this.toast(msg, {
-      ...this.defaultOpts,
       ...options,
       variant: 'success',
     });
   }
 
-  warning(msg: string | ReactElement, options = {}) {
+  warning(msg: string | ReactElement, options: OptionsWithExtraProps<'warning'> = {}) {
     return this.toast(msg, {
-      ...this.defaultOpts,
       ...options,
       variant: 'warning',
     });
   }
 
-  info(msg: string | ReactElement, options = {}) {
+  info(msg: string | ReactElement, options: OptionsWithExtraProps<'info'> = {}) {
     return this.toast(msg, {
-      ...this.defaultOpts,
       ...options,
       variant: 'info',
     });
   }
 
-  error(msg: string | ReactElement, options = {}) {
+  error(msg: string | ReactElement, options: OptionsWithExtraProps<'error'> = {}) {
     return this.toast(msg, {
-      ...this.defaultOpts,
       ...options,
       variant: 'error',
     });
   }
 
-  toast(msg: string | ReactElement, options = {}) {
-    const finalOptions = {
-      variant: 'default' as const,
+  toast(msg: string | ReactElement, options: OptionsWithExtraProps<BaseVariant> = {}) {
+    const finalOptions: OptionsWithExtraProps<BaseVariant> = {
+      variant: 'default',
       ...this.defaultOpts,
       ...options,
     };

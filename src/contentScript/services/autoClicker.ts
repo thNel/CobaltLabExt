@@ -6,28 +6,14 @@ import {createInput} from "../utils/hud/createInput";
 import {createDiv} from "../utils/hud/createDiv";
 import {pushNotification} from "@contentScript/utils/hud/pushNotification";
 import {ResourceTypes} from "@contentScript/types/resourceTypes";
+import {WorkerSettings} from "@/types/workerSettings";
 
 class AutoClicker {
   private _mining = false;
   private _timerNotificationSelfDelete = () => {
   };
 
-  public get deleteList(): ResourceTypes[] {
-    return [
-      // ResourceTypes.canOfTuna,
-      // ResourceTypes.waterJug,
-      // ResourceTypes.propaneTank,
-      // ResourceTypes.cloth,
-      // ResourceTypes.sewingKit,
-      // ResourceTypes.pickles,
-      // ResourceTypes.ropes,
-      // ResourceTypes.crudeOil,
-      // ResourceTypes.tarp,
-      // ResourceTypes.metalBlade,
-      // ResourceTypes.electricFuse,
-      // ResourceTypes.greenCard,
-    ];
-  }
+  private _deleteList: ResourceTypes[] = JSON.parse(localStorage.getItem('clickerDeleteList') ?? '[]');
 
   private readonly _idle = {
     timer: setTimeout(() => {
@@ -40,13 +26,13 @@ class AutoClicker {
       autoSelectTool: this._savedSettings.autoSelectTool ?? true,
       autoRepairTool: this._savedSettings.autoRepairTool ?? false,
       autoDeleteTool: this._savedSettings.autoDeleteTool ?? false,
-      delay: this._savedSettings.delay ?? 600,
+      delay: this._savedSettings.delay ?? 200,
     }
     : {
       autoSelectTool: true,
       autoRepairTool: false,
       autoDeleteTool: false,
-      delay: 600,
+      delay: 200,
     }
 
   private readonly _activateButtonSpan;
@@ -125,8 +111,24 @@ class AutoClicker {
     return this._mining;
   }
 
-  public get settings() {
-    return this._settings;
+  public get settings(): WorkerSettings['acs'] {
+    return {...this._settings, deleteList: this._deleteList};
+  }
+
+  public set settings(data: WorkerSettings['acs']) {
+    this._settings.autoSelectTool = data.autoSelectTool;
+    this._settings.delay = data.delay;
+    this._settings.autoDeleteTool = data.autoDeleteTool;
+    this._settings.autoRepairTool = data.autoRepairTool;
+    this._deleteList = data.deleteList;
+    localStorage.setItem('clickerDeleteList', JSON.stringify(this._deleteList));
+    localStorage.setItem('clickerSettings', JSON.stringify(this._settings));
+
+
+    this._autoSelectToolButton.style.cssText = this._settings.autoSelectTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
+    this._autoDeleteButton.style.cssText = this._settings.autoDeleteTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
+    this._autoRepairButton.style.cssText = this._settings.autoRepairTool ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
+    this._delayInput.value = this._settings.delay.toString();
   }
 
   public get controlsDiv(): HTMLDivElement {

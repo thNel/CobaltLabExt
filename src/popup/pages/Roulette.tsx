@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import {BidType} from "@/types";
 
-const Main = (): ReactElement => {
+const Roulette = (): ReactElement => {
   const [bid, setBid] = useState<BidType>(
     JSON.parse(localStorage.getItem('react_bid') ?? '[0, 0, 0, 0, 0]') ?? [0, 0, 0, 0, 0]
   );
@@ -27,9 +27,12 @@ const Main = (): ReactElement => {
       sx={{
         display: 'flex',
         width: '100%',
+        maxWidth: '536px',
+        height: '100%',
+        flex: '1 1 auto',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'start',
         gap: '16px',
       }}
     >
@@ -78,4 +81,4 @@ const Main = (): ReactElement => {
   )
 }
 
-export default Main;
+export default Roulette;

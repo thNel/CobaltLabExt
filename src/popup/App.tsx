@@ -1,6 +1,5 @@
-import Container from "@mui/material/Container";
-import Main from "@/pages/Main";
-import {useEffect, useState} from "react";
+import Roulette from "@/pages/Roulette";
+import {ReactElement, useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import {useSnackbar} from 'notistack';
 import ToastUtils from "@/utils/toastUtils";
@@ -8,11 +7,12 @@ import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import Typography from "@mui/material/Typography";
 import Shop from "@/pages/Shop";
+import ACSettings from "@/pages/ACSettings";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<number>(JSON.parse(localStorage.getItem('react_selectedPage') ?? '0') ?? 0);
   const maxPage = 2; // начиная с 0
-  const pageNames = ['Рулетка', 'Цены в магазинах'];
+  const pageNames = ['Настройки автокликера', 'Рулетка', 'Цены в магазинах'];
   const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
   const setPage = (page: number) => {
@@ -25,14 +25,24 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        flex: '1 1 auto',
+      }}
+    >
       <Box
         sx={{
           backgroundColor: 'rgba(133,133,133,0.07)',
           display: 'flex',
-          justifyContent: 'center',
           width: '100%',
-          justifySelf: 'start',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 0,
         }}
         className='dark-shadow-up'
       >
@@ -45,8 +55,8 @@ const App = () => {
       <Box sx={{
         display: 'flex',
         width: '100%',
-        alignItems: 'center',
         justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: 'rgba(133,133,133,0.07)',
       }} className='dark-shadow-down'>
         <Box sx={{
@@ -66,7 +76,7 @@ const App = () => {
             className={currentPage > 0 ? '' : 'invisible'}
             onClick={currentPage > 0 ? () => setPage(currentPage - 1) : undefined}
           />
-          <Typography>{pageNames[currentPage] ?? 'Скоро появится!'}</Typography>
+          <Typography variant={"h6"}>{pageNames[currentPage] ?? 'Скоро появится!'}</Typography>
           <EastIcon
             sx={{
               cursor: 'pointer',
@@ -76,27 +86,33 @@ const App = () => {
           />
         </Box>
       </Box>
-      <Container
-        maxWidth='xl'
+      <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
+          width: '100%',
           flex: '1 1 auto',
           alignItems: 'center',
-          justifyContent: 'center',
-          gap: '50px',
+          justifyContent: 'start',
+          padding: 0,
+          maxHeight: '502px',
+          overflow: 'auto',
         }}
       >
-        {(() => {
+        {((): ReactElement => {
           switch (currentPage) {
             case 0:
-              return <Main/>;
+              return <ACSettings/>;
             case 1:
+              return <Roulette/>;
+            case 2:
               return <Shop/>;
+            default:
+              return <Typography>Что-то пошло не так</Typography>;
           }
         })()}
-      </Container>
-    </>
+      </Box>
+    </Box>
   )
 }
 

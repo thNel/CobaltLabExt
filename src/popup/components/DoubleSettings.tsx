@@ -42,11 +42,8 @@ export const DoubleSettings = ({isDouble, setIsDouble, isSmartDouble, setIsSmart
           }
           label={<Typography>Удваивать ставку при проигрыше</Typography>}/>
         {isDouble
-          ? <>
+          ? <Box sx={{display: 'flex', gap: '30px', alignItems: 'center', justifyContent: 'start'}}>
             <FormControlLabel
-              sx={{
-                alignSelf: 'end',
-              }}
               control={
                 <Input
                   sx={{width: '140px'}}
@@ -82,7 +79,7 @@ export const DoubleSettings = ({isDouble, setIsDouble, isSmartDouble, setIsSmart
                 />
               }
               label={<Typography>Smart</Typography>}/>
-          </>
+          </Box>
           : null}
       </FormGroup>
     </Box>
