@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CobaltLab Helper",
-  "version": "1.7.0.0",
+  "version": "2.0.0.0",
   "action": {
     "default_icon": {
       "32": "images/icon32.png",
@@ -25,24 +25,14 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.cobaltlab.tech/game*"
+        "https://*.cobaltlab.tech/embedGame*"
       ],
+      "all_frames": true,
       "css": [
         "custom-styles.scss"
       ],
       "js": [
         "content-script.js"
-      ]
-    },
-    {
-      "matches": [
-        "https://*.cobaltlab.tech/roulette*"
-      ],
-      "css": [
-        "roulette-styles.scss"
-      ],
-      "js": [
-        "roulette-script.js"
       ]
     }
   ],
@@ -60,5 +50,5 @@
     "keyword": "aString"
   },
   "short_name": "AutoCobaltLab",
-  "version_name": "Clicker 2.0"
+  "version_name": "Salami"
 }

@@ -48,8 +48,7 @@ const btn = createButton({
     } catch (e) {
       autoRouletteOn = false;
       btn.style.cssText = autoRouletteOn ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
-      alert(e);
-      return;
+      return Promise.reject(e);
     }
     interval = setInterval(async () => {
       try {
@@ -66,8 +65,7 @@ const btn = createButton({
         clearInterval(interval);
         autoRouletteOn = false;
         btn.style.cssText = autoRouletteOn ? 'background-color: rgba(46,139,87,0.3) !important;' : '';
-        alert(e);
-        return;
+        return Promise.reject(e);
       }
     }, 2 * 1000);
   }
@@ -75,7 +73,7 @@ const btn = createButton({
 const placeBtn = () => {
   const rouletteHead = document.querySelector<HTMLDivElement>('div.container.roulette-container > div.case-head > div.case-head__left');
   if (!rouletteHead) {
-    alert('Не нашёл куда вставить кнопку :(');
+    alert('чит Авторулетка: "Не нашёл куда вставить кнопку :("');
     return;
   }
 

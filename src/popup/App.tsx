@@ -33,6 +33,7 @@ const App = () => {
         alignItems: 'center',
         width: '100%',
         flex: '1 1 auto',
+        overflow: 'auto',
       }}
     >
       <Box

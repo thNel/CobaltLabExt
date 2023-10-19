@@ -171,6 +171,6 @@ export const clicker = async () => {
     clickCounter = 0;
     setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
   } catch (e) {
-    alert(e);
+    return Promise.reject(e);
   }
 }
