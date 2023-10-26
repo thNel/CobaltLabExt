@@ -19,17 +19,17 @@ let {axes, pickaxes, rock}: {
   rock: filteredTool | undefined
 } = {axes: [], pickaxes: [], rock: undefined};
 
-const clickFn = async () => {
+const clickFn = async (type?: 'wood' | 'ore' | 'road') => {
   if (!autoClicker.mining) {
     pushNotification('Автокликер был завершён!', true);
     return;
   }
-  const elementInfo = getClickerElement(clickCounter);
+  const elementInfo = await getClickerElement(type !== 'road' ? type : undefined);
   if (elementInfo !== null) {
     if (!autoClicker.settings.autoSelectTool) {
       elementInfo.element.click();
       clickCounter += 1;
-      setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
+      setTimeout(() => clickFn(elementInfo.type), autoClicker.settings.delay);
       return;
     } else {
       if (rock?.durability === 0 && autoClicker.settings.autoRepairTool) {
@@ -38,7 +38,7 @@ const clickFn = async () => {
         axes = newTools.axes;
         pickaxes = newTools.pickaxes;
         rock = newTools.rock;
-        setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
+        setTimeout(() => clickFn(elementInfo.type), autoClicker.settings.delay);
         return;
       }
       let selectedTool = rock;
@@ -54,7 +54,7 @@ const clickFn = async () => {
         pickaxes = newTools.pickaxes;
         rock = newTools.rock;
         clickCounter += 1;
-        setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
+        setTimeout(() => clickFn(elementInfo.type), autoClicker.settings.delay);
         return;
       }
       if (!selectedTool) {
@@ -68,7 +68,7 @@ const clickFn = async () => {
         if (selectedTool) {
           await selectQuickSlot(selectedTool.slotID);
           selectedSlot = selectedTool.slotID;
-          setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
+          setTimeout(() => clickFn(elementInfo.type), autoClicker.settings.delay);
           return;
         } else {
           errorCounter += 1;
@@ -80,7 +80,7 @@ const clickFn = async () => {
             return;
           }
           pushNotification(`Не найден инструмент! Попытка #${errorCounter}`, true);
-          setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
+          setTimeout(() => clickFn(elementInfo.type), autoClicker.settings.delay);
           return;
         }
       }
@@ -103,13 +103,13 @@ const clickFn = async () => {
       if (elementInfo.type === 'ore' || elementInfo.type === 'road') {
         pickaxes = pickaxes.map((item, index) => index === 0 ? {...item, durability: item.durability - 1} : item);
       }
-      setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
+      setTimeout(() => clickFn(elementInfo.type), autoClicker.settings.delay);
       return;
     }
   } else if (errorCounter < 10) {
     errorCounter += 1;
     pushNotification(`Попытка найти,что бить, #${errorCounter}`, true, 1000);
-    setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
+    setTimeout(clickFn, autoClicker.settings.delay);
     return;
   }
 
@@ -169,7 +169,7 @@ export const clicker = async () => {
       return;
     }
     clickCounter = 0;
-    setTimeout(clickFn, autoClicker.settings.delay + Math.round(Math.random() * 400));
+    setTimeout(clickFn, autoClicker.settings.delay);
   } catch (e) {
     return Promise.reject(e);
   }

@@ -1,33 +1,59 @@
 import {pushError} from "./hud/pushError";
 import settings from "../store/settings";
+import {sleep} from "@contentScript/handlers/sleep";
 
-let randomTarget = [false, false, false, false, false];
-
-const generateRandomTargets = () => {
-  for (let i = 0; i < 5; i++) {
-    randomTarget[i] = Math.random() > 0.499;
-  }
-}
-export const getClickerElement = (clickCounter: number): {
-  type: 'wood' | 'ore' | 'road';
+export const getClickerElement = async (currentType?: 'wood' | 'ore' | 'road'): Promise<{
+  type?: 'wood' | 'ore' | 'road';
   element: HTMLImageElement | HTMLDivElement;
-} | null => {
+} | null> => {
   const farmElementWrapper = settings.gameBody.querySelector<HTMLDivElement>('.farm-wrapper__clicker');
   if (farmElementWrapper) {
-    if (clickCounter % 5 === 0)
-      generateRandomTargets();
     const iskra = farmElementWrapper.querySelector<HTMLImageElement>('.iskra');
     const cross = farmElementWrapper.querySelector<HTMLImageElement>('.x');
     const farmElement = farmElementWrapper.querySelector<HTMLDivElement>('.farm-wrapper__clicker-item');
-    if (cross && farmElement)
+    if (currentType === 'wood') {
+      if (cross) {
+        return {
+          type: currentType,
+          element: cross,
+        }
+      } else {
+        await sleep(200);
+        return getClickerElement(currentType);
+      }
+    }
+    if (currentType === 'ore') {
+      if (iskra) {
+        return {
+          type: currentType,
+          element: iskra,
+        }
+      } else {
+        await sleep(200);
+        return getClickerElement(currentType);
+      }
+    }
+    if (currentType === 'road') {
+      if (farmElement) {
+        return {
+          type: currentType,
+          element: farmElement,
+        }
+      } else {
+        await sleep(200);
+        return getClickerElement(currentType);
+      }
+    }
+
+    if (cross)
       return {
         type: 'wood',
-        element: randomTarget[clickCounter % 5] ? cross : farmElement,
+        element: cross,
       }
-    if (iskra && farmElement)
+    if (iskra)
       return {
         type: 'ore',
-        element: randomTarget[clickCounter % 5] ? iskra : farmElement,
+        element: iskra,
       }
     if (farmElement)
       return {

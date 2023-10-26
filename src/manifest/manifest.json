@@ -8,7 +8,7 @@
       "48": "images/icon48.png",
       "64": "images/icon64.png"
     },
-    "default_title": "AutoRoulette",
+    "default_title": "CobaltLab Helper",
     "default_popup": "index.html"
   },
   "description": "Автокликер для игры CobaltLab",

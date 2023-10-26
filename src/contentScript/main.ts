@@ -156,9 +156,7 @@ function Init() {
 
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg === 'CobaltLab Helper ping') {
-      if (port) {
-        port.disconnect();
-      }
+      if (port) port.disconnect();
       pushNotification('Подключение к расширению CobaltLab Helper', true);
       port = chrome.runtime.connect({name: 'CobaltLab Helper popup'});
       port.onDisconnect.addListener(() => pushNotification('Расширение отключилось от игры', true));
